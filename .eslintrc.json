@@ -1,0 +1,7 @@
+{
+  "extends": "next/core-web-vitals",
+  // disable react hooks rules
+  "rules": {
+    "react-hooks/exhaustive-deps": "off"
+  }
+}
