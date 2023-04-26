@@ -1,0 +1,3 @@
+More authentication methods
+
+Test every single api endpoint with Postman/Thunder Client
