@@ -2,15 +2,19 @@ import "@/styles/globals.scss";
 import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import Navbar from "@/components/navbar/Navbar";
+import SideNavbar from "@/components/navbar/SideNavbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import { useThemeStore } from "@/stores/theme";
 import { useMediaQuery } from "react-responsive";
 import { useMobileStore } from "@/stores/mobile";
+import { useViewStore } from "@/stores/view";
 import LoadingBar from "react-top-loading-bar";
 import { FadeLoader } from "react-spinners";
 import { useLoadingStore } from "@/stores/loading";
 import { useRouter } from "next/router";
+import { ThemeType } from "@/types/theme";
+import { ViewType } from "@/types/view";
 
 export default function App({
   Component,
@@ -21,9 +25,24 @@ export default function App({
 
   const [progress, setProgress] = useState(0);
 
-  const { theme } = useThemeStore();
+  const { setView } = useViewStore();
+  const { theme, changeTheme } = useThemeStore();
   const { loading } = useLoadingStore();
   const { setIsMobile } = useMobileStore();
+
+  // Get the theme and view from local storage
+  useEffect(() => {
+    const theme = localStorage.getItem("theme") as ThemeType | null;
+    const view = localStorage.getItem("view") as ViewType | null;
+
+    if (theme) {
+      changeTheme(theme);
+    }
+
+    if (view) {
+      setView(view);
+    }
+  }, []);
 
   useEffect(() => {
     setIsMobile(isMobile);
@@ -67,7 +86,15 @@ export default function App({
       <SessionProvider session={session}>
         <main className={theme} style={{ opacity: loading ? 0.2 : 1 }}>
           <Navbar />
-          <Component {...pageProps} />
+
+          <div className="body">
+            <SideNavbar />
+
+            <div className="main-body">
+              <Component {...pageProps} />
+            </div>
+          </div>
+
           <Footer />
         </main>
       </SessionProvider>

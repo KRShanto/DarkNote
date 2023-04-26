@@ -16,14 +16,44 @@ main {
   height: 100vh;
 }
 
-main.dark {
+main.DARK {
   background-color: rgb(36, 36, 36);
   color: white;
+
+  #navbar {
+    background-color: rgb(11, 11, 11);
+  }
+
+  #side-navbar {
+    background-color: rgb(11, 11, 11);
+  }
 }
 
-main.light {
-  background-color: rgb(255, 255, 255);
+main.LIGHT {
+  background-color: rgb(230, 227, 227);
   color: black;
+
+  #navbar {
+    background-color: rgb(36, 36, 36);
+  }
+
+  #side-navbar {
+    background-color: rgb(36, 36, 36);
+  }
+}
+
+.body {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.main-body {
+  position: absolute;
+  width: 85%;
+  height: 92vh;
+  right: 0;
+  top: 8vh;
 }
 
 .preloader {

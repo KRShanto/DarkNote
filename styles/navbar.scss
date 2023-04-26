@@ -1,0 +1,66 @@
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  // background-color: black;
+  height: 8vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  // right: 0;
+  left: 0;
+  z-index: 100;
+  color: $white;
+
+  .logo {
+    color: gold;
+    font-family: "Tilt Neon", sans-serif;
+    font-size: 2rem;
+  }
+
+  .links {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+    align-items: center;
+
+    a,
+    button {
+      text-decoration: none;
+      color: $white;
+      transition: all 0.3s ease-in-out;
+      font-size: 2rem;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+
+      &:hover {
+        color: $mainColor;
+      }
+    }
+
+    .login {
+      background-color: transparent;
+      padding: 0.3rem 1rem;
+      border-radius: 0.2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      transition: all 0.3s ease-in-out;
+      // font-family: "Josefin Sans", sans-serif;
+      color: $mainColor;
+      border: 1px solid $mainColor;
+
+      &:hover {
+        background-color: $mainColor;
+        color: white;
+      }
+    }
+
+    .profile-image {
+      border-radius: 50%;
+    }
+  }
+}
