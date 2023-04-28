@@ -14,14 +14,17 @@ import UserImage from "@/public/user-image.png";
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const router = useRouter();
   const { view, setView } = useViewStore();
 
   return (
     <nav id="navbar">
-      <h1 className="logo">Dark Note</h1>
+      <Link href="/" className="logo">
+        Dark Note
+      </Link>
 
       <div className="links">
+        <CreateNoteButton />
+
         {view === "GRID" ? (
           <button
             className="grid-list"
@@ -72,4 +75,39 @@ export default function Navbar() {
       </div>
     </nav>
   );
+}
+
+function CreateNoteButton() {
+  const router = useRouter();
+
+  // if its home page, show create notebook
+  if (router.pathname === "/") {
+    return (
+      <Link
+        href="/create-book"
+        title="Create Notebook"
+        className="create-button"
+      >
+        Create Notebook
+      </Link>
+    );
+  }
+
+  // if the path contains /book, show create note
+  else if (router.pathname.includes("/book")) {
+    return (
+      <Link
+        href={`/create-note?book=${router.query.id}`}
+        title="Create Note"
+        className="create-button"
+      >
+        Create Note
+      </Link>
+    );
+  }
+
+  // else show nothing
+  else {
+    return <></>;
+  }
 }

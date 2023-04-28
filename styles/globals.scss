@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Lobster&family=Tilt+Neon&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@1&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ysabeau:wght@600&display=swap");
 
 @import "var";
 
@@ -17,29 +18,13 @@ main {
 }
 
 main.DARK {
-  background-color: rgb(36, 36, 36);
+  background-color: rgb(17, 17, 17);
   color: white;
-
-  #navbar {
-    background-color: rgb(11, 11, 11);
-  }
-
-  #side-navbar {
-    background-color: rgb(11, 11, 11);
-  }
 }
 
 main.LIGHT {
   background-color: rgb(230, 227, 227);
   color: black;
-
-  #navbar {
-    background-color: rgb(36, 36, 36);
-  }
-
-  #side-navbar {
-    background-color: rgb(36, 36, 36);
-  }
 }
 
 .body {
@@ -97,6 +82,7 @@ main.LIGHT {
   }
 }
 
-@import "navbar.scss";
-@import "home.scss";
-@import "side-navbar.scss";
+@import "navbar";
+@import "home";
+@import "side-navbar";
+@import "create-book";

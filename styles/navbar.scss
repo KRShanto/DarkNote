@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  // background-color: black;
+  background-color: transparent;
   height: 8vh;
   width: 100vw;
   position: fixed;
@@ -12,11 +12,14 @@
   left: 0;
   z-index: 100;
   color: $white;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.262);
 
   .logo {
     color: gold;
     font-family: "Tilt Neon", sans-serif;
     font-size: 2rem;
+    font-weight: bold;
+    text-decoration: none;
   }
 
   .links {
