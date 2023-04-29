@@ -27,7 +27,7 @@ export default function Navbar() {
 
         {view === "GRID" ? (
           <button
-            className="grid-list"
+            className="grid-list link"
             onClick={() => setView("LIST")}
             title="List View"
           >
@@ -35,7 +35,7 @@ export default function Navbar() {
           </button>
         ) : (
           <button
-            className="grid-list"
+            className="grid-list link"
             onClick={() => setView("GRID")}
             title="Grid View"
           >
@@ -43,7 +43,7 @@ export default function Navbar() {
           </button>
         )}
 
-        <Link href="/settings" title="Settings">
+        <Link href="/settings" title="Settings" className="link">
           <AiOutlineSetting />
         </Link>
 
@@ -68,7 +68,7 @@ export default function Navbar() {
             )}
           </Link>
         ) : (
-          <button className="login" onClick={() => signIn()} title="Login">
+          <button className="btn" onClick={() => signIn()} title="Login">
             Login
           </button>
         )}
@@ -83,11 +83,7 @@ function CreateNoteButton() {
   // if its home page, show create notebook
   if (router.pathname === "/") {
     return (
-      <Link
-        href="/create-book"
-        title="Create Notebook"
-        className="create-button"
-      >
+      <Link href="/create-book" title="Create Notebook" className="btn">
         Create Notebook
       </Link>
     );
@@ -99,7 +95,7 @@ function CreateNoteButton() {
       <Link
         href={`/create-note?book=${router.query.id}`}
         title="Create Note"
-        className="create-button"
+        className="btn"
       >
         Create Note
       </Link>

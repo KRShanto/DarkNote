@@ -1,0 +1,18 @@
+.btn {
+  background-color: transparent;
+  padding: 0.3rem 1rem;
+  border-radius: 0.2rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  color: $mainColor;
+  border: 1px solid $mainColor;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: "Noto Sans", sans-serif;
+
+  &:hover {
+    background-color: $mainColor;
+    color: white;
+  }
+}
