@@ -8,5 +8,6 @@
   top: 8vh;
   color: $white;
   background-color: transparent;
-  border-right: 0.5px solid rgba(255, 255, 255, 0.262);
+  // border-right: 0.5px solid rgba(255, 255, 255, 0.262);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
 }

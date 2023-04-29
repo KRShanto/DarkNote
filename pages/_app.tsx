@@ -68,6 +68,11 @@ export default function App({
     };
   }, [router]);
 
+  // Change the body's class based on the theme
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
+
   return (
     <>
       <LoadingBar
@@ -84,7 +89,7 @@ export default function App({
       )}
 
       <SessionProvider session={session}>
-        <main className={theme} style={{ opacity: loading ? 0.2 : 1 }}>
+        <main style={{ opacity: loading ? 0.2 : 1 }}>
           <Navbar />
 
           <div className="body">

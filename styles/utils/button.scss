@@ -1,8 +1,12 @@
 .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   background-color: transparent;
   padding: 0.3rem 1rem;
   border-radius: 0.2rem;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
   color: $mainColor;
@@ -11,8 +15,13 @@
   text-decoration: none;
   font-family: "Noto Sans", sans-serif;
 
+  .icon {
+    font-size: 1.3rem;
+  }
+
   &:hover {
     background-color: $mainColor;
     color: white;
+    text-shadow: 0 0 0.5px black;
   }
 }

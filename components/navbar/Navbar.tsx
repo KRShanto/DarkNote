@@ -9,6 +9,8 @@ import Image from "next/image";
 import { FaBars } from "react-icons/fa";
 import { BsGrid3X3Gap } from "react-icons/bs";
 import { AiOutlineSetting } from "react-icons/ai";
+import { FaBook } from "react-icons/fa";
+import { FaFileAlt } from "react-icons/fa";
 
 import UserImage from "@/public/user-image.png";
 
@@ -84,7 +86,8 @@ function CreateNoteButton() {
   if (router.pathname === "/") {
     return (
       <Link href="/create-book" title="Create Notebook" className="btn">
-        Create Notebook
+        <p>Create Notebook</p>
+        <FaBook className="icon" />
       </Link>
     );
   }
@@ -97,7 +100,8 @@ function CreateNoteButton() {
         title="Create Note"
         className="btn"
       >
-        Create Note
+        <p>Create Note</p>
+        <FaFileAlt className="icon" />
       </Link>
     );
   }

@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: transparent;
+  // background-color: transparent;
   height: 8vh;
   width: 100vw;
   position: fixed;
@@ -11,8 +11,9 @@
   // right: 0;
   left: 0;
   z-index: 100;
-  color: $white;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.262);
+  // color: $white;
+  // border-bottom: 0.5px solid rgba(255, 255, 255, 0.262);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
   .logo {
     color: gold;
@@ -31,7 +32,7 @@
 
     .link {
       text-decoration: none;
-      color: $white;
+      color: inherit;
       transition: all 0.3s ease-in-out;
       font-size: 2rem;
       background-color: transparent;

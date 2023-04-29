@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useLoadingStore } from "@/stores/loading";
-import NotLoggedInMessage from "./NotLoggedInMessage";
+import NotLoggedInMessage from "../NotLoggedInMessage";
 
 // import lock icon
 import { FaLock } from "react-icons/fa";
@@ -35,7 +35,7 @@ export default function CreateBook() {
     }
 
     try {
-      const body = { title, description };
+      const body = { title, description, locked };
       const json = await fetcher("/api/create-book", body);
 
       if (json.type !== "SUCCESS") {

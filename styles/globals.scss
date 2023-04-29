@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Lobster&family=Tilt+Neon&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@1&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Ysabeau:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ysabeau&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600&display=swap");
 
 @import "var";
@@ -12,18 +12,40 @@
   box-sizing: border-box;
 }
 
-main {
+body {
   position: relative;
   width: 100vw;
   height: 100vh;
 }
 
-main.DARK {
-  background-color: rgb(17, 17, 17);
+// main {
+//   position: relative;
+//   width: 100vw;
+//   height: 100vh;
+// }
+
+// main.DARK {
+//   background-color: rgb(17, 17, 17);
+//   color: white;
+// }
+
+// main.LIGHT {
+//   background-color: rgb(230, 227, 227);
+//   color: black;
+// }
+
+body.DARK {
+  $color: rgb(17, 17, 17);
+  background-color: $color;
   color: white;
+
+  nav {
+    background-color: $color;
+    color: $white;
+  }
 }
 
-main.LIGHT {
+body.LIGHT {
   background-color: rgb(230, 227, 227);
   color: black;
 }
@@ -87,5 +109,6 @@ main.LIGHT {
 @import "home";
 @import "side-navbar";
 @import "create-book";
+@import "display-notebooks";
 
 @import "utils/button";

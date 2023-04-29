@@ -1,0 +1,57 @@
+.books {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  padding: 1rem;
+  margin: 1rem;
+
+  .book {
+    width: 25rem;
+    height: 25rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px white;
+    font-family: "Ysabeau", sans-serif;
+    font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      //   box-shadow: 0 0 5px $mainColor;
+      transform: scale(1.1);
+    }
+
+    .main {
+      height: 90%;
+    }
+
+    .info {
+      font-family: sans-serif;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      svg {
+        font-size: 1.6rem;
+      }
+
+      .createdAt {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .locked {
+        color: cyan;
+      }
+    }
+
+    .title {
+      margin-bottom: 1rem;
+    }
+  }
+}
