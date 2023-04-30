@@ -19,6 +19,9 @@ const notebookSchema = new Schema<NotebookType>({
     type: Date,
     default: Date.now,
   },
+  protectionToken: {
+    type: String,
+  },
 });
 
 const Notebook =
