@@ -96,7 +96,7 @@ function CreateNoteButton() {
   else if (router.pathname.includes("/book")) {
     return (
       <Link
-        href={`/create-note?book=${router.query.id}`}
+        href={`/create-note?id=${router.query.id}`}
         title="Create Note"
         className="btn"
       >
