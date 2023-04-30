@@ -4,6 +4,8 @@ import GoogleProvider from "next-auth/providers/google";
 import clientPromise from "../../../lib/clientPromise";
 import User from "@/models/user";
 import dbConnect from "@/lib/dbConnect";
+import { DEFAULT_PROTECTION_KEY } from "@/constants/security";
+import bcrypt from "bcrypt";
 
 export const authOptions = {
   secret: process.env.SECRET,
@@ -22,14 +24,25 @@ export const authOptions = {
     signIn: async (user, account, profile) => {
       // Check if the user is new or not
       // Check if there is any `protectionKey` in the user object
-      // If there is no `protectionKey` then redirect to `/settings/security` page
+      // Generate default protection key
+      // If there is no `protectionKey` then redirect to `/new` page
 
       await dbConnect();
 
       const userFromDB = await User.findOne({ email: user.user.email });
 
       if (!userFromDB || !userFromDB.protectionKey) {
-        return Promise.resolve("/settings/security?new=true");
+        // hash
+        const salt = await bcrypt.genSalt(10);
+        const hashedProtectionKey = await bcrypt.hash(
+          DEFAULT_PROTECTION_KEY,
+          salt
+        );
+
+        userFromDB.protectionKey = hashedProtectionKey;
+        await userFromDB.save();
+
+        return "/new";
       }
 
       return true;
