@@ -5,7 +5,9 @@ export type ReturnedJsonType = {
     | "SUCCESS"
     | "ALREADY"
     | "NOTFOUND"
+    | "USER_NOTFOUND"
     | "UNAUTHORIZED"
     | "SERVER_ERROR"
-    | "INVALID";
+    | "INVALID"
+    | "LOCKED";
 };
