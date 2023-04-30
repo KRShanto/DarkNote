@@ -7,6 +7,7 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
 import User from "@/models/user";
+import { UserType } from "@/types/data/user";
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,7 +20,7 @@ export default async function handler(
     res,
     authOptions as NextAuthOptions
   );
-  const sessionUser = session?.user;
+  const sessionUser = session?.user as UserType;
 
   if (!sessionUser) {
     return response(
@@ -30,15 +31,6 @@ export default async function handler(
       },
       401
     );
-  }
-
-  const user = await User.findOne({ email: sessionUser.email });
-
-  if (!user) {
-    return response(res, {
-      type: "NOTFOUND",
-      msg: "User not found",
-    });
   }
 
   const { title, description, locked } = req.body;
@@ -58,7 +50,7 @@ export default async function handler(
     title,
     description,
     locked,
-    userId: user._id,
+    userId: sessionUser._id,
   };
 
   try {
