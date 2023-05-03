@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useLoadingStore } from "@/stores/loading";
 import fetcher from "@/lib/fetcher";
-
-import { FaLock } from "react-icons/fa";
 import {
   addNotebookProtectionToken,
   getNotebookProtectionTokenById,
 } from "@/lib/session";
+
+import { FaLock } from "react-icons/fa";
 
 export default function CreateNote() {
   const [title, setTitle] = useState("");

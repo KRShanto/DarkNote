@@ -26,10 +26,10 @@ export default function DisplayBooks() {
 
   return (
     <>
-      <div className="books">
+      <div className="display">
         {books.map((book) => {
           return (
-            <Link href={`/book/${book._id}`} className="book" key={book._id}>
+            <Link href={`/book/${book._id}`} className="card" key={book._id}>
               <div className="main">
                 <h2 className="title">{book.title}</h2>
                 <p className="description">{book.description}</p>

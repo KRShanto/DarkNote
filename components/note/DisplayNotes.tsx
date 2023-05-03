@@ -6,6 +6,9 @@ import {
   addNotebookProtectionToken,
   getNotebookProtectionTokenById,
 } from "@/lib/session";
+import Link from "next/link";
+import { FaClock, FaLock } from "react-icons/fa";
+import moment from "moment";
 
 export default function DisplayNotes() {
   const router = useRouter();
@@ -94,12 +97,25 @@ export default function DisplayNotes() {
           </button>
         </div>
       ) : (
-        <div>
+        <div className="display">
           {notes.map((note) => (
-            <div key={note._id}>
-              <h1>{note.title}</h1>
-              <p>{note.content}</p>
-            </div>
+            <Link href={`/note/${id}`} key={note._id} className="card">
+              <div className="main">
+                <h1 className="title">{note.title}</h1>
+                <p className="description">{note.content}</p>
+              </div>
+              <div className="info">
+                <p className="createdAt">
+                  <FaClock />
+                  {moment(note.createdAt).fromNow()}
+                </p>
+              </div>
+              {note.locked && (
+                <p className="locked" title="This note is locked">
+                  <FaLock />
+                </p>
+              )}
+            </Link>
           ))}
         </div>
       )}
