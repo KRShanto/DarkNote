@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import fetcher from "@/lib/fetcher";
 import { NoteType } from "@/types/data/note";
+import {
+  addNotebookProtectionToken,
+  getNotebookProtectionTokenById,
+} from "@/lib/session";
 
 export default function DisplayNotes() {
   const router = useRouter();
@@ -27,7 +31,8 @@ export default function DisplayNotes() {
     if (json.type === "SUCCESS") {
       // Save the `protectionToken` to the session storage
       // sessionStorage.setItem("protectionToken", json.data);
-      sessionStorage.setItem("protectionToken", json.data.protectionToken);
+      // sessionStorage.setItem("protectionToken", json.data.protectionToken);
+      addNotebookProtectionToken(id as string, json.data.protectionToken);
       setNotes(json.data.notes);
       setNeedToUnlock(false);
     } else if (json.type === "INVALID") {
@@ -45,9 +50,10 @@ export default function DisplayNotes() {
       // });
 
       // Get the `protectionToken` from the session storage
-      const protectionToken = sessionStorage.getItem("protectionToken");
+      // const protectionToken = sessionStorage.getItem("protectionToken");
+      const protectionToken = getNotebookProtectionTokenById(id as string);
 
-      console;
+      console.log(protectionToken);
 
       const json = await fetcher(`/api/get-notes`, {
         id: id,

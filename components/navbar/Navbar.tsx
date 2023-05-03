@@ -16,7 +16,7 @@ import UserImage from "@/public/user-image.png";
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const { view, setView } = useViewStore();
+  const { view, setView } = useViewStore(); // TODO
 
   return (
     <nav id="navbar">

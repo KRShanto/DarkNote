@@ -4,6 +4,10 @@ import { useLoadingStore } from "@/stores/loading";
 import fetcher from "@/lib/fetcher";
 
 import { FaLock } from "react-icons/fa";
+import {
+  addNotebookProtectionToken,
+  getNotebookProtectionTokenById,
+} from "@/lib/session";
 
 export default function CreateNote() {
   const [title, setTitle] = useState("");
@@ -34,8 +38,11 @@ export default function CreateNote() {
     console.log(json);
 
     if (json.type === "SUCCESS") {
+      // // Save the `protectionToken` to the session storage
+      // sessionStorage.setItem("protectionToken", json.data);
+
       // Save the `protectionToken` to the session storage
-      sessionStorage.setItem("protectionToken", json.data);
+      addNotebookProtectionToken(id as string, json.data);
       setNeedToUnlock(false);
     } else if (json.type === "INVALID") {
       console.log("Invalid protection key");
@@ -48,9 +55,14 @@ export default function CreateNote() {
     async function getNotebook() {
       turnOn();
 
+      // // Get the `protectionToken` from the session storage
+      // const protectionTokenFromSession =
+      //   sessionStorage.getItem("protectionToken");
+
       // Get the `protectionToken` from the session storage
-      const protectionTokenFromSession =
-        sessionStorage.getItem("protectionToken");
+      const protectionTokenFromSession = getNotebookProtectionTokenById(
+        id as string
+      );
 
       console.log(protectionTokenFromSession);
 
