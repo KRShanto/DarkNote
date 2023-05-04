@@ -2,10 +2,10 @@ import fetcher from "@/lib/fetcher";
 import { NotebookType } from "@/types/data/notebook";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
+import Link from "next/link";
 
 import { FaClock } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
-import Link from "next/link";
 
 export default function DisplayBooks() {
   const [books, setBooks] = useState<NotebookType[]>([]);
@@ -40,9 +40,7 @@ export default function DisplayBooks() {
                   {moment(book.createdAt).fromNow()}
                 </p>
                 {book.locked && (
-                  <p className="locked" title="This book is locked">
-                    <FaLock />
-                  </p>
+                  <FaLock className="locked" title="This book is locked" />
                 )}
               </div>
             </Link>

@@ -46,11 +46,6 @@ export default function DisplayNotes() {
 
   useEffect(() => {
     async function getNotes() {
-      // const res = await fetcher(`/api/get-notes`, {
-      //   id: id,
-
-      // });
-
       // Get the `protectionToken` from the session storage
       // const protectionToken = sessionStorage.getItem("protectionToken");
       // const protectionToken = getNoteookProtectionTokenById(id as string);
@@ -105,20 +100,29 @@ export default function DisplayNotes() {
               className="card"
             >
               <div className="main">
-                <h1 className="title">{note.title}</h1>
-                <p className="description">{note.content}</p>
+                <h1 className="title">
+                  {note.title.length > 35
+                    ? note.title.substring(0, 35) + "...."
+                    : note.title}
+                </h1>
+                <p className="description">
+                  {
+                    // display only the first 100 characters
+                    note.content.length > 200
+                      ? note.content.substring(0, 200) + "........"
+                      : note.content
+                  }
+                </p>
               </div>
               <div className="info">
                 <p className="createdAt">
                   <FaClock />
                   {moment(note.createdAt).fromNow()}
                 </p>
+                {note.locked && (
+                  <FaLock className="locked" title="This note is locked" />
+                )}
               </div>
-              {note.locked && (
-                <p className="locked" title="This note is locked">
-                  <FaLock />
-                </p>
-              )}
             </Link>
           ))}
         </div>
