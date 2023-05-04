@@ -1,4 +1,4 @@
-import { UserType } from "./../../types/data/user";
+import { UserType } from "../../types/data/user";
 import { NextApiRequest, NextApiResponse } from "next";
 import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
@@ -11,10 +11,13 @@ import { v4 as uuidv4 } from "uuid";
 import User from "@/models/user";
 import bcrypt from "bcrypt";
 
-// Unclock a notebook
+// Unclock a note
 // Check if the protectionKey is correct
+// Check if the note is locked
+// Check if the notebook is locked
 // Generate a token and save it in the database
 // Return the token to the client
+// Also return the note
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -41,14 +44,16 @@ export default async function handler(
 
   const { id, protectionKey } = req.body;
 
-  const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
+  // const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
+  const note = await Note.findOne({ _id: id, userId: sessionUser._id });
+  const book = await NoteBook.findOne({ _id: note.notebookId });
 
-  if (!book) {
+  if (!note) {
     return response(
       res,
       {
         type: "NOTFOUND",
-        msg: "No notebook found",
+        msg: "No note found",
       },
       404
     );
@@ -95,9 +100,21 @@ export default async function handler(
   book.protectionToken = token;
   await book.save();
 
+  //   return response(res, {
+  //     type: "SUCCESS",
+  //     msg: "Notebook unlocked successfully",
+  //     data: token,
+  //   });
+
+  // Also return the notes
+  // const notes = await Note.find({ notebookId: book._id });
+
   return response(res, {
     type: "SUCCESS",
     msg: "Notebook unlocked successfully",
-    data: token,
+    data: {
+      protectionToken: token,
+      note,
+    },
   });
 }

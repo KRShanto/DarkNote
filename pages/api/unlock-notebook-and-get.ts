@@ -9,7 +9,7 @@ import response from "@/lib/response";
 import Note from "@/models/note";
 import { v4 as uuidv4 } from "uuid";
 import User from "@/models/user";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 // Unclock a notebook
 // Check if the protectionKey is correct
