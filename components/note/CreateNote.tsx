@@ -6,6 +6,7 @@ import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
 
 import { FaLock } from "react-icons/fa";
 import { generateNotePath } from "@/lib/notepage";
+import RichEditor from "./RichEditor";
 
 export default function CreateNote() {
   const [title, setTitle] = useState("");
@@ -62,6 +63,7 @@ export default function CreateNote() {
 
       console.log(protectionTokenFromSession);
 
+      // TODO: don't use this route instead use check-book-protection
       const json = await fetcher("/api/get-book", {
         id,
         protectionToken: protectionTokenFromSession,
@@ -145,7 +147,7 @@ export default function CreateNote() {
             />
           </div>
 
-          <div className="form-wrapper">
+          {/* <div className="form-wrapper">
             <label htmlFor="description">Content</label>
             <textarea
               name="description"
@@ -153,7 +155,9 @@ export default function CreateNote() {
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
-          </div>
+          </div> */}
+
+          <RichEditor content={content} setContent={setContent} />
 
           <div className="lock" onClick={() => setLocked(!locked)}>
             <FaLock className={`icon ${locked ? "active" : ""}`} />
