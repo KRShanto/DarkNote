@@ -14,6 +14,8 @@ export default function DisplayNote() {
 
   const [needToUnlock, setNeedToUnlock] = useState(false);
   const [protectionKey, setProtectionKey] = useState("");
+  const [deletePopup, setDeletePopup] = useState(false);
+
   const [note, setNote] = useState<NoteType>();
 
   const [notebookId, setNotebookId] = useState<string>();
@@ -113,11 +115,99 @@ export default function DisplayNote() {
           </button>
         </div>
       ) : (
-        <div className="note">
-          <h1 className="title">{note?.title}</h1>
-          <p className="description">{note?.content}</p>
+        <div className="display-note">
+          <div className="header">
+            <div className="title-info">
+              <h1 className="title">{note?.title}</h1>
+              <div className="info">
+                <span className="date">
+                  <FaClock /> {moment(note?.createdAt).format("MMMM Do YYYY")}
+                </span>
+              </div>
+            </div>
+
+            <hr />
+
+            <div className="options">
+              <Link
+                className="edit btn"
+                href={`/edit-note/${notebookId}-${noteId}`}
+              >
+                Edit Note
+              </Link>
+
+              <button
+                className="btn danger"
+                onClick={() => {
+                  setDeletePopup(true);
+                }}
+              >
+                Delete Note
+              </button>
+              <button className="btn">Full Screen</button>
+            </div>
+          </div>
+
+          <div
+            dangerouslySetInnerHTML={{ __html: note?.content as string }}
+            className="content"
+          ></div>
         </div>
       )}
+
+      {deletePopup && (
+        <DeletePopup
+          noteId={noteId as string}
+          notebookId={notebookId as string}
+          protectionToken={protectionKey}
+          setDeletePopup={setDeletePopup}
+        />
+      )}
+    </div>
+  );
+}
+
+function DeletePopup({
+  noteId,
+  notebookId,
+  protectionToken,
+  setDeletePopup,
+}: {
+  noteId: string;
+  notebookId: string;
+  protectionToken: string;
+  setDeletePopup: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const router = useRouter();
+
+  async function handleDelete() {
+    const json = await fetcher("/api/delete-note", {
+      id: noteId,
+      protectionToken,
+    });
+
+    console.log(json);
+
+    if (json.type === "SUCCESS") {
+      // redirect to notebook page
+      router.push(`/book/${notebookId}`);
+    } else {
+      console.error("ERROR");
+      console.error(json);
+    }
+  }
+
+  return (
+    <div className="delete-popup">
+      <p>Are you sure you want to delete this note?</p>
+      <div className="options">
+        <button className="btn" onClick={() => setDeletePopup(false)}>
+          Cancel
+        </button>
+        <button className="btn danger" onClick={handleDelete}>
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

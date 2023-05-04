@@ -25,3 +25,15 @@
     text-shadow: 0 0 0.5px black;
   }
 }
+
+.danger {
+  $color: red;
+  color: $color;
+  border: 1px solid $color;
+
+  &:hover {
+    background-color: $color;
+    color: white;
+    text-shadow: 0 0 0.5px black;
+  }
+}
