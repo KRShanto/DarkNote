@@ -1,28 +1,18 @@
-const NOTES_PROTECTION_TOKENS_KEY = "notesProtectionTokens";
-const NOTEBOOKS_PROTECTION_TOKENS_KEY = "notebooksProtectionTokens";
+const PROTECTION_TOKENS_KEY = "protectionTokens";
 
 export type ProtectionToken = {
   id: string;
   token: string;
 };
 
-export function addNoteProtectionToken(id: string, token: string): void {
-  const tokens = getNotesProtectionTokens();
+export function addProtectionToken(id: string, token: string): void {
+  const tokens = getProtectionTokens();
   tokens.push({ id, token });
-  sessionStorage.setItem(NOTES_PROTECTION_TOKENS_KEY, JSON.stringify(tokens));
+  sessionStorage.setItem(PROTECTION_TOKENS_KEY, JSON.stringify(tokens));
 }
 
-export function addNotebookProtectionToken(id: string, token: string): void {
-  const tokens = getNotebooksProtectionTokens();
-  tokens.push({ id, token });
-  sessionStorage.setItem(
-    NOTEBOOKS_PROTECTION_TOKENS_KEY,
-    JSON.stringify(tokens)
-  );
-}
-
-export function getNotesProtectionTokens(): ProtectionToken[] {
-  const tokensString = sessionStorage.getItem(NOTES_PROTECTION_TOKENS_KEY);
+export function getProtectionTokens(): ProtectionToken[] {
+  const tokensString = sessionStorage.getItem(PROTECTION_TOKENS_KEY);
   if (tokensString) {
     return JSON.parse(tokensString);
   } else {
@@ -30,23 +20,8 @@ export function getNotesProtectionTokens(): ProtectionToken[] {
   }
 }
 
-export function getNotebooksProtectionTokens(): ProtectionToken[] {
-  const tokensString = sessionStorage.getItem(NOTEBOOKS_PROTECTION_TOKENS_KEY);
-  if (tokensString) {
-    return JSON.parse(tokensString);
-  } else {
-    return [];
-  }
-}
-
-export function getNoteProtectionTokenById(id: string): string | null {
-  const tokens = getNotesProtectionTokens();
-  const matchingToken = tokens.find((token) => token.id === id);
-  return matchingToken ? matchingToken.token : null;
-}
-
-export function getNotebookProtectionTokenById(id: string): string | null {
-  const tokens = getNotebooksProtectionTokens();
+export function getProtectionTokenById(id: string): string | null {
+  const tokens = getProtectionTokens();
   const matchingToken = tokens.find((token) => token.id === id);
   return matchingToken ? matchingToken.token : null;
 }

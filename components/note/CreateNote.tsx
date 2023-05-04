@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useLoadingStore } from "@/stores/loading";
 import fetcher from "@/lib/fetcher";
-import {
-  addNotebookProtectionToken,
-  getNotebookProtectionTokenById,
-} from "@/lib/session";
+import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
 
 import { FaLock } from "react-icons/fa";
+import { generateNotePath } from "@/lib/notepage";
 
 export default function CreateNote() {
   const [title, setTitle] = useState("");
@@ -42,7 +40,7 @@ export default function CreateNote() {
       // sessionStorage.setItem("protectionToken", json.data);
 
       // Save the `protectionToken` to the session storage
-      addNotebookProtectionToken(id as string, json.data);
+      addProtectionToken(id as string, json.data);
       setNeedToUnlock(false);
     } else if (json.type === "INVALID") {
       console.log("Invalid protection key");
@@ -60,9 +58,7 @@ export default function CreateNote() {
       //   sessionStorage.getItem("protectionToken");
 
       // Get the `protectionToken` from the session storage
-      const protectionTokenFromSession = getNotebookProtectionTokenById(
-        id as string
-      );
+      const protectionTokenFromSession = getProtectionTokenById(id as string);
 
       console.log(protectionTokenFromSession);
 
@@ -104,6 +100,9 @@ export default function CreateNote() {
       const json = await fetcher("/api/create-note", body);
 
       console.log(json);
+
+      // redirect to notebook page
+      router.push(generateNotePath(json.data._id, id as string));
     } catch (error: any) {
       console.error(error);
       setError(error.message);

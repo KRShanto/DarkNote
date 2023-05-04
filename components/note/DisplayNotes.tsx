@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import fetcher from "@/lib/fetcher";
 import { NoteType } from "@/types/data/note";
-import {
-  addNotebookProtectionToken,
-  getNotebookProtectionTokenById,
-} from "@/lib/session";
+import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
 import Link from "next/link";
 import { FaClock, FaLock } from "react-icons/fa";
 import moment from "moment";
+import { generateNotePath } from "@/lib/notepage";
 
 export default function DisplayNotes() {
   const router = useRouter();
@@ -35,7 +33,8 @@ export default function DisplayNotes() {
       // Save the `protectionToken` to the session storage
       // sessionStorage.setItem("protectionToken", json.data);
       // sessionStorage.setItem("protectionToken", json.data.protectionToken);
-      addNotebookProtectionToken(id as string, json.data.protectionToken);
+      // addNotebookProtectionToken(id as string, json.data.protectionToken);
+      addProtectionToken(id as string, json.data.protectionToken);
       setNotes(json.data.notes);
       setNeedToUnlock(false);
     } else if (json.type === "INVALID") {
@@ -54,7 +53,8 @@ export default function DisplayNotes() {
 
       // Get the `protectionToken` from the session storage
       // const protectionToken = sessionStorage.getItem("protectionToken");
-      const protectionToken = getNotebookProtectionTokenById(id as string);
+      // const protectionToken = getNoteookProtectionTokenById(id as string);
+      const protectionToken = getProtectionTokenById(id as string);
 
       console.log(protectionToken);
 
@@ -99,7 +99,11 @@ export default function DisplayNotes() {
       ) : (
         <div className="display">
           {notes.map((note) => (
-            <Link href={`/note/${id}`} key={note._id} className="card">
+            <Link
+              href={generateNotePath(note._id, id as string)}
+              key={note._id}
+              className="card"
+            >
               <div className="main">
                 <h1 className="title">{note.title}</h1>
                 <p className="description">{note.content}</p>
