@@ -13,6 +13,7 @@ import { FaBook } from "react-icons/fa";
 import { FaFileAlt } from "react-icons/fa";
 
 import UserImage from "@/public/user-image.png";
+import { retrieveFromPath } from "@/lib/notepage";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -25,6 +26,7 @@ export default function Navbar() {
       </Link>
 
       <div className="links">
+        <BackButton />
         <CreateNoteButton />
 
         {view === "GRID" ? (
@@ -102,6 +104,51 @@ function CreateNoteButton() {
       >
         <p>Create Note</p>
         <FaFileAlt className="icon" />
+      </Link>
+    );
+  }
+
+  // else show nothing
+  else {
+    return <></>;
+  }
+}
+
+function BackButton() {
+  const router = useRouter();
+
+  // If the path contains /book/, go to home
+  if (
+    router.pathname.includes("/book/") ||
+    router.pathname.includes("/settings") ||
+    router.pathname.includes("/profile") ||
+    router.pathname.includes("/create-book")
+  ) {
+    return (
+      <Link className="btn" href="/" title="Back">
+        Back
+      </Link>
+    );
+  }
+
+  // If the path contains /note/, go to the book page
+  else if (router.pathname.includes("/note/")) {
+    const { notebookId } = retrieveFromPath(router.asPath);
+
+    return (
+      <Link className="btn" href={`/book/${notebookId}`} title="Back">
+        Back
+      </Link>
+    );
+  }
+
+  // If the path contains /create-note, go the book page
+  else if (router.pathname.includes("/create-note")) {
+    const { id } = router.query;
+
+    return (
+      <Link className="btn" href={`/book/${id}`} title="Back">
+        Back
       </Link>
     );
   }
