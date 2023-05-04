@@ -17,6 +17,7 @@ export default function CreateNote() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [textContent, setTextContent] = useState("");
   const [locked, setLocked] = useState(false);
   const [error, setError] = useState("");
 
@@ -125,6 +126,7 @@ export default function CreateNote() {
         id: noteId,
         title,
         content,
+        textContent,
         locked,
         protectionToken,
       };
@@ -187,7 +189,12 @@ export default function CreateNote() {
             />
           </div> */}
 
-          <RichEditor content={content} setContent={setContent} />
+          <RichEditor
+            content={content}
+            setContent={setContent}
+            textContent={textContent}
+            setTextContent={setTextContent}
+          />
 
           <div className="lock" onClick={() => setLocked(!locked)}>
             <FaLock className={`icon ${locked ? "active" : ""}`} />

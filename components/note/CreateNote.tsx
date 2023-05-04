@@ -11,6 +11,7 @@ import RichEditor from "./RichEditor";
 export default function CreateNote() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [textContent, setTextContent] = useState("");
   const [locked, setLocked] = useState(false);
   const [error, setError] = useState("");
   const [needToUnlock, setNeedToUnlock] = useState(false); // TODO: get a better solution: use boolean | null
@@ -98,7 +99,7 @@ export default function CreateNote() {
     }
 
     try {
-      const body = { id, title, content, locked, protectionToken };
+      const body = { id, title, content, textContent, locked, protectionToken };
       const json = await fetcher("/api/create-note", body);
 
       console.log(json);
@@ -157,7 +158,12 @@ export default function CreateNote() {
             />
           </div> */}
 
-          <RichEditor content={content} setContent={setContent} />
+          <RichEditor
+            content={content}
+            setContent={setContent}
+            textContent={textContent}
+            setTextContent={setTextContent}
+          />
 
           <div className="lock" onClick={() => setLocked(!locked)}>
             <FaLock className={`icon ${locked ? "active" : ""}`} />

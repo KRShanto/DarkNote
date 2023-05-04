@@ -16,6 +16,8 @@ export default function DisplayNotes() {
   const [protectionKey, setProtectionKey] = useState("");
   const [notes, setNotes] = useState<NoteType[]>([]);
 
+  console.log("notes", notes);
+
   async function handleUnlock() {
     if (protectionKey.length === 0) {
       console.log("No protection key entered");
@@ -106,12 +108,9 @@ export default function DisplayNotes() {
                     : note.title}
                 </h1>
                 <p className="description">
-                  {
-                    // display only the first 100 characters
-                    note.content.length > 200
-                      ? note.content.substring(0, 200) + "........"
-                      : note.content
-                  }
+                  {note.textContent.length > 200
+                    ? note.textContent.substring(0, 200) + "........"
+                    : note.textContent}
                 </p>
               </div>
               <div className="info">

@@ -34,7 +34,7 @@ export default async function handler(
     );
   }
 
-  const { id, title, content, locked, protectionToken } = req.body;
+  const { id, title, content, textContent, locked, protectionToken } = req.body;
 
   // Get the book
   const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
@@ -60,14 +60,25 @@ export default async function handler(
     });
   }
 
+  // Check if required fields are not empty
+  if (!title || !content || !textContent) {
+    return response(res, {
+      type: "INVALID",
+      msg: "Please fill in all required fields",
+    });
+  }
+
   // Create the note
   const note = {
     title,
     content,
+    textContent,
     notebookId: book._id,
     userId: sessionUser._id,
     locked: locked || false,
   };
+
+  console.log("The note: ", note);
 
   try {
     const newNote = await Note.create(note);

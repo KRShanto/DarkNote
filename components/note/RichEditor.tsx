@@ -4,12 +4,17 @@ import { Editor } from "@tinymce/tinymce-react";
 function RichEditor({
   content,
   setContent,
+  textContent,
+  setTextContent,
 }: {
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
+  textContent: string;
+  setTextContent: React.Dispatch<React.SetStateAction<string>>;
 }) {
   function handleEditorChange(content: any, editor: any) {
     setContent(content);
+    setTextContent(editor.getContent({ format: "text" }));
   }
 
   return (

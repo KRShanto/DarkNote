@@ -35,7 +35,7 @@ export default async function handler(
     );
   }
 
-  const { id, title, content, locked, protectionToken } = req.body;
+  const { id, title, content, textContent, locked, protectionToken } = req.body;
 
   // Get the book
   //   const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
@@ -80,7 +80,7 @@ export default async function handler(
     // update the note
     const newNote = await Note.findOneAndUpdate(
       { _id: id, userId: sessionUser._id },
-      { title, content, locked: locked || false },
+      { title, content, textContent, locked: locked || false },
       { new: true }
     );
 
