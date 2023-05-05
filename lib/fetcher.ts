@@ -13,5 +13,9 @@ export default async function fetcher(
   });
 
   const json = await res.json();
+
+  // TODO: log more beautifully
+  console.log(`FETCHED [${url}] REQUEST [${body}] RESPONSE [${json}]`);
+
   return json;
 }

@@ -1,0 +1,48 @@
+.protection-key-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30rem;
+  gap: 2rem;
+  position: relative;
+  background-color: rgba(7, 7, 7, 0.989);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 5rem auto;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.44);
+
+  .heading {
+    color: rgb(255, 106, 0);
+    text-shadow: 0 0 2px rgb(255, 13, 0);
+    font-family: "Tilt Neon", sans-serif;
+    font-size: 2rem;
+  }
+
+  .error {
+    color: red;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: "Josefin Sans", sans-serif;
+    background-color: black;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 0, 0, 0.44);
+    width: 100%;
+    text-align: center;
+  }
+
+  input {
+    font-size: 1.7rem;
+    font-family: sans-serif;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.44);
+    outline: none;
+    width: 100%;
+    font-family: "Ysabeau", sans-serif;
+    background-color: rgba(255, 255, 255, 0.072);
+    color: rgba(255, 255, 255, 0.813);
+    font-weight: bold;
+  }
+}

@@ -6,4 +6,6 @@ Option to change the font size and font family and theme etc.
 
 Edit & Delete notebook
 
- Bookmarks and Bin
+Bookmarks and Bin
+
+IMPORTANT create a component and global state for logging the fetch requests and responses
