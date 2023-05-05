@@ -5,6 +5,7 @@ A note taking site with rich text editing made with Next.js and Mongodb.
 ## Features
 
 - Rich text editing
+- Markdown support
 - Dark mode
 - Multiple Themes (**Coming Soon**)
 - Separate notes into notebooks
