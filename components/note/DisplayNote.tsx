@@ -15,6 +15,7 @@ export default function DisplayNote() {
   const [needToUnlock, setNeedToUnlock] = useState(false);
   const [protectionKey, setProtectionKey] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
+  const [protectionToken, setProtectionToken] = useState<string | null>();
 
   const [note, setNote] = useState<NoteType>();
 
@@ -42,6 +43,8 @@ export default function DisplayNote() {
       addProtectionToken(notebookId as string, json.data.protectionToken);
       setNote(json.data.notes);
       setNeedToUnlock(false);
+      setProtectionKey("");
+      setProtectionToken(json.data.protectionToken);
     } else if (json.type === "INVALID") {
       console.log("Invalid protection key");
     } else {
@@ -83,6 +86,7 @@ export default function DisplayNote() {
 
       if (json.type === "SUCCESS") {
         setNote(json.data);
+        setProtectionToken(protectionToken);
       } else if (json.type === "LOCKED") {
         setNeedToUnlock(true);
       } else {
@@ -159,7 +163,7 @@ export default function DisplayNote() {
         <DeletePopup
           noteId={noteId as string}
           notebookId={notebookId as string}
-          protectionToken={protectionKey}
+          protectionToken={protectionToken as string}
           setDeletePopup={setDeletePopup}
         />
       )}
