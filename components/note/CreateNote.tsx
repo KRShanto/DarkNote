@@ -9,8 +9,8 @@ import NotFoundMessage from "../NotFoundMessage";
 import { useSession } from "next-auth/react";
 import { FaLock } from "react-icons/fa";
 import NotLoggedInMessage from "../NotLoggedInMessage";
-import { ReturnedJsonType } from "@/types/json";
 import ProtectionKeyForm from "../ProtectionKeyForm";
+import { NotebookType } from "@/types/data/notebook";
 
 export default function CreateNote() {
   // form states
@@ -20,6 +20,7 @@ export default function CreateNote() {
   const [locked, setLocked] = useState(false);
   const [error, setError] = useState("");
 
+  const [book, setBook] = useState<NotebookType>();
   const [needToUnlock, setNeedToUnlock] = useState(false); // TODO: get a better solution: use boolean | null
   const [bookNotFound, setBookNotFound] = useState(false);
   const [protectionToken, setProtectionToken] = useState("");
@@ -28,6 +29,7 @@ export default function CreateNote() {
   const { status } = useSession();
 
   const router = useRouter();
+  // id of the notebook
   const { id } = router.query;
 
   function afterUnlock(data: any) {
@@ -35,40 +37,31 @@ export default function CreateNote() {
     addProtectionToken(id as string, data);
     // Update the unlocked state
     setNeedToUnlock(false);
+    // Update the notebook
+    setBook(data);
   }
 
-  useEffect(() => {
-    async function getNotebook() {
-      turnOn();
+  async function getNotebook() {
+    // Get the `protectionToken` from the session storage
+    const protectionTokenFromSession = getProtectionTokenById(id as string);
 
-      // Get the `protectionToken` from the session storage
-      const protectionTokenFromSession = getProtectionTokenById(id as string);
+    turnOn();
+    const json = await fetcher("/api/get-book", {
+      id,
+    });
+    turnOff();
 
-      const json = await fetcher("/api/get-book", {
-        id,
-        protectionToken: protectionTokenFromSession,
-      });
+    if (json.type === "SUCCESS") {
+      setProtectionToken(protectionTokenFromSession || "");
+      setBook(json.data);
 
-      console.log(json);
-
-      // TODO: handle cases: NOTFOUND, LOCKED, SUCCESS
-      if (json.type === "SUCCESS") {
-        // TODO redirect to the note page
-        console.log("SUCCESS");
-        setProtectionToken(protectionTokenFromSession || "");
-      } else if (json.type === "LOCKED") {
-        console.log("LOCKED");
+      if (json.data.locked) {
         setNeedToUnlock(true);
-      } else if (json.type === "NOTFOUND") {
-        console.log("Book is not found");
-        setBookNotFound(true);
       }
-
-      turnOff();
+    } else if (json.type === "NOTFOUND") {
+      setBookNotFound(true);
     }
-
-    if (id) getNotebook();
-  }, [id]);
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -77,19 +70,27 @@ export default function CreateNote() {
       return setError("Please fill in all fields");
     }
 
-    try {
-      const body = { id, title, content, textContent, locked, protectionToken };
-      const json = await fetcher("/api/create-note", body);
+    const body = { id, title, content, textContent, locked, protectionToken };
 
-      console.log(json);
+    turnOn();
+    const json = await fetcher("/api/create-note", body);
+    turnOff();
 
+    if (json.type === "SUCCESS") {
       // redirect to notebook page
       router.push(generateNotePath(json.data._id, id as string));
-    } catch (error: any) {
-      console.error(error);
-      setError(error.message);
+    } else if (json.type === "LOCKED") {
+      setNeedToUnlock(true);
+    } else if (json.type === "INVALID") {
+      setError("You need to fill in all fields");
+    } else {
+      setError("Something went wrong");
     }
   }
+
+  useEffect(() => {
+    if (id) getNotebook();
+  }, [id]);
 
   if (router.isFallback) {
     return <></>;

@@ -28,7 +28,10 @@ export default function CreateBook() {
 
     try {
       const body = { title, description, locked };
+
+      turnOn();
       const json = await fetcher("/api/create-book", body);
+      turnOff();
 
       if (json.type !== "SUCCESS") {
         throw new Error(json.msg);

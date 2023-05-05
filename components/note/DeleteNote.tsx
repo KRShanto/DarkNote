@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import fetcher from "@/lib/fetcher";
+import { useLoadingStore } from "@/stores/loading";
 
 export default function DeleteNote({
   noteId,
@@ -13,14 +14,15 @@ export default function DeleteNote({
   setDeletePopup: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
+  const { turnOn, turnOff } = useLoadingStore();
 
   async function handleDelete() {
+    turnOn();
     const json = await fetcher("/api/delete-note", {
       id: noteId,
       protectionToken,
     });
-
-    console.log(json);
+    turnOff();
 
     if (json.type === "SUCCESS") {
       // redirect to notebook page

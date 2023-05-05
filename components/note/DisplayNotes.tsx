@@ -11,47 +11,18 @@ import NotFoundMessage from "../NotFoundMessage";
 import { useSession } from "next-auth/react";
 import NotLoggedInMessage from "../NotLoggedInMessage";
 import ProtectionKeyForm from "../ProtectionKeyForm";
+import { useLoadingStore } from "@/stores/loading";
 
 export default function DisplayNotes() {
   const router = useRouter();
   const { id } = router.query;
 
   const [needToUnlock, setNeedToUnlock] = useState(false);
-  const [protectionKey, setProtectionKey] = useState("");
   const [notes, setNotes] = useState<NoteType[]>([]);
   const [bookNotFound, setBookNotFound] = useState(false);
 
   const { status } = useSession();
-
-  console.log("notes", notes);
-
-  // async function handleUnlock() {
-  //   if (protectionKey.length === 0) {
-  //     console.log("No protection key entered");
-  //     return;
-  //   }
-
-  //   const json = await fetcher(`/api/unlock-notebook-and-get`, {
-  //     id,
-  //     protectionKey,
-  //   });
-
-  //   console.log(json);
-
-  //   if (json.type === "SUCCESS") {
-  //     // Save the `protectionToken` to the session storage
-  //     // sessionStorage.setItem("protectionToken", json.data);
-  //     // sessionStorage.setItem("protectionToken", json.data.protectionToken);
-  //     // addNotebookProtectionToken(id as string, json.data.protectionToken);
-  //     addProtectionToken(id as string, json.data.protectionToken);
-  //     setNotes(json.data.notes);
-  //     setNeedToUnlock(false);
-  //   } else if (json.type === "INVALID") {
-  //     console.log("Invalid protection key");
-  //   } else {
-  //     console.error("ERROR");
-  //   }
-  // }
+  const { turnOn, turnOff } = useLoadingStore();
 
   function afterUnlock(data: any) {
     addProtectionToken(id as string, data.protectionToken);
@@ -59,33 +30,28 @@ export default function DisplayNotes() {
     setNeedToUnlock(false);
   }
 
-  useEffect(() => {
-    async function getNotes() {
-      // Get the `protectionToken` from the session storage
-      // const protectionToken = sessionStorage.getItem("protectionToken");
-      // const protectionToken = getNoteookProtectionTokenById(id as string);
-      const protectionToken = getProtectionTokenById(id as string);
+  async function getNotes() {
+    const protectionToken = getProtectionTokenById(id as string);
 
-      console.log(protectionToken);
+    turnOn();
+    const json = await fetcher(`/api/get-notes`, {
+      id,
+      protectionToken,
+    });
+    turnOff();
 
-      const json = await fetcher(`/api/get-notes`, {
-        id,
-        protectionToken,
-      });
-
-      console.log(json);
-
-      if (json.type === "SUCCESS") {
-        setNotes(json.data);
-      } else if (json.type === "LOCKED") {
-        setNeedToUnlock(true);
-      } else if (json.type === "NOTFOUND") {
-        setBookNotFound(true);
-      } else {
-        console.error("ERROR");
-      }
+    if (json.type === "SUCCESS") {
+      setNotes(json.data);
+    } else if (json.type === "LOCKED") {
+      setNeedToUnlock(true);
+    } else if (json.type === "NOTFOUND") {
+      setBookNotFound(true);
+    } else {
+      console.error("ERROR");
     }
+  }
 
+  useEffect(() => {
     if (id) getNotes();
   }, [id]);
 
@@ -100,23 +66,6 @@ export default function DisplayNotes() {
   return (
     <div>
       {needToUnlock ? (
-        // <div>
-        //   <label htmlFor="protectionKey">
-        //     This note is protected. Please enter the protection key to unlock
-        //     it.
-        //   </label>
-        //   <input
-        //     type="text"
-        //     name="protectionKey"
-        //     id="protectionKey"
-        //     value={protectionKey}
-        //     onChange={(e) => setProtectionKey(e.target.value)}
-        //   />
-        //   <button onClick={handleUnlock} disabled={protectionKey.length === 0}>
-        //     Unlock
-        //   </button>
-        // </div>
-
         <ProtectionKeyForm
           afterUnlock={afterUnlock}
           id={id as string}

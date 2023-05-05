@@ -11,64 +11,54 @@ import NotFoundMessage from "../NotFoundMessage";
 import { useSession } from "next-auth/react";
 import NotLoggedInMessage from "../NotLoggedInMessage";
 import ProtectionKeyForm from "../ProtectionKeyForm";
+import { useLoadingStore } from "@/stores/loading";
 
 export default function DisplayNote() {
   const router = useRouter();
-  const { id } = router.query; // TODO
-  // the `id` is separated by {notebookId}-{noteId}
+  // id: {notebookId}-{noteId}
+  const { id } = router.query;
 
   const [needToUnlock, setNeedToUnlock] = useState(false);
   const [deletePopup, setDeletePopup] = useState(false);
   const [protectionToken, setProtectionToken] = useState<string | null>();
+  const [noteNotFound, setNoteNotFound] = useState(false);
 
   const [note, setNote] = useState<NoteType>();
 
   const [noteId, setNoteId] = useState<string>();
   const [notebookId, setNotebookId] = useState<string>();
 
-  const [noteNotFound, setNoteNotFound] = useState(false);
-
   const { status } = useSession();
-
-  // async function handleUnlock() {
-  //   if (protectionKey.length === 0) {
-  //     console.log("No protection key entered");
-  //     return;
-  //   }
-
-  //   const json = await fetcher(`/api/unlock-notebook-and-get-note`, {
-  //     id: noteId,
-  //     protectionKey,
-  //   });
-
-  //   console.log(json);
-
-  //   if (json.type === "SUCCESS") {
-  //     // Save the `protectionToken` to the session storage
-  //     // sessionStorage.setItem("protectionToken", json.data);
-  //     // sessionStorage.setItem("protectionToken", json.data.protectionToken);
-  //     // addNotebookProtectionToken(id as string, json.data.protectionToken);
-  //     addProtectionToken(notebookId as string, json.data.protectionToken);
-  //     setNote(json.data.note);
-  //     setNeedToUnlock(false);
-  //     setProtectionKey("");
-  //     setProtectionToken(json.data.protectionToken);
-  //   } else if (json.type === "INVALID") {
-  //     console.log("Invalid protection key");
-  //   } else {
-  //     console.error("ERROR");
-  //   }
-  // }
+  const { turnOn, turnOff } = useLoadingStore();
 
   function afterUnlock(data: any) {
-    // Save the `protectionToken` to the session storage
     addProtectionToken(notebookId as string, data.protectionToken);
-    // Update the note
     setNote(data.note);
-    // Update the unlocked state
     setNeedToUnlock(false);
-    // Update the protection Token
     setProtectionToken(data.protectionToken);
+  }
+
+  async function getNotes() {
+    const protectionToken = getProtectionTokenById(notebookId as string);
+
+    turnOn();
+    const json = await fetcher(`/api/get-note`, {
+      id: noteId,
+      notebookId,
+      protectionToken: protectionToken,
+    });
+    turnOff();
+
+    if (json.type === "SUCCESS") {
+      setNote(json.data);
+      setProtectionToken(protectionToken);
+    } else if (json.type === "LOCKED") {
+      setNeedToUnlock(true);
+    } else if (json.type === "NOTFOUND") {
+      setNoteNotFound(true);
+    } else {
+      console.error("ERROR");
+    }
   }
 
   useEffect(() => {
@@ -82,41 +72,6 @@ export default function DisplayNote() {
   }, [id]);
 
   useEffect(() => {
-    async function getNotes() {
-      // const res = await fetcher(`/api/get-notes`, {
-      //   id: id,
-
-      // });
-
-      // Get the `protectionToken` from the session storage
-      // const protectionToken = sessionStorage.getItem("protectionToken");
-      // const protectionToken = getNotebookProtectionTokenById(id as string);
-      const protectionToken = getProtectionTokenById(notebookId as string);
-
-      console.log(protectionToken);
-
-      const json = await fetcher(`/api/get-note`, {
-        id: noteId,
-        notebookId,
-        protectionToken: protectionToken,
-      });
-
-      console.log(json);
-
-      if (json.type === "SUCCESS") {
-        setNote(json.data);
-        setProtectionToken(protectionToken);
-      } else if (json.type === "LOCKED") {
-        setNeedToUnlock(true);
-      } else if (json.type === "NOTFOUND") {
-        setNoteNotFound(true);
-      } else {
-        console.error("ERROR");
-      }
-    }
-
-    //   if (id) getNotes();
-    // }, [id]);
     if (notebookId && noteId) getNotes();
   }, [notebookId, noteId]);
 
@@ -131,23 +86,6 @@ export default function DisplayNote() {
   return (
     <div>
       {needToUnlock ? (
-        // <div>
-        //   <label htmlFor="protectionKey">
-        //     This note is protected. Please enter the protection key to unlock
-        //     it.
-        //   </label>
-        //   <input
-        //     type="text"
-        //     name="protectionKey"
-        //     id="protectionKey"
-        //     value={protectionKey}
-        //     onChange={(e) => setProtectionKey(e.target.value)}
-        //   />
-        //   <button onClick={handleUnlock} disabled={protectionKey.length === 0}>
-        //     Unlock
-        //   </button>
-        // </div>
-
         <ProtectionKeyForm
           afterUnlock={afterUnlock}
           id={noteId as string}

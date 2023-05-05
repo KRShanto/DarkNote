@@ -3,15 +3,19 @@ import { NotebookType } from "@/types/data/notebook";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import Link from "next/link";
+import { useLoadingStore } from "@/stores/loading";
 
 import { FaClock } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 
 export default function DisplayBooks() {
   const [books, setBooks] = useState<NotebookType[]>([]);
+  const { turnOn, turnOff } = useLoadingStore();
 
   async function getBooks() {
+    turnOn();
     const json = await fetcher("/api/get-books", {});
+    turnOff();
 
     if (json.type !== "SUCCESS") {
       throw new Error(json.msg);

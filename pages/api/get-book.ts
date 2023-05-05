@@ -32,7 +32,7 @@ export default async function handler(
       );
     }
 
-    const { id, protectionToken } = req.body;
+    const { id } = req.body;
 
     const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
 
@@ -40,20 +40,6 @@ export default async function handler(
       return response(res, {
         type: "NOTFOUND",
         msg: "No notebook found",
-      });
-    }
-
-    if (book.locked && !book.protectionToken) {
-      return response(res, {
-        type: "LOCKED",
-        msg: "No protection token found. You need to unlock the notebook first",
-      });
-    }
-
-    if (book.locked && book.protectionToken !== protectionToken) {
-      return response(res, {
-        type: "LOCKED",
-        msg: "Invalid protection token",
       });
     }
 
