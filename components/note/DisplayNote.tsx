@@ -6,6 +6,7 @@ import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
 import Link from "next/link";
 import { FaClock, FaLock } from "react-icons/fa";
 import moment from "moment";
+import DeleteNote from "@/components/note/DeleteNote";
 
 export default function DisplayNote() {
   const router = useRouter();
@@ -118,6 +119,13 @@ export default function DisplayNote() {
             Unlock
           </button>
         </div>
+      ) : deletePopup ? (
+        <DeleteNote
+          noteId={noteId as string}
+          notebookId={notebookId as string}
+          protectionToken={protectionToken as string}
+          setDeletePopup={setDeletePopup}
+        />
       ) : (
         <div className="display-note">
           <div className="header">
@@ -158,60 +166,6 @@ export default function DisplayNote() {
           ></div>
         </div>
       )}
-
-      {deletePopup && (
-        <DeletePopup
-          noteId={noteId as string}
-          notebookId={notebookId as string}
-          protectionToken={protectionToken as string}
-          setDeletePopup={setDeletePopup}
-        />
-      )}
-    </div>
-  );
-}
-
-function DeletePopup({
-  noteId,
-  notebookId,
-  protectionToken,
-  setDeletePopup,
-}: {
-  noteId: string;
-  notebookId: string;
-  protectionToken: string;
-  setDeletePopup: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  const router = useRouter();
-
-  async function handleDelete() {
-    const json = await fetcher("/api/delete-note", {
-      id: noteId,
-      protectionToken,
-    });
-
-    console.log(json);
-
-    if (json.type === "SUCCESS") {
-      // redirect to notebook page
-      router.push(`/book/${notebookId}`);
-    } else {
-      console.error("ERROR");
-      console.error(json);
-    }
-  }
-
-  return (
-    <div className="delete-popup">
-      <p>Are you sure you want to delete this note?</p>
-      <div className="options">
-        <button className="btn" onClick={() => setDeletePopup(false)}>
-          Cancel
-        </button>
-        <button className="btn danger" onClick={handleDelete}>
-          Delete
-        </button>
-      </div>
     </div>
   );
 }
