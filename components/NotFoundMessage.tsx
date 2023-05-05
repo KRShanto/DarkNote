@@ -7,7 +7,7 @@ export default function NotFoundMessage({
   what: "NOTEBOOK" | "NOTE";
 }) {
   return (
-    <div className="not-found-message">
+    <div className="not-found-message confirm">
       <h1 className="text">
         The {what.toLowerCase()} you are looking for does not exist.
       </h1>

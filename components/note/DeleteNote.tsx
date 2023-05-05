@@ -32,8 +32,10 @@ export default function DeleteNote({
   }
 
   return (
-    <div className="delete-note">
-      <h1 className="text">Are you sure you want to delete this note?</h1>
+    <div className="delete-note confirm">
+      <h1 style={{ color: "rgb(255, 0, 0)" }} className="text">
+        Are you sure you want to delete this note?
+      </h1>
 
       <div className="options">
         <button className="btn" onClick={() => setDeletePopup(false)}>
