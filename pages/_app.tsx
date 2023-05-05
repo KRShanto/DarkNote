@@ -10,11 +10,12 @@ import { useMediaQuery } from "react-responsive";
 import { useMobileStore } from "@/stores/mobile";
 import { useViewStore } from "@/stores/view";
 import LoadingBar from "react-top-loading-bar";
-import { FadeLoader } from "react-spinners";
+import { FadeLoader, BounceLoader } from "react-spinners";
 import { useLoadingStore } from "@/stores/loading";
 import { useRouter } from "next/router";
 import { ThemeType } from "@/types/theme";
 import { ViewType } from "@/types/view";
+import LoaderForUser from "@/components/LoaderForUser";
 
 export default function App({
   Component,
@@ -22,7 +23,6 @@ export default function App({
 }: AppProps) {
   const router = useRouter();
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
   const [progress, setProgress] = useState(0);
 
   const { setView } = useViewStore();
@@ -84,7 +84,7 @@ export default function App({
 
       {loading && (
         <div className="preloader">
-          <FadeLoader className="spinner" color="cyan" loading={loading} />
+          <BounceLoader className="spinner" color="cyan" loading={loading} />
         </div>
       )}
 
@@ -101,6 +101,8 @@ export default function App({
           </div>
 
           <Footer />
+
+          <LoaderForUser />
         </main>
       </SessionProvider>
     </>
