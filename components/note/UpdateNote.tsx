@@ -11,6 +11,7 @@ import { NoteType } from "@/types/data/note";
 import NotFoundMessage from "../NotFoundMessage";
 import { useSession } from "next-auth/react";
 import NotLoggedInMessage from "../NotLoggedInMessage";
+import ProtectionKeyForm from "../ProtectionKeyForm";
 
 export default function CreateNote() {
   const router = useRouter();
@@ -35,33 +36,38 @@ export default function CreateNote() {
 
   const [noteNoteFound, setNoteNotFound] = useState(false);
 
-  async function handleUnlock() {
-    if (protectionKey.length === 0) {
-      console.log("No protection key entered");
-      return;
-    }
+  // async function handleUnlock() {
+  //   if (protectionKey.length === 0) {
+  //     console.log("No protection key entered");
+  //     return;
+  //   }
 
-    const json = await fetcher(`/api/unlock-notebook-and-get-note`, {
-      notebookId,
-      protectionKey,
-    });
+  //   const json = await fetcher(`/api/unlock-notebook-and-get-note`, {
+  //     notebookId,
+  //     protectionKey,
+  //   });
 
-    console.log(json);
+  //   console.log(json);
 
-    if (json.type === "SUCCESS") {
-      // Save the `protectionToken` to the session storage
-      // sessionStorage.setItem("protectionToken", json.data);
-      // sessionStorage.setItem("protectionToken", json.data.protectionToken);
-      // addNotebookProtectionToken(id as string, json.data.protectionToken);
-      addProtectionToken(notebookId as string, json.data.protectionToken);
-      //   setNote(json.data.notes);
+  //   if (json.type === "SUCCESS") {
+  //     // Save the `protectionToken` to the session storage
+  //     // sessionStorage.setItem("protectionToken", json.data);
+  //     // sessionStorage.setItem("protectionToken", json.data.protectionToken);
+  //     // addNotebookProtectionToken(id as string, json.data.protectionToken);
+  //     addProtectionToken(notebookId as string, json.data.protectionToken);
+  //     //   setNote(json.data.notes);
 
-      setNeedToUnlock(false);
-    } else if (json.type === "INVALID") {
-      console.log("Invalid protection key");
-    } else {
-      console.error("ERROR");
-    }
+  //     setNeedToUnlock(false);
+  //   } else if (json.type === "INVALID") {
+  //     console.log("Invalid protection key");
+  //   } else {
+  //     console.error("ERROR");
+  //   }
+  // }
+
+  function afterUnlock(data: any) {
+    addProtectionToken(notebookId as string, data.protectionToken);
+    setNeedToUnlock(false);
   }
 
   useEffect(() => {
@@ -162,22 +168,28 @@ export default function CreateNote() {
   return (
     <div>
       {needToUnlock ? (
-        <div>
-          <label htmlFor="protectionKey">
-            This note is protected. Please enter the protection key to unlock
-            it.
-          </label>
-          <input
-            type="text"
-            name="protectionKey"
-            id="protectionKey"
-            value={protectionKey}
-            onChange={(e) => setProtectionKey(e.target.value)}
-          />
-          <button onClick={handleUnlock} disabled={protectionKey.length === 0}>
-            Unlock
-          </button>
-        </div>
+        // <div>
+        //   <label htmlFor="protectionKey">
+        //     This note is protected. Please enter the protection key to unlock
+        //     it.
+        //   </label>
+        //   <input
+        //     type="text"
+        //     name="protectionKey"
+        //     id="protectionKey"
+        //     value={protectionKey}
+        //     onChange={(e) => setProtectionKey(e.target.value)}
+        //   />
+        //   <button onClick={handleUnlock} disabled={protectionKey.length === 0}>
+        //     Unlock
+        //   </button>
+        // </div>
+
+        <ProtectionKeyForm
+          id={noteId as string}
+          path="/api/unlock-notebook-and-get-note"
+          afterUnlock={afterUnlock}
+        />
       ) : (
         <form id="create-book" onSubmit={handleSubmit}>
           <h1 className="heading">Create Note</h1>

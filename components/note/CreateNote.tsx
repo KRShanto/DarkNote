@@ -9,17 +9,20 @@ import NotFoundMessage from "../NotFoundMessage";
 import { useSession } from "next-auth/react";
 import { FaLock } from "react-icons/fa";
 import NotLoggedInMessage from "../NotLoggedInMessage";
+import { ReturnedJsonType } from "@/types/json";
+import ProtectionKeyForm from "../ProtectionKeyForm";
 
 export default function CreateNote() {
+  // form states
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [textContent, setTextContent] = useState("");
   const [locked, setLocked] = useState(false);
   const [error, setError] = useState("");
+
   const [needToUnlock, setNeedToUnlock] = useState(false); // TODO: get a better solution: use boolean | null
   const [bookNotFound, setBookNotFound] = useState(false);
   const [protectionToken, setProtectionToken] = useState("");
-  const [protectionKey, setProtectionKey] = useState("");
 
   const { turnOn, turnOff } = useLoadingStore();
   const { status } = useSession();
@@ -27,47 +30,20 @@ export default function CreateNote() {
   const router = useRouter();
   const { id } = router.query;
 
-  async function handleUnlock() {
-    if (protectionKey.length === 0) {
-      console.log("No protection key entered");
-      return;
-    }
-
-    const json = await fetcher(`/api/unlock-notebook`, {
-      id,
-      protectionKey,
-    });
-
-    console.log(json);
-
-    if (json.type === "SUCCESS") {
-      // // Save the `protectionToken` to the session storage
-      // sessionStorage.setItem("protectionToken", json.data);
-
-      // Save the `protectionToken` to the session storage
-      addProtectionToken(id as string, json.data);
-      setNeedToUnlock(false);
-    } else if (json.type === "INVALID") {
-      console.log("Invalid protection key");
-    } else {
-      console.error("ERROR");
-    }
+  function afterUnlock(data: any) {
+    // Save the `protectionToken` to the session storage
+    addProtectionToken(id as string, data);
+    // Update the unlocked state
+    setNeedToUnlock(false);
   }
 
   useEffect(() => {
     async function getNotebook() {
       turnOn();
 
-      // // Get the `protectionToken` from the session storage
-      // const protectionTokenFromSession =
-      //   sessionStorage.getItem("protectionToken");
-
       // Get the `protectionToken` from the session storage
       const protectionTokenFromSession = getProtectionTokenById(id as string);
 
-      console.log(protectionTokenFromSession);
-
-      // TODO: don't use this route instead use check-book-protection
       const json = await fetcher("/api/get-book", {
         id,
         protectionToken: protectionTokenFromSession,
@@ -130,22 +106,11 @@ export default function CreateNote() {
   return (
     <div>
       {needToUnlock ? (
-        <div>
-          <label htmlFor="protectionKey">
-            This note is protected. Please enter the protection key to unlock
-            it.
-          </label>
-          <input
-            type="text"
-            name="protectionKey"
-            id="protectionKey"
-            value={protectionKey}
-            onChange={(e) => setProtectionKey(e.target.value)}
-          />
-          <button onClick={handleUnlock} disabled={protectionKey.length === 0}>
-            Unlock
-          </button>
-        </div>
+        <ProtectionKeyForm
+          path="/api/unlock-notebook"
+          id={id as string}
+          afterUnlock={afterUnlock}
+        />
       ) : (
         <form id="create-book" onSubmit={handleSubmit}>
           <h1 className="heading">Create Note</h1>
@@ -162,16 +127,6 @@ export default function CreateNote() {
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-
-          {/* <div className="form-wrapper">
-            <label htmlFor="description">Content</label>
-            <textarea
-              name="description"
-              id="description"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          </div> */}
 
           <RichEditor
             content={content}

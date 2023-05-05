@@ -10,6 +10,7 @@ import DeleteNote from "@/components/note/DeleteNote";
 import NotFoundMessage from "../NotFoundMessage";
 import { useSession } from "next-auth/react";
 import NotLoggedInMessage from "../NotLoggedInMessage";
+import ProtectionKeyForm from "../ProtectionKeyForm";
 
 export default function DisplayNote() {
   const router = useRouter();
@@ -17,7 +18,6 @@ export default function DisplayNote() {
   // the `id` is separated by {notebookId}-{noteId}
 
   const [needToUnlock, setNeedToUnlock] = useState(false);
-  const [protectionKey, setProtectionKey] = useState("");
   const [deletePopup, setDeletePopup] = useState(false);
   const [protectionToken, setProtectionToken] = useState<string | null>();
 
@@ -30,34 +30,45 @@ export default function DisplayNote() {
 
   const { status } = useSession();
 
-  async function handleUnlock() {
-    if (protectionKey.length === 0) {
-      console.log("No protection key entered");
-      return;
-    }
+  // async function handleUnlock() {
+  //   if (protectionKey.length === 0) {
+  //     console.log("No protection key entered");
+  //     return;
+  //   }
 
-    const json = await fetcher(`/api/unlock-notebook-and-get-note`, {
-      notebookId,
-      protectionKey,
-    });
+  //   const json = await fetcher(`/api/unlock-notebook-and-get-note`, {
+  //     id: noteId,
+  //     protectionKey,
+  //   });
 
-    console.log(json);
+  //   console.log(json);
 
-    if (json.type === "SUCCESS") {
-      // Save the `protectionToken` to the session storage
-      // sessionStorage.setItem("protectionToken", json.data);
-      // sessionStorage.setItem("protectionToken", json.data.protectionToken);
-      // addNotebookProtectionToken(id as string, json.data.protectionToken);
-      addProtectionToken(notebookId as string, json.data.protectionToken);
-      setNote(json.data.notes);
-      setNeedToUnlock(false);
-      setProtectionKey("");
-      setProtectionToken(json.data.protectionToken);
-    } else if (json.type === "INVALID") {
-      console.log("Invalid protection key");
-    } else {
-      console.error("ERROR");
-    }
+  //   if (json.type === "SUCCESS") {
+  //     // Save the `protectionToken` to the session storage
+  //     // sessionStorage.setItem("protectionToken", json.data);
+  //     // sessionStorage.setItem("protectionToken", json.data.protectionToken);
+  //     // addNotebookProtectionToken(id as string, json.data.protectionToken);
+  //     addProtectionToken(notebookId as string, json.data.protectionToken);
+  //     setNote(json.data.note);
+  //     setNeedToUnlock(false);
+  //     setProtectionKey("");
+  //     setProtectionToken(json.data.protectionToken);
+  //   } else if (json.type === "INVALID") {
+  //     console.log("Invalid protection key");
+  //   } else {
+  //     console.error("ERROR");
+  //   }
+  // }
+
+  function afterUnlock(data: any) {
+    // Save the `protectionToken` to the session storage
+    addProtectionToken(notebookId as string, data.protectionToken);
+    // Update the note
+    setNote(data.note);
+    // Update the unlocked state
+    setNeedToUnlock(false);
+    // Update the protection Token
+    setProtectionToken(data.protectionToken);
   }
 
   useEffect(() => {
@@ -120,22 +131,28 @@ export default function DisplayNote() {
   return (
     <div>
       {needToUnlock ? (
-        <div>
-          <label htmlFor="protectionKey">
-            This note is protected. Please enter the protection key to unlock
-            it.
-          </label>
-          <input
-            type="text"
-            name="protectionKey"
-            id="protectionKey"
-            value={protectionKey}
-            onChange={(e) => setProtectionKey(e.target.value)}
-          />
-          <button onClick={handleUnlock} disabled={protectionKey.length === 0}>
-            Unlock
-          </button>
-        </div>
+        // <div>
+        //   <label htmlFor="protectionKey">
+        //     This note is protected. Please enter the protection key to unlock
+        //     it.
+        //   </label>
+        //   <input
+        //     type="text"
+        //     name="protectionKey"
+        //     id="protectionKey"
+        //     value={protectionKey}
+        //     onChange={(e) => setProtectionKey(e.target.value)}
+        //   />
+        //   <button onClick={handleUnlock} disabled={protectionKey.length === 0}>
+        //     Unlock
+        //   </button>
+        // </div>
+
+        <ProtectionKeyForm
+          afterUnlock={afterUnlock}
+          id={noteId as string}
+          path="/api/unlock-notebook-and-get-note"
+        />
       ) : deletePopup ? (
         <DeleteNote
           noteId={noteId as string}

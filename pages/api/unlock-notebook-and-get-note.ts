@@ -46,9 +46,10 @@ export default async function handler(
 
     const { id, protectionKey } = req.body;
 
+    console.log("id", id);
+
     // const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
     const note = await Note.findOne({ _id: id, userId: sessionUser._id });
-    const book = await NoteBook.findOne({ _id: note.notebookId });
 
     if (!note) {
       return response(
@@ -59,6 +60,15 @@ export default async function handler(
         },
         404
       );
+    }
+
+    const book = await NoteBook.findOne({ _id: note.notebookId });
+
+    if (!book) {
+      return response(res, {
+        type: "NOTFOUND",
+        msg: "No notebook found",
+      });
     }
 
     if (!book.locked) {
