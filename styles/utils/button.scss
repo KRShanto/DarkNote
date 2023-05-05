@@ -37,3 +37,45 @@
     text-shadow: 0 0 0.5px black;
   }
 }
+
+.mini-danger {
+  $color: rgb(255, 115, 0);
+  color: $color;
+  border: 1px solid $color;
+
+  &:hover {
+    background-color: $color;
+    color: white;
+    text-shadow: 0 0 0.5px black;
+  }
+}
+
+.success {
+  $color: rgb(0, 255, 0);
+  color: $color;
+  border: 1px solid $color;
+
+  &:hover {
+    background-color: $color;
+    color: white;
+    text-shadow: 0 0 0.5px black;
+  }
+}
+
+.sky {
+  $color: rgb(0, 166, 255);
+  color: $color;
+  border: 1px solid $color;
+
+  &:hover {
+    background-color: $color;
+    color: white;
+    text-shadow: 0 0 0.5px black;
+  }
+}
+
+@media (max-width: 768px) {
+  .btn {
+    font-size: 1rem;
+  }
+}

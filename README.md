@@ -14,4 +14,5 @@ A note taking site with rich text editing made with Next.js and Mongodb.
 - Export notes as HTML (**Coming Soon**)
 - Access notes from anywhere by logging in
 - Sign up with Google or Email (passwordless)
+- Report any issues to the developer directly from the site (**Coming Soon**)
 - Free to use
