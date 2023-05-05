@@ -49,7 +49,7 @@ export default async function handler(
   const notebook: NotebookType = {
     title,
     description,
-    locked,
+    locked: locked || false,
     userId: sessionUser._id,
   };
 

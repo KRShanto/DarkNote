@@ -24,7 +24,7 @@ export default async function handler(
   if (!sessionUser) {
     return response(res, {
       type: "UNAUTHORIZED",
-      msg: "You need to be signed in to create a notebook",
+      msg: "You need to be signed in to get notebooks",
     });
   }
 

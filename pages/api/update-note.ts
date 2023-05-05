@@ -17,65 +17,66 @@ export default async function handler(
 ) {
   await dbConnect();
 
-  const session = await getServerSession(
-    req,
-    res,
-    authOptions as NextAuthOptions
-  );
-  const sessionUser = session?.user as UserType;
-
-  if (!sessionUser) {
-    return response(
-      res,
-      {
-        type: "UNAUTHORIZED",
-        msg: "You need to be signed in to create a notebook",
-      },
-      401
-    );
-  }
-
-  const { id, title, content, textContent, locked, protectionToken } = req.body;
-
-  // Get the book
-  //   const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
-  const note = await Note.findOne({ _id: id, userId: sessionUser._id });
-  const book = await NoteBook.findOne({
-    _id: note.notebookId,
-    userId: sessionUser._id,
-  });
-
-  if (!book || !note) {
-    return response(res, {
-      type: "NOTFOUND",
-      msg: "No notebook found",
-    });
-  }
-
-  if (book.locked && !book.protectionToken) {
-    return response(res, {
-      type: "LOCKED",
-      msg: "No protection token found. You need to unlock the notebook first",
-    });
-  }
-
-  if (book.locked && book.protectionToken !== protectionToken) {
-    return response(res, {
-      type: "LOCKED",
-      msg: "Invalid protection token",
-    });
-  }
-
-  // Create the note
-  //   const updateNote = {
-  //     title,
-  //     content,
-  //     notebookId: book._id,
-  //     userId: sessionUser._id,
-  //     locked: locked || false,
-  //   };
-
   try {
+    const session = await getServerSession(
+      req,
+      res,
+      authOptions as NextAuthOptions
+    );
+    const sessionUser = session?.user as UserType;
+
+    if (!sessionUser) {
+      return response(
+        res,
+        {
+          type: "UNAUTHORIZED",
+          msg: "You need to be signed in to create a notebook",
+        },
+        401
+      );
+    }
+
+    const { id, title, content, textContent, locked, protectionToken } =
+      req.body;
+
+    // Get the book
+    //   const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
+    const note = await Note.findOne({ _id: id, userId: sessionUser._id });
+    const book = await NoteBook.findOne({
+      _id: note.notebookId,
+      userId: sessionUser._id,
+    });
+
+    if (!book || !note) {
+      return response(res, {
+        type: "NOTFOUND",
+        msg: "No notebook found",
+      });
+    }
+
+    if (book.locked && !book.protectionToken) {
+      return response(res, {
+        type: "LOCKED",
+        msg: "No protection token found. You need to unlock the notebook first",
+      });
+    }
+
+    if (book.locked && book.protectionToken !== protectionToken) {
+      return response(res, {
+        type: "LOCKED",
+        msg: "Invalid protection token",
+      });
+    }
+
+    // Create the note
+    //   const updateNote = {
+    //     title,
+    //     content,
+    //     notebookId: book._id,
+    //     userId: sessionUser._id,
+    //     locked: locked || false,
+    //   };
+
     // const newNote = await Note.create(note);
     // update the note
     const newNote = await Note.findOneAndUpdate(
@@ -89,8 +90,17 @@ export default async function handler(
       msg: "Note created successfully",
       data: newNote,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    // handle casting error
+    if (error.name === "CastError") {
+      return response(res, {
+        type: "NOTFOUND",
+        msg: "No notebook found",
+      });
+    }
+
+    console.error(error);
+
     return response(res, {
       type: "SERVER_ERROR",
       msg: "Something went wrong",
