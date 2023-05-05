@@ -3,10 +3,12 @@ import { useRouter } from "next/router";
 import { useLoadingStore } from "@/stores/loading";
 import fetcher from "@/lib/fetcher";
 import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
-
-import { FaLock } from "react-icons/fa";
 import { generateNotePath } from "@/lib/notepage";
 import RichEditor from "./RichEditor";
+import NotFoundMessage from "../NotFoundMessage";
+import { useSession } from "next-auth/react";
+import { FaLock } from "react-icons/fa";
+import NotLoggedInMessage from "../NotLoggedInMessage";
 
 export default function CreateNote() {
   const [title, setTitle] = useState("");
@@ -20,6 +22,7 @@ export default function CreateNote() {
   const [protectionKey, setProtectionKey] = useState("");
 
   const { turnOn, turnOff } = useLoadingStore();
+  const { status } = useSession();
 
   const router = useRouter();
   const { id } = router.query;
@@ -110,6 +113,18 @@ export default function CreateNote() {
       console.error(error);
       setError(error.message);
     }
+  }
+
+  if (router.isFallback) {
+    return <></>;
+  }
+
+  if (!id || bookNotFound) {
+    return <NotFoundMessage what="NOTEBOOK" />;
+  }
+
+  if (status === "unauthenticated") {
+    return <NotLoggedInMessage />;
   }
 
   return (

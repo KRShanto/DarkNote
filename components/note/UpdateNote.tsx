@@ -3,18 +3,21 @@ import { useRouter } from "next/router";
 import { useLoadingStore } from "@/stores/loading";
 import fetcher from "@/lib/fetcher";
 import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
-
 import { FaLock } from "react-icons/fa";
 import { generateNotePath } from "@/lib/notepage";
 import RichEditor from "./RichEditor";
 import { NotebookType } from "@/types/data/notebook";
 import { NoteType } from "@/types/data/note";
 import NotFoundMessage from "../NotFoundMessage";
+import { useSession } from "next-auth/react";
+import NotLoggedInMessage from "../NotLoggedInMessage";
 
 export default function CreateNote() {
   const router = useRouter();
   const { id } = router.query; // TODO
   // the `id` is separated by {notebookId}-{noteId}
+
+  const { status } = useSession();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -150,6 +153,10 @@ export default function CreateNote() {
 
   if (noteNoteFound) {
     return <NotFoundMessage what="NOTE" />;
+  }
+
+  if (status === "unauthenticated") {
+    return <NotLoggedInMessage />;
   }
 
   return (

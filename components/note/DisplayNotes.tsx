@@ -8,6 +8,8 @@ import { FaClock, FaLock } from "react-icons/fa";
 import moment from "moment";
 import { generateNotePath } from "@/lib/notepage";
 import NotFoundMessage from "../NotFoundMessage";
+import { useSession } from "next-auth/react";
+import NotLoggedInMessage from "../NotLoggedInMessage";
 
 export default function DisplayNotes() {
   const router = useRouter();
@@ -17,6 +19,8 @@ export default function DisplayNotes() {
   const [protectionKey, setProtectionKey] = useState("");
   const [notes, setNotes] = useState<NoteType[]>([]);
   const [bookNotFound, setBookNotFound] = useState(false);
+
+  const { status } = useSession();
 
   console.log("notes", notes);
 
@@ -80,6 +84,10 @@ export default function DisplayNotes() {
 
   if (bookNotFound) {
     return <NotFoundMessage what="NOTEBOOK" />;
+  }
+
+  if (status === "unauthenticated") {
+    return <NotLoggedInMessage />;
   }
 
   return (

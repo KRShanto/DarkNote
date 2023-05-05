@@ -8,6 +8,8 @@ import { FaClock, FaLock } from "react-icons/fa";
 import moment from "moment";
 import DeleteNote from "@/components/note/DeleteNote";
 import NotFoundMessage from "../NotFoundMessage";
+import { useSession } from "next-auth/react";
+import NotLoggedInMessage from "../NotLoggedInMessage";
 
 export default function DisplayNote() {
   const router = useRouter();
@@ -25,6 +27,8 @@ export default function DisplayNote() {
   const [notebookId, setNotebookId] = useState<string>();
 
   const [noteNotFound, setNoteNotFound] = useState(false);
+
+  const { status } = useSession();
 
   async function handleUnlock() {
     if (protectionKey.length === 0) {
@@ -107,6 +111,10 @@ export default function DisplayNote() {
 
   if (noteNotFound) {
     return <NotFoundMessage what="NOTE" />;
+  }
+
+  if (status === "unauthenticated") {
+    return <NotLoggedInMessage />;
   }
 
   return (
