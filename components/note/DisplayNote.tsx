@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FaClock, FaLock } from "react-icons/fa";
 import moment from "moment";
 import DeleteNote from "@/components/note/DeleteNote";
+import NotFoundMessage from "../NotFoundMessage";
 
 export default function DisplayNote() {
   const router = useRouter();
@@ -20,8 +21,10 @@ export default function DisplayNote() {
 
   const [note, setNote] = useState<NoteType>();
 
-  const [notebookId, setNotebookId] = useState<string>();
   const [noteId, setNoteId] = useState<string>();
+  const [notebookId, setNotebookId] = useState<string>();
+
+  const [noteNotFound, setNoteNotFound] = useState(false);
 
   async function handleUnlock() {
     if (protectionKey.length === 0) {
@@ -90,6 +93,8 @@ export default function DisplayNote() {
         setProtectionToken(protectionToken);
       } else if (json.type === "LOCKED") {
         setNeedToUnlock(true);
+      } else if (json.type === "NOTFOUND") {
+        setNoteNotFound(true);
       } else {
         console.error("ERROR");
       }
@@ -99,6 +104,10 @@ export default function DisplayNote() {
     // }, [id]);
     if (notebookId && noteId) getNotes();
   }, [notebookId, noteId]);
+
+  if (noteNotFound) {
+    return <NotFoundMessage what="NOTE" />;
+  }
 
   return (
     <div>

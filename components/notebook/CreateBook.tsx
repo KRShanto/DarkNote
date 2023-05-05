@@ -19,13 +19,13 @@ export default function CreateBook() {
   const { data: session, status } = useSession();
   const { turnOn, turnOff } = useLoadingStore();
 
-  useEffect(() => {
-    if (status === "loading") {
-      turnOn();
-    } else {
-      turnOff();
-    }
-  }, [status]);
+  // useEffect(() => {
+  //   if (status === "loading") {
+  //     turnOn();
+  //   } else {
+  //     turnOff();
+  //   }
+  // }, [status]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

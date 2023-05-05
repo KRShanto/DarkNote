@@ -9,6 +9,7 @@ import { generateNotePath } from "@/lib/notepage";
 import RichEditor from "./RichEditor";
 import { NotebookType } from "@/types/data/notebook";
 import { NoteType } from "@/types/data/note";
+import NotFoundMessage from "../NotFoundMessage";
 
 export default function CreateNote() {
   const router = useRouter();
@@ -28,6 +29,8 @@ export default function CreateNote() {
 
   const [notebookId, setNotebookId] = useState<string>();
   const [noteId, setNoteId] = useState<string>();
+
+  const [noteNoteFound, setNoteNotFound] = useState(false);
 
   async function handleUnlock() {
     if (protectionKey.length === 0) {
@@ -97,6 +100,8 @@ export default function CreateNote() {
         setLocked(json.data.locked);
       } else if (json.type === "LOCKED") {
         setNeedToUnlock(true);
+      } else if (json.type === "NOTFOUND") {
+        setNoteNotFound(true);
       } else {
         console.error("ERROR");
       }
@@ -141,6 +146,10 @@ export default function CreateNote() {
       console.error(error);
       setError(error.message);
     }
+  }
+
+  if (noteNoteFound) {
+    return <NotFoundMessage what="NOTE" />;
   }
 
   return (

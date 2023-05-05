@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FaClock, FaLock } from "react-icons/fa";
 import moment from "moment";
 import { generateNotePath } from "@/lib/notepage";
+import NotFoundMessage from "../NotFoundMessage";
 
 export default function DisplayNotes() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function DisplayNotes() {
   const [needToUnlock, setNeedToUnlock] = useState(false);
   const [protectionKey, setProtectionKey] = useState("");
   const [notes, setNotes] = useState<NoteType[]>([]);
+  const [bookNotFound, setBookNotFound] = useState(false);
 
   console.log("notes", notes);
 
@@ -56,8 +58,8 @@ export default function DisplayNotes() {
       console.log(protectionToken);
 
       const json = await fetcher(`/api/get-notes`, {
-        id: id,
-        protectionToken: protectionToken,
+        id,
+        protectionToken,
       });
 
       console.log(json);
@@ -66,6 +68,8 @@ export default function DisplayNotes() {
         setNotes(json.data);
       } else if (json.type === "LOCKED") {
         setNeedToUnlock(true);
+      } else if (json.type === "NOTFOUND") {
+        setBookNotFound(true);
       } else {
         console.error("ERROR");
       }
@@ -73,6 +77,10 @@ export default function DisplayNotes() {
 
     if (id) getNotes();
   }, [id]);
+
+  if (bookNotFound) {
+    return <NotFoundMessage what="NOTEBOOK" />;
+  }
 
   return (
     <div>
