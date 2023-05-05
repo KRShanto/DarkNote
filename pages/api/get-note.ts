@@ -28,6 +28,7 @@ export default async function handler(
     });
   }
 
+  // TODO: don't take `notebookId` from the body, but from the note object
   const { id, notebookId, protectionToken } = req.body;
 
   const book = await NoteBook.findOne({

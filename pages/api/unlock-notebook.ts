@@ -10,6 +10,7 @@ import Note from "@/models/note";
 import { v4 as uuidv4 } from "uuid";
 import User from "@/models/user";
 import bcrypt from "bcrypt";
+import { DEFAULT_PROTECTION_KEY } from "@/constants/security";
 
 // Unclock a notebook
 // Check if the protectionKey is correct
@@ -76,7 +77,24 @@ export default async function handler(
     );
   }
 
-  const match = await bcrypt.compare(protectionKey, user.protectionKey);
+  // const match = await bcrypt.compare(protectionKey, user.protectionKey);
+
+  // Check if the user.protectionKey is null
+  // If it is null, then the user has not set a protection key
+  // So, we will compare with the default protection key
+  let match = false;
+  if (user.protectionKey) {
+    match = await bcrypt.compare(protectionKey, user.protectionKey);
+  } else {
+    // Compare with the default protection key
+    // don't use bcrypt here because the default protection key is not hashed
+    match = protectionKey === DEFAULT_PROTECTION_KEY;
+
+    // set the protection key to the default protection key
+    // use bcrypt to hash the default protection key
+    user.protectionKey = await bcrypt.hash(DEFAULT_PROTECTION_KEY, 10);
+    await user.save();
+  }
 
   if (!match) {
     return response(

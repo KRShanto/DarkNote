@@ -27,26 +27,41 @@ export const authOptions = {
       // Generate default protection key
       // If there is no `protectionKey` then redirect to `/new` page
 
-      await dbConnect();
+      // await dbConnect();
 
-      const userFromDB = await User.findOne({ email: user.user.email });
+      // const userFromDB = await User.findOne({ email: user.user.email });
 
-      if (!userFromDB || !userFromDB.protectionKey) {
-        // hash
-        const salt = await bcrypt.genSalt(10);
-        const hashedProtectionKey = await bcrypt.hash(
-          DEFAULT_PROTECTION_KEY,
-          salt
-        );
+      // if (!userFromDB || !userFromDB.protectionKey) {
+      //   // hash
+      //   const salt = await bcrypt.genSalt(10);
+      //   const hashedProtectionKey = await bcrypt.hash(
+      //     DEFAULT_PROTECTION_KEY,
+      //     salt
+      //   );
 
-        userFromDB.protectionKey = hashedProtectionKey;
-        await userFromDB.save();
+      //   userFromDB.protectionKey = hashedProtectionKey;
+      //   await userFromDB.save();
 
-        return "/new";
-      }
+      //   return "/new";
+      // }
 
+      // return true;
+
+      // return `/api/new?email=${user.user.email}`;
       return true;
     },
+    // redirect: async (url, baseUrl) => {
+    // after successful sign in, redirect to `/api/new` page
+
+    // console.log("URL: ", url);
+    // console.log("BASE URL: ", baseUrl);
+
+    // if (url === "/api/auth/signin" || url === "/api/auth/signout") {
+    //   return baseUrl;
+    // }
+
+    // return "/api/new";
+    // },
   },
   providers: [
     GoogleProvider({
