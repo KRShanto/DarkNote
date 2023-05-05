@@ -5,3 +5,5 @@ Test every single api endpoint with Postman/Thunder Client
 Option to change the font size and font family and theme etc.
 
 Edit & Delete notebook
+
+ Bookmarks and Bin

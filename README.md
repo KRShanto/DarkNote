@@ -9,6 +9,8 @@ A note taking site with rich text editing made with Next.js and Mongodb.
 - Dark mode
 - Multiple Themes (**Coming Soon**)
 - Separate notes into notebooks
+- Bookmark notes for quick access (**Coming Soon**)
+- Restore deleted notes within 15 days (**Coming Soon**)
 - Lock notebooks with a protection key
 - Export notes as PDF (**Coming Soon**)
 - Export notes as HTML (**Coming Soon**)

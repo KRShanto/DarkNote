@@ -2,7 +2,6 @@ import "@/styles/globals.scss";
 import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import Navbar from "@/components/navbar/Navbar";
-import SideNavbar from "@/components/navbar/SideNavbar";
 import Footer from "@/components/Footer";
 import { SessionProvider } from "next-auth/react";
 import { useThemeStore } from "@/stores/theme";
@@ -92,12 +91,8 @@ export default function App({
         <main style={{ opacity: loading ? 0.2 : 1 }}>
           <Navbar />
 
-          <div className="body">
-            <SideNavbar />
-
-            <div className="main-body">
-              <Component {...pageProps} />
-            </div>
+          <div className="main-body">
+            <Component {...pageProps} />
           </div>
 
           <Footer />

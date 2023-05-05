@@ -58,7 +58,7 @@ body.LIGHT {
 
 .main-body {
   position: absolute;
-  width: 85%;
+  width: 100%;
   height: 92vh;
   right: 0;
   top: 8vh;
@@ -107,7 +107,6 @@ body.LIGHT {
 
 @import "navbar";
 @import "home";
-@import "side-navbar";
 @import "create-book";
 @import "display";
 @import "display-note";
