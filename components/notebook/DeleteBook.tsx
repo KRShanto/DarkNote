@@ -2,14 +2,12 @@ import { useRouter } from "next/router";
 import fetcher from "@/lib/fetcher";
 import { useLoadingStore } from "@/stores/loading";
 
-export default function DeleteNote({
-  noteId,
-  notebookId,
+export default function DeleteBook({
+  id,
   protectionToken,
   setDeletePopup,
 }: {
-  noteId: string;
-  notebookId: string;
+  id: string;
   protectionToken: string;
   setDeletePopup: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -18,15 +16,15 @@ export default function DeleteNote({
 
   async function handleDelete() {
     turnOn();
-    const json = await fetcher("/api/delete-note", {
-      id: noteId,
+    const json = await fetcher("/api/delete-book", {
+      id,
       protectionToken,
     });
     turnOff();
 
     if (json.type === "SUCCESS") {
-      // redirect to notebook page
-      router.push(`/book/${notebookId}`);
+      // redirect to home page
+      router.push(`/`);
     } else {
       console.error("ERROR");
       console.error(json);
@@ -36,8 +34,12 @@ export default function DeleteNote({
   return (
     <div className="delete-note confirm">
       <h1 style={{ color: "rgb(255, 0, 0)" }} className="heading">
-        Are you sure you want to delete this note?
+        Are you sure you want to delete this notebook?
       </h1>
+
+      <p className="text">
+        All your notes under this book will be deleted as well.
+      </p>
 
       <div className="options">
         <button className="btn" onClick={() => setDeletePopup(false)}>

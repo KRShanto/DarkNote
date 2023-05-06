@@ -5,12 +5,18 @@
   gap: 3rem;
   margin: 5rem 0;
 
-  .text {
+  .heading {
     text-align: center;
     font-size: 2.8rem;
     color: rgb(255, 68, 0);
     text-shadow: 0 0 2px red;
     font-family: "Ysabeau", serif;
+  }
+
+  .text {
+    font-size: 1.8rem;
+    font-family: "Josefin Sans", sans-serif;
+    color: $white;
   }
 
   .options {
@@ -22,7 +28,7 @@
 
 @media (max-width: 1200px) {
   .confirm {
-    .text {
+    .heading {
       font-size: 2.3rem;
     }
   }
@@ -30,7 +36,7 @@
 
 @media (max-width: 900px) {
   .confirm {
-    .text {
+    .heading {
       font-size: 2rem;
     }
   }
@@ -38,7 +44,7 @@
 
 @media (max-width: 768px) {
   .confirm {
-    .text {
+    .heading {
       font-size: 1.6rem;
     }
 
