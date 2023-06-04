@@ -7,6 +7,8 @@ import NotLoggedInMessage from "../NotLoggedInMessage";
 
 // import lock icon
 import { FaLock } from "react-icons/fa";
+// import unlock icon
+import { FaUnlock } from "react-icons/fa";
 
 export default function CreateBook() {
   const [title, setTitle] = useState("");
@@ -76,9 +78,12 @@ export default function CreateBook() {
         />
       </div>
 
-      <div className="lock" onClick={() => setLocked(!locked)}>
-        <FaLock className={`icon ${locked ? "active" : ""}`} />
-        <p>Lock Book</p>
+      <div className="lock">
+        {locked ? (
+          <FaLock className="icon active" onClick={() => setLocked(!locked)} />
+        ) : (
+          <FaUnlock className="icon" onClick={() => setLocked(!locked)} />
+        )}
       </div>
 
       <button type="submit">Create Book</button>

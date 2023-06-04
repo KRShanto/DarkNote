@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useViewStore } from "@/stores/view";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
+import { retrieveFromPath } from "@/lib/notepage";
 
 // icons
 import { FaBars } from "react-icons/fa";
@@ -13,7 +14,6 @@ import { FaBook } from "react-icons/fa";
 import { FaFileAlt } from "react-icons/fa";
 
 import UserImage from "@/public/user-image.png";
-import { retrieveFromPath } from "@/lib/notepage";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -29,6 +29,7 @@ export default function Navbar() {
         <BackButton />
         <CreateNoteButton />
 
+        {/* TODO */}
         {view === "GRID" ? (
           <button
             className="grid-list link"

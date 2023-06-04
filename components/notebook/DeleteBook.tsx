@@ -14,6 +14,8 @@ export default function DeleteBook({
   const router = useRouter();
   const { turnOn, turnOff } = useLoadingStore();
 
+  console.log("protectionToken", protectionToken);
+
   async function handleDelete() {
     turnOn();
     const json = await fetcher("/api/delete-book", {

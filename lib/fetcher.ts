@@ -15,7 +15,11 @@ export default async function fetcher(
   const json = await res.json();
 
   // TODO: log more beautifully
-  console.log(`FETCHED [${url}] REQUEST [${body}] RESPONSE [${json}]`);
+  // console.log(
+  //   `FETCHED [${url}] REQUEST [${JSON.stringify(
+  //     body
+  //   )}] RESPONSE [${JSON.stringify(json)}]`
+  // );
 
   return json;
 }

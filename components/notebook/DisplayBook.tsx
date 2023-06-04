@@ -13,9 +13,9 @@ import NotLoggedInMessage from "../NotLoggedInMessage";
 import ProtectionKeyForm from "../ProtectionKeyForm";
 import { useLoadingStore } from "@/stores/loading";
 import { NotebookType } from "@/types/data/notebook";
-import DeleteBook from "../notebook/DeleteBook";
+import DeleteBook from "./DeleteBook";
 
-export default function DisplayNotes() {
+export default function DisplayBook() {
   const router = useRouter();
   const { id } = router.query;
 
@@ -30,6 +30,9 @@ export default function DisplayNotes() {
   const { turnOn, turnOff } = useLoadingStore();
 
   function afterUnlock(data: any) {
+    console.log("Id: ", id);
+    console.log("data: ", data);
+
     addProtectionToken(id as string, data.protectionToken);
     setNotes(data.notes);
     setNeedToUnlock(false);
@@ -54,12 +57,16 @@ export default function DisplayNotes() {
   async function getNotes() {
     const protectionToken = getProtectionTokenById(id as string);
 
+    console.log("protection: ", protectionToken);
+
     turnOn();
     const json = await fetcher(`/api/get-notes`, {
       id,
       protectionToken,
     });
     turnOff();
+
+    console.log(json);
 
     if (json.type === "SUCCESS") {
       setNotes(json.data);

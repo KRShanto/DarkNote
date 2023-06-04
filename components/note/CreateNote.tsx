@@ -45,19 +45,21 @@ export default function CreateNote() {
     // Get the `protectionToken` from the session storage
     const protectionTokenFromSession = getProtectionTokenById(id as string);
 
+    console.log("protectionToken: ", protectionTokenFromSession);
+
     turnOn();
     const json = await fetcher("/api/get-book", {
       id,
     });
     turnOff();
 
+    console.log("json: ", json);
+
     if (json.type === "SUCCESS") {
       setProtectionToken(protectionTokenFromSession || "");
       setBook(json.data);
-
-      if (json.data.locked) {
-        setNeedToUnlock(true);
-      }
+    } else if (json.type === "LOCKED") {
+      setNeedToUnlock(true);
     } else if (json.type === "NOTFOUND") {
       setBookNotFound(true);
     }

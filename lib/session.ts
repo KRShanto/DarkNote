@@ -5,9 +5,18 @@ export type ProtectionToken = {
   token: string;
 };
 
+// Add the token to the session storage
+// But if the token already exists, replace it
 export function addProtectionToken(id: string, token: string): void {
   const tokens = getProtectionTokens();
-  tokens.push({ id, token });
+  const tokenIndex = tokens.findIndex((token) => token.id === id);
+
+  if (tokenIndex === -1) {
+    tokens.push({ id, token });
+  } else {
+    tokens[tokenIndex].token = token;
+  }
+
   sessionStorage.setItem(PROTECTION_TOKENS_KEY, JSON.stringify(tokens));
 }
 

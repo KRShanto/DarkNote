@@ -12,19 +12,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
 
-  .title {
-    font-size: 2.5rem;
-    font-family: "Josefin Sans", sans-serif;
-  }
+    .title {
+      font-size: 2.5rem;
+      font-family: "Josefin Sans", sans-serif;
+    }
 
-  .date {
-    font-size: 1.2rem;
-    font-family: "Josefin Sans", sans-serif;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    .date {
+      font-size: 1.2rem;
+      font-family: "Josefin Sans", sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   }
 
   .options {
