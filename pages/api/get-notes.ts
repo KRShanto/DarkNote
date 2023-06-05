@@ -7,6 +7,7 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
 import Note from "@/models/note";
+import isUser from "@/lib/auth/isUser";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,23 +16,13 @@ export default async function handler(
   await dbConnect();
 
   try {
-    const session = await getServerSession(
-      req,
-      res,
-      authOptions as NextAuthOptions
-    );
-    const sessionUser = session?.user as UserType;
+    const user = await isUser(req, res);
 
-    if (!sessionUser) {
-      return response(res, {
-        type: "UNAUTHORIZED",
-        msg: "You need to be signed in to create a notebook",
-      });
-    }
+    if (!user) return;
 
     const { id, protectionToken } = req.body;
 
-    const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
+    const book = await NoteBook.findOne({ _id: id, userId: user._id });
 
     if (!book) {
       return response(res, {

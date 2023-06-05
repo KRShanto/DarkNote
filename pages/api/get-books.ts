@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
+import isUser from "@/lib/auth/isUser";
 
 // Get all notebooks related to the user
 export default async function handler(
@@ -14,21 +15,11 @@ export default async function handler(
 ) {
   await dbConnect();
 
-  const session = await getServerSession(
-    req,
-    res,
-    authOptions as NextAuthOptions
-  );
-  const sessionUser = session?.user as UserType;
+  const user = await isUser(req, res);
 
-  if (!sessionUser) {
-    return response(res, {
-      type: "UNAUTHORIZED",
-      msg: "You need to be signed in to get notebooks",
-    });
-  }
+  if (!user) return;
 
-  const books = await NoteBook.find({ userId: sessionUser._id }).sort({
+  const books = await NoteBook.find({ userId: user._id }).sort({
     createdAt: "desc",
   });
 

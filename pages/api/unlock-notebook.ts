@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import User from "@/models/user";
 import bcrypt from "bcrypt";
 import { DEFAULT_PROTECTION_KEY } from "@/constants/security";
+import isUser from "@/lib/auth/isUser";
 
 // Unclock a notebook
 // Check if the protectionKey is correct
@@ -23,23 +24,9 @@ export default async function handler(
   await dbConnect();
 
   try {
-    const session = await getServerSession(
-      req,
-      res,
-      authOptions as NextAuthOptions
-    );
-    const sessionUser = session?.user as UserType;
+    const sessionUser = await isUser(req, res);
 
-    if (!sessionUser) {
-      return response(
-        res,
-        {
-          type: "UNAUTHORIZED",
-          msg: "You need to be signed in to create a notebook",
-        },
-        401
-      );
-    }
+    if (!sessionUser) return;
 
     const { id, protectionKey } = req.body;
 

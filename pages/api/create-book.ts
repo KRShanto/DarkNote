@@ -6,8 +6,8 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
-import User from "@/models/user";
 import { UserType } from "@/types/data/user";
+import isUser from "@/lib/auth/isUser";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,23 +15,9 @@ export default async function handler(
 ) {
   await dbConnect();
 
-  const session = await getServerSession(
-    req,
-    res,
-    authOptions as NextAuthOptions
-  );
-  const sessionUser = session?.user as UserType;
+  const user = await isUser(req, res);
 
-  if (!sessionUser) {
-    return response(
-      res,
-      {
-        type: "UNAUTHORIZED",
-        msg: "You need to be signed in to create a notebook",
-      },
-      401
-    );
-  }
+  if (!user) return;
 
   const { title, description, locked } = req.body;
 
@@ -50,7 +36,7 @@ export default async function handler(
     title,
     description,
     locked: locked || false,
-    userId: sessionUser._id,
+    userId: user._id,
   };
 
   try {
