@@ -2,11 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
 import { NotebookType } from "@/types/data/notebook";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
-import { UserType } from "@/types/data/user";
 import isUser from "@/lib/auth/isUser";
 
 export default async function handler(

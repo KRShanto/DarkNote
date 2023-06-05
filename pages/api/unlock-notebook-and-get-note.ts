@@ -1,10 +1,6 @@
-import { UserType } from "../../types/data/user";
 import { NextApiRequest, NextApiResponse } from "next";
 import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
 import Note from "@/models/note";
 import { v4 as uuidv4 } from "uuid";
@@ -33,9 +29,6 @@ export default async function handler(
 
     const { id, protectionKey } = req.body;
 
-    console.log("id", id);
-
-    // const book = await NoteBook.findOne({ _id: id, userId: sessionUser._id });
     const note = await Note.findOne({ _id: id, userId: sessionUser._id });
 
     if (!note) {
@@ -115,15 +108,6 @@ export default async function handler(
 
     book.protectionToken = token;
     await book.save();
-
-    //   return response(res, {
-    //     type: "SUCCESS",
-    //     msg: "Notebook unlocked successfully",
-    //     data: token,
-    //   });
-
-    // Also return the notes
-    // const notes = await Note.find({ notebookId: book._id });
 
     return response(res, {
       type: "SUCCESS",

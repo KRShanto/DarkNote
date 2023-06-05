@@ -1,12 +1,7 @@
-import { UserType } from "./../../types/data/user";
 import { NextApiRequest, NextApiResponse } from "next";
 import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
-import Note from "@/models/note";
 import { v4 as uuidv4 } from "uuid";
 import User from "@/models/user";
 import bcrypt from "bcrypt";

@@ -1,15 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
-import { NotebookType } from "@/types/data/notebook";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
-import User from "@/models/user";
-import { UserType } from "@/types/data/user";
 import Note from "@/models/note";
 import isUser from "@/lib/auth/isUser";
+import isLocked from "@/lib/auth/isLocked";
 
 // Delete the book
 export default async function handler(
@@ -35,19 +30,7 @@ export default async function handler(
       });
     }
 
-    if (book.locked && !book.protectionToken) {
-      return response(res, {
-        type: "LOCKED",
-        msg: "No protection token found. You need to unlock the notebook first",
-      });
-    }
-
-    if (book.locked && book.protectionToken !== protectionToken) {
-      return response(res, {
-        type: "LOCKED",
-        msg: "Invalid protection token",
-      });
-    }
+    if (isLocked(res, book, protectionToken)) return;
 
     // Delete the book
     await NoteBook.deleteOne({ _id: id });
