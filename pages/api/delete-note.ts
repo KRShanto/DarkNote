@@ -5,6 +5,8 @@ import response from "@/lib/response";
 import Note from "@/models/note";
 import getUser from "@/lib/db/getUser";
 import isLocked from "@/lib/db/isLocked";
+import getNote from "@/lib/db/getNote";
+import getBook from "@/lib/db/getBook";
 
 // Delete the note
 export default async function handler(
@@ -21,26 +23,31 @@ export default async function handler(
     const { id, protectionToken } = req.body;
 
     // Get the note
-    const note = await Note.findOne({ _id: id });
+    // const note = await Note.findOne({ _id: id });
 
-    if (!note) {
-      return response(res, {
-        type: "NOTFOUND",
-        msg: "No note found",
-      });
-    }
+    // if (!note) {
+    //   return response(res, {
+    //     type: "NOTFOUND",
+    //     msg: "No note found",
+    //   });
+    // }
 
-    const book = await NoteBook.findOne({
-      _id: note.notebookId,
-      userId: user._id,
-    });
+    // const book = await NoteBook.findOne({
+    //   _id: note.notebookId,
+    //   userId: user._id,
+    // });
 
-    if (!book) {
-      return response(res, {
-        type: "NOTFOUND",
-        msg: "No notebook found",
-      });
-    }
+    // if (!book) {
+    //   return response(res, {
+    //     type: "NOTFOUND",
+    //     msg: "No notebook found",
+    //   });
+    // }
+
+    const note = await getNote(res, { _id: id });
+    const book = await getBook(res, { _id: note.notebookId, userId: user._id });
+
+    if (!note || !book) return;
 
     if (isLocked(res, book, protectionToken)) return;
 

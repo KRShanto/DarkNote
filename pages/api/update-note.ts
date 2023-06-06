@@ -5,6 +5,8 @@ import response from "@/lib/response";
 import Note from "@/models/note";
 import getUser from "@/lib/db/getUser";
 import isLocked from "@/lib/db/isLocked";
+import getBook from "@/lib/db/getBook";
+import getNote from "@/lib/db/getNote";
 
 // Update a note
 export default async function handler(
@@ -22,20 +24,26 @@ export default async function handler(
       req.body;
 
     // Get the book
-    const note = await Note.findOne({ _id: id, userId: user._id });
-    const book = await NoteBook.findOne({
-      _id: note.notebookId,
-      userId: user._id,
-    });
+    // const note = await Note.findOne({ _id: id, userId: user._id });
+    // const book = await NoteBook.findOne({
+    // _id: note.notebookId,
+    // userId: user._id,
+    // });
 
-    if (!book || !note) {
-      return response(res, {
-        type: "NOTFOUND",
-        msg: "No notebook found",
-      });
-    }
+    // if (!book || !note) {
+    //   return response(res, {
+    //     type: "NOTFOUND",
+    //     msg: "No notebook found",
+    //   });
+    // }
 
-    if (isLocked(res, book, protectionToken)) return;
+    const note = await getNote(res, { _id: id, userId: user._id });
+
+    if (!note) return;
+
+    const book = await getBook(res, { _id: note.notebookId, userId: user._id });
+
+    if (!book || isLocked(res, book, protectionToken)) return;
 
     // update the note
     const newNote = await Note.findOneAndUpdate(

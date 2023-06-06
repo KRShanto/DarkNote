@@ -19,16 +19,18 @@ export default async function handler(
 
     const { id, protectionToken } = req.body;
 
+    // const book = await NoteBook.findOne({ _id: id, userId: user._id });
+
+    // if (!book) {
+    //   return response(res, {
+    //     type: "NOTFOUND",
+    //     msg: "No notebook found",
+    //   });
+    // }
+
     const book = await NoteBook.findOne({ _id: id, userId: user._id });
 
-    if (!book) {
-      return response(res, {
-        type: "NOTFOUND",
-        msg: "No notebook found",
-      });
-    }
-
-    if (isLocked(res, book, protectionToken)) return;
+    if (!book || isLocked(res, book, protectionToken)) return;
 
     // Get all notes related to the notebook
     const notes = await Note.find({ notebookId: id }).sort({

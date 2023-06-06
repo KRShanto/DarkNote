@@ -5,6 +5,8 @@ import response from "@/lib/response";
 import Note from "@/models/note";
 import getUser from "@/lib/db/getUser";
 import isLocked from "@/lib/db/isLocked";
+import getBook from "@/lib/db/getBook";
+import getNote from "@/lib/db/getNote";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,29 +22,35 @@ export default async function handler(
     // TODO: don't take `notebookId` from the body, but from the note db
     const { id, notebookId, protectionToken } = req.body;
 
-    const book = await NoteBook.findOne({
-      _id: notebookId,
-      userId: user._id,
-    });
+    // const book = await NoteBook.findOne({
+    //   _id: notebookId,
+    //   userId: user._id,
+    // });
 
-    if (!book) {
-      return response(res, {
-        type: "NOTFOUND",
-        msg: "No notebook found",
-      });
-    }
+    // if (!book) {
+    //   return response(res, {
+    //     type: "NOTFOUND",
+    //     msg: "No notebook found",
+    //   });
+    // }
 
-    if (isLocked(res, book, protectionToken)) return;
+    const book = await getBook(res, { _id: notebookId, userId: user._id });
+
+    if (!book || isLocked(res, book, protectionToken)) return;
 
     // Get the note
-    const note = await Note.findOne({ _id: id, notebookId: notebookId });
+    // const note = await Note.findOne({ _id: id, notebookId: notebookId });
 
-    if (!note) {
-      return response(res, {
-        type: "NOTFOUND",
-        msg: "No note found",
-      });
-    }
+    // if (!note) {
+    //   return response(res, {
+    //     type: "NOTFOUND",
+    //     msg: "No note found",
+    //   });
+    // }
+
+    const note = await getNote(res, { _id: id, notebookId: notebookId });
+
+    if (!note) return;
 
     return response(res, {
       type: "SUCCESS",

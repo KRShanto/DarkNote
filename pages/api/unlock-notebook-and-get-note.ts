@@ -8,6 +8,8 @@ import User from "@/models/user";
 import bcrypt from "bcrypt";
 import { DEFAULT_PROTECTION_KEY } from "@/constants/security";
 import getUser from "@/lib/db/getUser";
+import getBook from "@/lib/db/getBook";
+import getNote from "@/lib/db/getNote";
 
 // Unclock a note
 // Check if the protectionKey is correct
@@ -29,27 +31,32 @@ export default async function handler(
 
     const { id, protectionKey } = req.body;
 
-    const note = await Note.findOne({ _id: id, userId: sessionUser._id });
+    // const note = await Note.findOne({ _id: id, userId: sessionUser._id });
 
-    if (!note) {
-      return response(
-        res,
-        {
-          type: "NOTFOUND",
-          msg: "No note found",
-        },
-        404
-      );
-    }
+    // if (!note) {
+    //   return response(
+    //     res,
+    //     {
+    //       type: "NOTFOUND",
+    //       msg: "No note found",
+    //     },
+    //     404
+    //   );
+    // }
 
-    const book = await NoteBook.findOne({ _id: note.notebookId });
+    // const book = await NoteBook.findOne({ _id: note.notebookId });
 
-    if (!book) {
-      return response(res, {
-        type: "NOTFOUND",
-        msg: "No notebook found",
-      });
-    }
+    // if (!book) {
+    //   return response(res, {
+    //     type: "NOTFOUND",
+    //     msg: "No notebook found",
+    //   });
+    // }
+
+    const note = await getNote(res, { _id: id, userId: sessionUser._id });
+    const book = await getBook(res, { _id: note.notebookId });
+
+    if (!note || !book) return;
 
     if (!book.locked) {
       return response(res, {
