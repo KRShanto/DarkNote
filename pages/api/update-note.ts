@@ -3,8 +3,8 @@ import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
 import response from "@/lib/response";
 import Note from "@/models/note";
-import getUser from "@/lib/auth/getUser";
-import isLocked from "@/lib/auth/isLocked";
+import getUser from "@/lib/db/getUser";
+import isLocked from "@/lib/db/isLocked";
 
 // Update a note
 export default async function handler(

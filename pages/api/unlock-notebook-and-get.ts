@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import User from "@/models/user";
 import bcrypt from "bcrypt";
 import { DEFAULT_PROTECTION_KEY } from "@/constants/security";
-import getUser from "@/lib/auth/getUser";
+import getUser from "@/lib/db/getUser";
 
 // Unclock a notebook
 // Check if the protectionKey is correct

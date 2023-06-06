@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
 import response from "@/lib/response";
-import getUser from "@/lib/auth/getUser";
+import getUser from "@/lib/db/getUser";
 
 export default async function handler(
   req: NextApiRequest,
