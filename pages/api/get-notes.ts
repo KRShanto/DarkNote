@@ -3,7 +3,7 @@ import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
 import response from "@/lib/response";
 import Note from "@/models/note";
-import isUser from "@/lib/auth/isUser";
+import getUser from "@/lib/auth/getUser";
 import isLocked from "@/lib/auth/isLocked";
 
 export default async function handler(
@@ -13,7 +13,7 @@ export default async function handler(
   await dbConnect();
 
   try {
-    const user = await isUser(req, res);
+    const user = await getUser(req, res);
 
     if (!user) return;
 

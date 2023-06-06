@@ -3,7 +3,7 @@ import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
 import { NotebookType } from "@/types/data/notebook";
 import response from "@/lib/response";
-import isUser from "@/lib/auth/isUser";
+import getUser from "@/lib/auth/getUser";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,7 +11,7 @@ export default async function handler(
 ) {
   await dbConnect();
 
-  const user = await isUser(req, res);
+  const user = await getUser(req, res);
 
   if (!user) return;
 

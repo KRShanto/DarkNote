@@ -5,7 +5,7 @@ import { NextAuthOptions } from "next-auth";
 import response from "@/lib/response";
 import { UserType } from "@/types/data/user";
 
-export default async function isUser(
+export default async function getUser(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

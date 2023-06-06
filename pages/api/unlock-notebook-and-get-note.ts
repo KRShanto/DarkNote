@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import User from "@/models/user";
 import bcrypt from "bcrypt";
 import { DEFAULT_PROTECTION_KEY } from "@/constants/security";
-import isUser from "@/lib/auth/isUser";
+import getUser from "@/lib/auth/getUser";
 
 // Unclock a note
 // Check if the protectionKey is correct
@@ -23,7 +23,7 @@ export default async function handler(
   await dbConnect();
 
   try {
-    const sessionUser = await isUser(req, res);
+    const sessionUser = await getUser(req, res);
 
     if (!sessionUser) return;
 
