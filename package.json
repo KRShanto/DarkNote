@@ -1,7 +1,28 @@
 {
   "name": "dark-note",
-  "version": "0.1.0",
+  "version": "1.0",
   "private": true,
+  "author": {
+    "name": "KR Shanto",
+    "email": "krshanto2005@gmail.com"
+  },
+  "description": "An open source note taking site with rich text editing made with Next.js and Mongodb.",
+  "license": "MIT",
+  "categories": [
+    "Education",
+    "Notebooks"
+  ],
+  "displayName": "Dark Note",
+  "homepage": "https://darknote.vercel.app",
+  "keywords": [
+    "note",
+    "notebook"
+  ],
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KRShanto/DarkNote"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
