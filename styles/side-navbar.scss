@@ -1,0 +1,171 @@
+.side-navbar {
+  position: absolute;
+  width: 5vw;
+  max-width: 5vw;
+  height: 92vh;
+  left: 0;
+  top: 8vh;
+  // border: 2px solid red;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: row;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  // border: 2px solid green;
+
+  .links {
+    width: 5vw;
+    min-width: 5vw;
+    // border: 2px solid pink;
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 0;
+
+    // border: 2px solid blue;
+
+    .link {
+      padding: 1.5rem;
+      font-size: 2rem;
+      border-radius: 5px;
+      color: rgba(255, 255, 255, 0.581);
+      background-color: transparent;
+      // border: 2px solid blue;
+      outline: none;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.084);
+      }
+    }
+
+    .link.active {
+      color: white;
+    }
+
+    img {
+      border-radius: 50%;
+    }
+  }
+
+  .notebook-bar {
+    width: 25vw;
+    min-width: 25vw;
+    // border: 2px solid red;
+
+    .header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      border: none;
+      outline: none;
+      background-color: transparent;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.367);
+      width: 100%;
+      transition: background-color 0.2s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.084);
+      }
+
+      .title {
+        font-size: 1.7rem;
+        font-family: "Ysabeau", cursive;
+        font-weight: bold;
+        color: white;
+      }
+
+      .toggle {
+        font-size: 1.8rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        border: none;
+        outline: none;
+        background-color: transparent;
+      }
+    }
+
+    .notes {
+      // border: 2px solid green;
+      position: relative;
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-direction: column;
+      // background-color: rgba(255, 255, 255, 0.037);
+
+      .note {
+        padding: 1rem;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
+        text-align: start;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        // gap: 1rem;
+        text-decoration: none;
+        // border: 2px solid red;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .title-content {
+          // border: 2px solid blue;
+          width: 90%;
+          // position: relative;
+        }
+
+        .eye {
+          // border: 2px solid green;
+          width: 10%;
+          // position: relative;
+          display: inline-block;
+        }
+
+        .title {
+          font-size: 1.6rem;
+          font-family: "Ysabeau", cursive;
+          // underline
+          // text-decoration: underline;
+          font-weight: bold;
+          color: rgba(255, 255, 255, 0.824);
+
+          .number {
+            font-family: "Lobster", cursive;
+          }
+        }
+
+        .content {
+          font-size: 1.2rem;
+          font-family: "Ysabeau", cursive;
+          color: rgba(255, 255, 255, 0.677);
+        }
+      }
+    }
+  }
+}
+
+.side-navbar.note-active {
+  width: 30vw;
+  max-width: 30vw;
+}
+
+.side-navbar.note-active + .main-body {
+  width: 70vw;
+}

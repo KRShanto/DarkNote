@@ -9,3 +9,5 @@ Edit & Delete notebook
 Bookmarks and Bin
 
 IMPORTANT create a component and global state for logging the fetch requests and responses
+
+Change the color of TinyMCE (match it with the theme)

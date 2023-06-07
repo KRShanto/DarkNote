@@ -8,6 +8,7 @@ import { useThemeStore } from "@/stores/theme";
 import { useMediaQuery } from "react-responsive";
 import { useMobileStore } from "@/stores/mobile";
 import { useViewStore } from "@/stores/view";
+import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 import LoadingBar from "react-top-loading-bar";
 import { FadeLoader, BounceLoader } from "react-spinners";
 import { useLoadingStore } from "@/stores/loading";
@@ -15,6 +16,8 @@ import { useRouter } from "next/router";
 import { ThemeType } from "@/types/theme";
 import { ViewType } from "@/types/view";
 import LoaderForUser from "@/components/LoaderForUser";
+import SideNavbar from "../components/side-navbar/SideNavbar";
+import fetcher from "@/lib/fetcher";
 
 export default function App({
   Component,
@@ -28,6 +31,7 @@ export default function App({
   const { theme, changeTheme } = useThemeStore();
   const { loading } = useLoadingStore();
   const { setIsMobile } = useMobileStore();
+  const { set } = useBooksWithNotesStore();
 
   // Get the theme and view from local storage
   useEffect(() => {
@@ -72,6 +76,18 @@ export default function App({
     document.body.className = theme;
   }, [theme]);
 
+  // Fetch the books and notes
+  useEffect(() => {
+    async function getBooksWithNotes() {
+      const res = await fetcher("/api/get-books-with-notes", {});
+      const data = res.data;
+
+      set(data);
+    }
+
+    getBooksWithNotes();
+  }, []);
+
   return (
     <>
       <LoadingBar
@@ -90,6 +106,7 @@ export default function App({
       <SessionProvider session={session}>
         <main style={{ opacity: loading ? 0.2 : 1 }}>
           <Navbar />
+          <SideNavbar />
 
           <div className="main-body">
             <Component {...pageProps} />

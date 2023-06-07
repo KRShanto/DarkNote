@@ -7,6 +7,7 @@ import getUser from "@/lib/db/getUser";
 
 // Get all notebooks related to the user
 // TODO: Streamline this process - first sent all notebooks, then get all notes related to the notebooks and send them
+// TODO: Add lock restriction
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
