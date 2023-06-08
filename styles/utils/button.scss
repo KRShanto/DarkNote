@@ -1,29 +1,43 @@
 .btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background-color: transparent;
-  padding: 0.2rem 0.8rem;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // gap: 0.5rem;
+  // background-color: transparent;
+  // padding: 0.2rem 0.8rem;
+  // border-radius: 0.5rem;
+  // font-size: 1.4rem;
+  // font-weight: bold;
+  // transition: all 0.3s ease-in-out;
+  // color: $mainColor;
+  // border: 1px solid $mainColor;
+  // cursor: pointer;
+  // text-decoration: none;
+  // font-family: "Noto Sans", sans-serif;
+
+  // .icon {
+  //   font-size: 1.3rem;
+  // }
+
+  // &:hover {
+  //   background-color: $mainColor;
+  //   color: white;
+  //   text-shadow: 0 0 0.5px black;
+  // }
+
+  background-color: rgb(34, 181, 240);
+  padding: 0.6rem;
+  font-size: 1.5rem;
   border-radius: 0.5rem;
-  font-size: 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.443);
+  outline: none;
+  cursor: pointer;
+  color: white;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
-  color: $mainColor;
-  border: 1px solid $mainColor;
-  cursor: pointer;
-  text-decoration: none;
-  font-family: "Noto Sans", sans-serif;
-
-  .icon {
-    font-size: 1.3rem;
-  }
-
-  &:hover {
-    background-color: $mainColor;
-    color: white;
-    text-shadow: 0 0 0.5px black;
-  }
+  text-shadow: 0 0 0.5px black;
+  // box shadow to the bottom
+  box-shadow: 0px 0px 12px -2px rgb(167, 165, 165);
 }
 
 .danger {

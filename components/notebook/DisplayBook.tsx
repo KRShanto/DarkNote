@@ -10,10 +10,10 @@ import { generateNotePath } from "@/lib/notepage";
 import NotFoundMessage from "../NotFoundMessage";
 import { useSession } from "next-auth/react";
 import NotLoggedInMessage from "../NotLoggedInMessage";
-import ProtectionKeyForm from "../ProtectionKeyForm";
 import { useLoadingStore } from "@/stores/loading";
 import { NotebookType } from "@/types/data/notebook";
 import DeleteBook from "./DeleteBook";
+import { usePopupStore } from "@/stores/popup";
 
 export default function DisplayBook() {
   const router = useRouter();
@@ -28,6 +28,7 @@ export default function DisplayBook() {
 
   const { status } = useSession();
   const { turnOn, turnOff } = useLoadingStore();
+  const { openPopup } = usePopupStore();
 
   function afterUnlock(data: any) {
     console.log("Id: ", id);
@@ -53,6 +54,16 @@ export default function DisplayBook() {
       console.error("ERROR");
     }
   }
+
+  useEffect(() => {
+    if (needToUnlock) {
+      openPopup("Unlock", {
+        id: id,
+        path: "/api/unlock-notebook-and-get",
+        afterUnlock: afterUnlock,
+      });
+    }
+  }, [needToUnlock]);
 
   async function getNotes() {
     const protectionToken = getProtectionTokenById(id as string);
@@ -97,11 +108,7 @@ export default function DisplayBook() {
   return (
     <div>
       {needToUnlock ? (
-        <ProtectionKeyForm
-          afterUnlock={afterUnlock}
-          id={id as string}
-          path="/api/unlock-notebook-and-get"
-        />
+        <></>
       ) : deletePopup ? (
         <DeleteBook
           id={id as string}

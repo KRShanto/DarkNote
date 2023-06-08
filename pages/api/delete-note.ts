@@ -22,28 +22,6 @@ export default async function handler(
 
     const { id, protectionToken } = req.body;
 
-    // Get the note
-    // const note = await Note.findOne({ _id: id });
-
-    // if (!note) {
-    //   return response(res, {
-    //     type: "NOTFOUND",
-    //     msg: "No note found",
-    //   });
-    // }
-
-    // const book = await NoteBook.findOne({
-    //   _id: note.notebookId,
-    //   userId: user._id,
-    // });
-
-    // if (!book) {
-    //   return response(res, {
-    //     type: "NOTFOUND",
-    //     msg: "No notebook found",
-    //   });
-    // }
-
     const note = await getNote(res, { _id: id });
     const book = await getBook(res, { _id: note.notebookId, userId: user._id });
 

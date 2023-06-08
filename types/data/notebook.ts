@@ -4,6 +4,7 @@ export interface NotebookType {
   description: string;
   userId: string;
   locked: boolean;
+  unlocked: boolean;
   createdAt?: Date;
   protectionToken?: string;
 }

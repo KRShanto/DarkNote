@@ -21,16 +21,6 @@ export default async function handler(
     const { id, title, content, textContent, locked, protectionToken } =
       req.body;
 
-    // // Get the book
-    // const book = await NoteBook.findOne({ _id: id, userId: user._id });
-
-    // if (!book) {
-    //   return response(res, {
-    //     type: "NOTFOUND",
-    //     msg: "No notebook found",
-    //   });
-    // }
-
     const book = await getBook(res, { _id: id, userId: user._id });
 
     if (!book) return;

@@ -31,28 +31,6 @@ export default async function handler(
 
     const { id, protectionKey } = req.body;
 
-    // const note = await Note.findOne({ _id: id, userId: sessionUser._id });
-
-    // if (!note) {
-    //   return response(
-    //     res,
-    //     {
-    //       type: "NOTFOUND",
-    //       msg: "No note found",
-    //     },
-    //     404
-    //   );
-    // }
-
-    // const book = await NoteBook.findOne({ _id: note.notebookId });
-
-    // if (!book) {
-    //   return response(res, {
-    //     type: "NOTFOUND",
-    //     msg: "No notebook found",
-    //   });
-    // }
-
     const note = await getNote(res, { _id: id, userId: sessionUser._id });
     const book = await getBook(res, { _id: note.notebookId });
 

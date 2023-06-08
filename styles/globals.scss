@@ -58,12 +58,10 @@ body.LIGHT {
 
 .main-body {
   position: absolute;
-  // width: 100%;
   width: 95vw;
   height: 92vh;
   right: 0;
   top: 8vh;
-  // border: 2px solid green;
   overflow: scroll;
   transition: width 0.2s ease-in-out;
 }
@@ -84,8 +82,9 @@ body.LIGHT {
 @import "display";
 @import "display-note";
 @import "display-book";
-@import "protection-key-form";
 @import "side-navbar";
+@import "popup";
+@import "form";
 
 @import "utils/button";
 @import "utils/card";

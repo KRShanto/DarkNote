@@ -32,6 +32,7 @@ export default async function handler(
     title,
     description,
     locked: locked || false,
+    unlocked: false,
     userId: user._id,
   };
 

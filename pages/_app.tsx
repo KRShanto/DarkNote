@@ -15,9 +15,11 @@ import { useLoadingStore } from "@/stores/loading";
 import { useRouter } from "next/router";
 import { ThemeType } from "@/types/theme";
 import { ViewType } from "@/types/view";
+import { usePopupStore } from "@/stores/popup";
 import LoaderForUser from "@/components/LoaderForUser";
 import SideNavbar from "../components/side-navbar/SideNavbar";
 import fetcher from "@/lib/fetcher";
+import PopupState from "@/components/PopupState";
 
 export default function App({
   Component,
@@ -31,7 +33,8 @@ export default function App({
   const { theme, changeTheme } = useThemeStore();
   const { loading } = useLoadingStore();
   const { setIsMobile } = useMobileStore();
-  const { set } = useBooksWithNotesStore();
+  const { get } = useBooksWithNotesStore();
+  const { popup } = usePopupStore();
 
   // Get the theme and view from local storage
   useEffect(() => {
@@ -78,14 +81,7 @@ export default function App({
 
   // Fetch the books and notes
   useEffect(() => {
-    async function getBooksWithNotes() {
-      const res = await fetcher("/api/get-books-with-notes", {});
-      const data = res.data;
-
-      set(data);
-    }
-
-    getBooksWithNotes();
+    get();
   }, []);
 
   return (
@@ -104,7 +100,9 @@ export default function App({
       )}
 
       <SessionProvider session={session}>
-        <main style={{ opacity: loading ? 0.2 : 1 }}>
+        <PopupState />
+
+        <main style={{ opacity: loading || popup ? 0.2 : 1 }}>
           <Navbar />
           <SideNavbar />
 

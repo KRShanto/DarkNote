@@ -22,31 +22,9 @@ export default async function handler(
     // TODO: don't take `notebookId` from the body, but from the note db
     const { id, notebookId, protectionToken } = req.body;
 
-    // const book = await NoteBook.findOne({
-    //   _id: notebookId,
-    //   userId: user._id,
-    // });
-
-    // if (!book) {
-    //   return response(res, {
-    //     type: "NOTFOUND",
-    //     msg: "No notebook found",
-    //   });
-    // }
-
     const book = await getBook(res, { _id: notebookId, userId: user._id });
 
     if (!book || isLocked(res, book, protectionToken)) return;
-
-    // Get the note
-    // const note = await Note.findOne({ _id: id, notebookId: notebookId });
-
-    // if (!note) {
-    //   return response(res, {
-    //     type: "NOTFOUND",
-    //     msg: "No note found",
-    //   });
-    // }
 
     const note = await getNote(res, { _id: id, notebookId: notebookId });
 
