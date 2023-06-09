@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 import SideLink from "./SideLink";
 import UserPic from "./UserPic";
@@ -14,9 +14,37 @@ export default function SideNavbar() {
   const [notebookBarActive, setNotebookBarActive] = useState(true);
   const { books } = useBooksWithNotesStore();
 
+  console.log("Notebook bar active: ", notebookBarActive);
+
   function toggle() {
+    console.log("Toggling");
     setNotebookBarActive(!notebookBarActive);
   }
+
+  // listen for keyboard shortcuts
+  // "CTLR + b" to toggle notebook bar
+  // also disable browser shortcuts
+  // TODO: add settings for keyboard shortcuts
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      // if (e.key === "b") {
+      //   console.log("b pressed");
+      //   e.preventDefault();
+      //   toggle();
+      // }
+
+      if (e.ctrlKey && e.key === "b") {
+        console.log("ctrl + b pressed");
+        e.preventDefault();
+        toggle();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [toggle]);
 
   return (
     <div className={`side-navbar ${notebookBarActive ? "note-active" : ""}`}>
