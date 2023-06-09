@@ -1,90 +1,47 @@
 .btn {
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-  // gap: 0.5rem;
-  // background-color: transparent;
-  // padding: 0.2rem 0.8rem;
-  // border-radius: 0.5rem;
-  // font-size: 1.4rem;
-  // font-weight: bold;
-  // transition: all 0.3s ease-in-out;
-  // color: $mainColor;
-  // border: 1px solid $mainColor;
-  // cursor: pointer;
-  // text-decoration: none;
-  // font-family: "Noto Sans", sans-serif;
-
-  // .icon {
-  //   font-size: 1.3rem;
-  // }
-
-  // &:hover {
-  //   background-color: $mainColor;
-  //   color: white;
-  //   text-shadow: 0 0 0.5px black;
-  // }
-
-  background-color: rgb(34, 181, 240);
-  padding: 0.6rem;
-  font-size: 1.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.443);
-  outline: none;
-  cursor: pointer;
-  color: white;
+  font-size: 1.3rem;
   font-weight: bold;
-  transition: all 0.3s ease-in-out;
-  text-shadow: 0 0 0.5px black;
-  // box shadow to the bottom
-  box-shadow: 0px 0px 12px -2px rgb(167, 165, 165);
+  padding: 0.5rem 2rem;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  text-shadow: 0px 0px 1px black;
+  cursor: pointer;
+  margin: 1rem 0;
+  text-decoration: none;
+  font-family: "Noto Sans", sans-serif;
 }
 
-.danger {
-  $color: red;
-  color: $color;
-  border: 1px solid $color;
+.sky {
+  background-image: linear-gradient(45deg, rgb(1, 107, 182), rgb(0, 170, 255));
 
   &:hover {
-    background-color: $color;
-    color: white;
-    text-shadow: 0 0 0.5px black;
+    background-image: linear-gradient(45deg, rgb(0, 80, 172), rgb(1, 49, 151));
   }
 }
 
-.mini-danger {
-  $color: rgb(255, 115, 0);
-  color: $color;
-  border: 1px solid $color;
+.danger {
+  background-image: linear-gradient(45deg, rgb(255, 0, 72), rgb(255, 0, 179));
 
   &:hover {
-    background-color: $color;
-    color: white;
-    text-shadow: 0 0 0.5px black;
+    background-image: linear-gradient(
+      45deg,
+      rgb(255, 1, 120),
+      rgb(255, 0, 195)
+    );
   }
 }
 
 .success {
-  $color: rgb(27, 195, 1);
-  color: $color;
-  border: 1px solid $color;
+  background-image: linear-gradient(45deg, rgb(1, 122, 64), rgb(35, 238, 147));
 
   &:hover {
-    background-color: $color;
-    color: white;
-    text-shadow: 0 0 0.5px black;
-  }
-}
-
-.sky {
-  $color: rgb(0, 106, 255);
-  color: $color;
-  border: 1px solid $color;
-
-  &:hover {
-    background-color: $color;
-    color: white;
-    text-shadow: 0 0 0.5px black;
+    background-image: linear-gradient(
+      45deg,
+      rgb(0, 174, 90),
+      rgb(70, 251, 170)
+    );
   }
 }
 
