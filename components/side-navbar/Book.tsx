@@ -2,18 +2,41 @@ import { useState } from "react";
 import Note from "./Note";
 import { NoteType } from "@/types/data/note";
 import { BookWithNotesType } from "@/types/data/booksWithNotes";
+import { usePopupStore } from "@/stores/popup";
+import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 
 import { IoIosArrowForward } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
+import { addProtectionToken } from "@/lib/session";
 
 export default function Book({ book }: { book: BookWithNotesType }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  function toggle() {
-    setIsOpen(!isOpen);
-  }
+  const { openPopup } = usePopupStore();
+  const { addNotes, unlock } = useBooksWithNotesStore();
 
-  console.log("Unclock", book.unlocked);
+  // Toggle the book open and closed
+  // If the book is locked, open Unlock popup
+  function toggle() {
+    // After unlock
+    function afterUnlock(data: any) {
+      addProtectionToken(book._id as string, data.protectionToken);
+      addNotes(book._id as string, data.notes);
+      unlock(book._id as string);
+      setIsOpen(!isOpen);
+    }
+
+    if (book.locked && book.unlocked !== true) {
+      // Open unlock popup
+      openPopup("Unlock", {
+        path: "/api/unlock-notebook-and-get",
+        id: book._id,
+        afterUnlock: afterUnlock,
+      });
+    } else {
+      setIsOpen(!isOpen);
+    }
+  }
 
   return (
     <div className="book">
@@ -21,7 +44,7 @@ export default function Book({ book }: { book: BookWithNotesType }) {
         <div className="title">{book.title}</div>
 
         {book.locked && book.unlocked !== true ? (
-          <FaLock />
+          <FaLock className="lock" />
         ) : (
           <IoIosArrowForward
             className="toggle"
