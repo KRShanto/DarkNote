@@ -1,143 +1,105 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import fetcher from "@/lib/fetcher";
 import { NoteType } from "@/types/data/note";
-import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
 import Link from "next/link";
-import { FaClock, FaLock } from "react-icons/fa";
+import { FaClock } from "react-icons/fa";
 import moment from "moment";
-import DeleteNote from "@/components/note/DeleteNote";
-import NotFoundMessage from "../NotFoundMessage";
-import { useSession } from "next-auth/react";
-import NotLoggedInMessage from "../NotLoggedInMessage";
-import ProtectionKeyForm from "../ProtectionKeyForm";
-import { useLoadingStore } from "@/stores/loading";
+import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
+import { FadeLoader } from "react-spinners";
+import { usePopupStore } from "@/stores/popup";
+import Lottie from "lottie-react";
+import KidNotFoundAnimation from "@/public/animations/kid-not-found.json";
 
 export default function DisplayNote() {
+  const [note, setNote] = useState<NoteType | null>();
+
   const router = useRouter();
-  // id: {notebookId}-{noteId}
   const { id } = router.query;
 
-  const [needToUnlock, setNeedToUnlock] = useState(false);
-  const [deletePopup, setDeletePopup] = useState(false);
-  const [protectionToken, setProtectionToken] = useState<string | null>();
-  const [noteNotFound, setNoteNotFound] = useState(false);
+  const { books, loading } = useBooksWithNotesStore();
+  const { openPopup } = usePopupStore();
 
-  const [note, setNote] = useState<NoteType>();
-
-  const [noteId, setNoteId] = useState<string>();
-  const [notebookId, setNotebookId] = useState<string>();
-
-  const { status } = useSession();
-  const { turnOn, turnOff } = useLoadingStore();
-
-  function afterUnlock(data: any) {
-    addProtectionToken(notebookId as string, data.protectionToken);
-    setNote(data.note);
-    setNeedToUnlock(false);
-    setProtectionToken(data.protectionToken);
-  }
-
-  async function getNotes() {
-    const protectionToken = getProtectionTokenById(notebookId as string);
-
-    turnOn();
-    const json = await fetcher(`/api/get-note`, {
-      id: noteId,
-      notebookId,
-      protectionToken: protectionToken,
+  useEffect(() => {
+    // find the note from the books
+    books.forEach((book) => {
+      book.notes.forEach((note) => {
+        if (note._id === id) {
+          setNote(note);
+        }
+      });
     });
-    turnOff();
+  }, [id, books]);
 
-    if (json.type === "SUCCESS") {
-      setNote(json.data);
-      setProtectionToken(protectionToken);
-    } else if (json.type === "LOCKED") {
-      setNeedToUnlock(true);
-    } else if (json.type === "NOTFOUND") {
-      setNoteNotFound(true);
-    } else {
-      console.error("ERROR");
-    }
+  function deleteNote() {
+    openPopup("DeleteNote", { id: note?._id });
   }
 
-  useEffect(() => {
-    if (id) {
-      const idSplit = id as string;
-      const [notebookId, noteId] = idSplit.split("-");
-
-      setNotebookId(notebookId);
-      setNoteId(noteId);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (notebookId && noteId) getNotes();
-  }, [notebookId, noteId]);
-
-  if (noteNotFound) {
-    return <NotFoundMessage what="NOTE" />;
+  if (loading) {
+    return (
+      <div className="local-spinner">
+        <FadeLoader color="cyan" />
+      </div>
+    );
   }
 
-  if (status === "unauthenticated") {
-    return <NotLoggedInMessage />;
+  if (!note) {
+    return (
+      <div className="note-not-found">
+        <h1 className="text">Note not found.</h1>
+
+        <Lottie
+          animationData={KidNotFoundAnimation}
+          className="animation"
+          loop={true}
+          autoplay={true}
+        />
+
+        <p className="tip">
+          The note you are looking for does not exist or you do not have access
+          to it.
+        </p>
+
+        <p className="tip">
+          Unlock notebooks on the left to see the notes inside it.
+        </p>
+      </div>
+    );
   }
 
   return (
     <div>
-      {needToUnlock ? (
-        <ProtectionKeyForm
-          afterUnlock={afterUnlock}
-          id={noteId as string}
-          path="/api/unlock-notebook-and-get-note"
-        />
-      ) : deletePopup ? (
-        <DeleteNote
-          noteId={noteId as string}
-          notebookId={notebookId as string}
-          protectionToken={protectionToken as string}
-          setDeletePopup={setDeletePopup}
-        />
-      ) : (
-        <div className="display-note">
-          <div className="header">
-            <div className="title-info">
-              <h1 className="title">{note?.title}</h1>
-              <div className="info">
-                <span className="date">
-                  <FaClock /> {moment(note?.createdAt).format("MMMM Do YYYY")}
-                </span>
-              </div>
-            </div>
-
-            <hr />
-
-            <div className="options">
-              <Link
-                className="edit btn"
-                href={`/edit-note/${notebookId}-${noteId}`}
-              >
-                Edit Note
-              </Link>
-
-              <button
-                className="btn danger"
-                onClick={() => {
-                  setDeletePopup(true);
-                }}
-              >
-                Delete Note
-              </button>
-              <button className="btn">Full Screen</button>
+      <div className="display-note">
+        <div className="header">
+          <div className="title-info">
+            <h1 className="title">{note?.title}</h1>
+            <div className="info">
+              <span className="date">
+                <FaClock />
+                {moment(note?.createdAt).format("MMMM Do YYYY")}
+              </span>
             </div>
           </div>
 
+          <hr />
+
+          <div className="options">
+            <Link className="btn success" href={`/edit-note/${note?._id}`}>
+              Edit Note
+            </Link>
+
+            <button className="btn danger" onClick={deleteNote}>
+              Delete Note
+            </button>
+          </div>
+        </div>
+
+        <div className="content">
           <div
             dangerouslySetInnerHTML={{ __html: note?.content as string }}
-            className="content"
+            className="inner-content"
           ></div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

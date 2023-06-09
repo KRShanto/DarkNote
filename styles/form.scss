@@ -140,39 +140,34 @@
     justify-content: center;
     align-items: center;
 
-    button[type="submit"],
-    input[type="submit"] {
-      font-size: 1.3rem;
-      font-weight: bold;
-      padding: 0.5rem 2rem;
-      // background-color: rgb(0, 149, 255);
-      // gradient
-      background-image: linear-gradient(
-        45deg,
-        rgb(1, 107, 182),
-        rgb(0, 170, 255)
-      );
-      color: white;
-      border: none;
-      outline: none;
-      // box-shadow: 0 0 3px white;
-      border-radius: 5px;
-      text-shadow: 0px 0px 1px black;
-      border: 1px solid rgba(255, 255, 255, 0.44);
-      cursor: pointer;
-      margin: 1rem 0;
-      transition: all 0.3s ease-in-out;
+    // button[type="submit"],
+    // input[type="submit"] {
+    //   font-size: 1.3rem;
+    //   font-weight: bold;
+    //   padding: 0.5rem 2rem;
+    //   background-image: linear-gradient(
+    //     45deg,
+    //     rgb(1, 107, 182),
+    //     rgb(0, 170, 255)
+    //   );
+    //   color: white;
+    //   border: none;
+    //   outline: none;
+    //   border-radius: 5px;
+    //   text-shadow: 0px 0px 1px black;
+    //   border: 1px solid rgba(255, 255, 255, 0.44);
+    //   cursor: pointer;
+    //   margin: 1rem 0;
+    //   transition: all 0.3s ease-in-out;
 
-      &:hover {
-        // background-color: rgb(0, 149, 255, 0.5);
-        // gradient
-        background-image: linear-gradient(
-          45deg,
-          rgb(0, 80, 172),
-          rgb(1, 49, 151)
-        );
-      }
-    }
+    //   &:hover {
+    //     background-image: linear-gradient(
+    //       45deg,
+    //       rgb(0, 80, 172),
+    //       rgb(1, 49, 151)
+    //     );
+    //   }
+    // }
   }
 }
 

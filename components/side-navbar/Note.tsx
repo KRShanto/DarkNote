@@ -13,8 +13,7 @@ export default function Note({
   index: number;
 }) {
   const router = useRouter();
-  // Check the #id of the url
-  const id = router.asPath.split("#")[1];
+  const { id } = router.query;
 
   const [noteOpened, setOpenedNote] = useState(false);
 
@@ -28,7 +27,7 @@ export default function Note({
 
   return (
     <Link
-      href={`/#${note._id}`}
+      href={`/note/${note._id}`}
       scroll={false}
       key={note._id}
       className={`note ${noteOpened ? "open" : ""}`}

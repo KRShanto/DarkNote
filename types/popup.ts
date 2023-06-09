@@ -1,1 +1,1 @@
-export type PopupType = "Unlock" | null;
+export type PopupType = "Unlock" | "DeleteNote" | null;
