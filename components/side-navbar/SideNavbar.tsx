@@ -27,14 +27,7 @@ export default function SideNavbar() {
   // TODO: add settings for keyboard shortcuts
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
-      // if (e.key === "b") {
-      //   console.log("b pressed");
-      //   e.preventDefault();
-      //   toggle();
-      // }
-
       if (e.ctrlKey && e.key === "b") {
-        console.log("ctrl + b pressed");
         e.preventDefault();
         toggle();
       }
