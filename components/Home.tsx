@@ -18,12 +18,12 @@ export default function Home() {
 
         <div className="options">
           <button className="option btn light">
-            <FaRegStickyNote className="icon" />
+            <FaBook className="icon" />
             <p className="text">Create new Notebook</p>
           </button>
 
           <button className="option btn light">
-            <FaBook className="icon" />
+            <FaRegStickyNote className="icon" />
             <p className="text">Create new Note</p>
           </button>
 

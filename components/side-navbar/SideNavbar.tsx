@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 import SideLink from "./SideLink";
 import UserPic from "./UserPic";
-import Book from "./Book";
+import NotebookBar from "./NotebookBar";
 
 // icons
 import { AiOutlineSetting } from "react-icons/ai";
@@ -12,12 +11,8 @@ import { FiUsers } from "react-icons/fi";
 
 export default function SideNavbar() {
   const [notebookBarActive, setNotebookBarActive] = useState(true);
-  const { books } = useBooksWithNotesStore();
-
-  console.log("Notebook bar active: ", notebookBarActive);
 
   function toggle() {
-    console.log("Toggling");
     setNotebookBarActive(!notebookBarActive);
   }
 
@@ -64,11 +59,7 @@ export default function SideNavbar() {
         <UserPic />
       </div>
 
-      <div className="notebook-bar">
-        {books.map((book) => (
-          <Book key={book._id} book={book} />
-        ))}
-      </div>
+      <NotebookBar />
     </div>
   );
 }
