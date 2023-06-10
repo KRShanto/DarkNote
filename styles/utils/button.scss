@@ -13,7 +13,27 @@
   font-family: "Noto Sans", sans-serif;
 }
 
+.light {
+  border: 1px solid rgba(255, 255, 255, 0.082);
+
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.115),
+    rgba(255, 255, 255, 0.032)
+  );
+
+  &:hover {
+    background-image: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.021),
+      rgba(255, 255, 255, 0.037)
+    );
+  }
+}
+
 .sky {
+  box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.773) inset;
+
   background-image: linear-gradient(45deg, rgb(1, 107, 182), rgb(0, 170, 255));
 
   &:hover {
@@ -21,7 +41,17 @@
   }
 }
 
+.blue {
+  background-image: linear-gradient(45deg, rgb(0, 123, 255), rgb(0, 0, 255));
+
+  &:hover {
+    background-image: linear-gradient(45deg, rgb(0, 80, 172), rgb(1, 49, 151));
+  }
+}
+
 .danger {
+  box-shadow: 0px 0px 3px rgb(255, 255, 255) inset;
+
   background-image: linear-gradient(45deg, rgb(255, 0, 72), rgb(255, 0, 179));
 
   &:hover {
@@ -34,6 +64,8 @@
 }
 
 .success {
+  box-shadow: 0px 0px 1px rgba(255, 255, 255, 0.791) inset;
+
   background-image: linear-gradient(45deg, rgb(1, 122, 64), rgb(35, 238, 147));
 
   &:hover {

@@ -1,0 +1,42 @@
+#home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding-top: 5rem;
+
+  .welcome {
+    font-size: 3rem;
+    background: linear-gradient(90deg, #00d0ff, #0084ff, blue);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      width: 30rem;
+      padding: 1rem;
+      margin: 0.2rem 0;
+      color: rgb(255, 255, 255);
+      transition: all 0.2s ease-in-out;
+      background-color: transparent;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
