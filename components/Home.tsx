@@ -7,8 +7,15 @@ import { FaBook } from "react-icons/fa";
 import { FaKeyboard } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
+import { usePopupStore } from "@/stores/popup";
 
 export default function Home() {
+  const { openPopup } = usePopupStore();
+
+  function createNote() {
+    openPopup("CreateNote", {});
+  }
+
   return (
     <>
       <div id="home">
@@ -22,7 +29,7 @@ export default function Home() {
             <p className="text">Create new Notebook</p>
           </button>
 
-          <button className="option btn light">
+          <button className="option btn light" onClick={createNote}>
             <FaRegStickyNote className="icon" />
             <p className="text">Create new Note</p>
           </button>
