@@ -1,88 +1,66 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
+import { usePopupStore } from "@/stores/popup";
 import { useRouter } from "next/router";
-import { useLoadingStore } from "@/stores/loading";
-import fetcher from "@/lib/fetcher";
-import { addProtectionToken, getProtectionTokenById } from "@/lib/session";
-import { generateNotePath } from "@/lib/notepage";
-import RichEditor from "./RichEditor";
-import NotFoundMessage from "../NotFoundMessage";
-import { useSession } from "next-auth/react";
-import { FaLock } from "react-icons/fa";
-import NotLoggedInMessage from "../NotLoggedInMessage";
-import ProtectionKeyForm from "../ProtectionKeyForm";
+import { NoteType } from "@/types/data/note";
+import { FadeLoader } from "react-spinners";
 import { NotebookType } from "@/types/data/notebook";
+import Popup from "../utils/Popup";
+import PopupForm from "../utils/PopupForm";
+import Input from "../utils/form/Input";
+import Submit from "../utils/form/Submit";
+import { SendType } from "../utils/form/Form";
+import { getProtectionTokenById } from "@/lib/session";
 
 export default function CreateNote() {
-  // form states
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [textContent, setTextContent] = useState("");
-  const [locked, setLocked] = useState(false);
   const [error, setError] = useState("");
+  const [notebook, setNotebook] = useState<NotebookType>();
 
-  const [book, setBook] = useState<NotebookType>();
-  const [needToUnlock, setNeedToUnlock] = useState(false); // TODO: get a better solution: use boolean | null
-  const [bookNotFound, setBookNotFound] = useState(false);
-  const [protectionToken, setProtectionToken] = useState("");
-
-  const { turnOn, turnOff } = useLoadingStore();
-  const { status } = useSession();
-
+  const { books, loading, addNote } = useBooksWithNotesStore();
+  const { data, closePopup } = usePopupStore();
+  // const { id } = data as { id: string };
   const router = useRouter();
-  // id of the notebook
-  const { id } = router.query;
 
-  function afterUnlock(data: any) {
-    // Save the `protectionToken` to the session storage
-    addProtectionToken(id as string, data);
-    // Update the unlocked state
-    setNeedToUnlock(false);
-    // Update the notebook
-    setBook(data);
-  }
-
-  async function getNotebook() {
-    // Get the `protectionToken` from the session storage
-    const protectionTokenFromSession = getProtectionTokenById(id as string);
-
-    console.log("protectionToken: ", protectionTokenFromSession);
-
-    turnOn();
-    const json = await fetcher("/api/get-book", {
-      id,
+  useEffect(() => {
+    // find the notebook from the books
+    books.forEach((book) => {
+      if (book._id === data.id && !book.locked && book.unlocked === true) {
+        setNotebook(book);
+      }
     });
-    turnOff();
+  }, [data, books]);
 
-    console.log("json: ", json);
+  async function handleCreate(send: SendType) {
+    // console.log("Notebook: ", notebook);
 
-    if (json.type === "SUCCESS") {
-      setProtectionToken(protectionTokenFromSession || "");
-      setBook(json.data);
-    } else if (json.type === "LOCKED") {
-      setNeedToUnlock(true);
-    } else if (json.type === "NOTFOUND") {
-      setBookNotFound(true);
-    }
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    if (!title || !content) {
+    if (!title) {
       return setError("Please fill in all fields");
     }
 
-    const body = { id, title, content, textContent, locked, protectionToken };
+    const protectionToken = getProtectionTokenById(notebook?._id as string);
 
-    turnOn();
-    const json = await fetcher("/api/create-note", body);
-    turnOff();
+    const json = await send("/api/create-note", {
+      id: notebook?._id,
+      title,
+      protectionToken,
+    });
+
+    // console.log("json: ", json);
 
     if (json.type === "SUCCESS") {
+      // Add the note to the store
+      addNote(notebook?._id as string, json.data);
+
       // redirect to notebook page
-      router.push(generateNotePath(json.data._id, id as string));
+      router.push(`/note/${json.data._id}?edit=true`);
+
+      // Close the popup
+      closePopup();
     } else if (json.type === "LOCKED") {
-      setNeedToUnlock(true);
+      // This should never happen
+      // But in case it does, just blank the `notebook` state so that the user can choose a notebook again
+      setNotebook(undefined);
     } else if (json.type === "INVALID") {
       setError("You need to fill in all fields");
     } else {
@@ -90,64 +68,59 @@ export default function CreateNote() {
     }
   }
 
-  useEffect(() => {
-    if (id) getNotebook();
-  }, [id]);
-
-  if (router.isFallback) {
-    return <></>;
+  if (loading) {
+    return (
+      <div className="local-spinner">
+        <FadeLoader color="cyan" />
+      </div>
+    );
   }
 
-  if (!id || bookNotFound) {
-    return <NotFoundMessage what="NOTEBOOK" />;
-  }
+  // Choose which notebook to create the note in
+  if (!notebook) {
+    return (
+      <Popup crossIcon>
+        <div className="book-choose">
+          <h1 className="title">Choose a notebook</h1>
+          <p className="tip">Choose a notebook to create the note in.</p>
+          <p className="tip">Locked notebooks are not shown.</p>
+          <div className="books">
+            {books.map((book) => {
+              if (book.locked || book.unlocked !== true) {
+                return null;
+              }
 
-  if (status === "unauthenticated") {
-    return <NotLoggedInMessage />;
+              return (
+                <div
+                  key={book._id}
+                  className="book"
+                  onClick={() => setNotebook(book)}
+                >
+                  <p className="book-title">{book.title}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Popup>
+    );
   }
 
   return (
-    <div>
-      {needToUnlock ? (
-        <ProtectionKeyForm
-          path="/api/unlock-notebook"
-          id={id as string}
-          afterUnlock={afterUnlock}
-        />
-      ) : (
-        <form id="create-book" onSubmit={handleSubmit}>
-          <h1 className="heading">Create Note</h1>
+    <PopupForm
+      submitHandler={handleCreate}
+      className="create-note-form"
+      title="Create a note"
+      error={error}
+    >
+      <Input
+        label="Note title"
+        value={title}
+        setValue={setTitle}
+        placeholder="Enter note title"
+      />
 
-          {error && <p className="error">{error}</p>}
-
-          <div className="form-wrapper">
-            <label htmlFor="title">Title</label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-
-          <RichEditor
-            content={content}
-            setContent={setContent}
-            textContent={textContent}
-            setTextContent={setTextContent}
-          />
-
-          <div className="lock" onClick={() => setLocked(!locked)}>
-            <FaLock className={`icon ${locked ? "active" : ""}`} />
-            <p>Lock Book</p>
-          </div>
-
-          <button type="submit" className="submit-button">
-            Create Book
-          </button>
-        </form>
-      )}
-    </div>
+      <Submit>Create</Submit>
+    </PopupForm>
   );
 }

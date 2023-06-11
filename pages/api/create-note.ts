@@ -18,8 +18,7 @@ export default async function handler(
 
     if (!user) return;
 
-    const { id, title, content, textContent, locked, protectionToken } =
-      req.body;
+    const { id, title, protectionToken } = req.body;
 
     const book = await getBook(res, { _id: id, userId: user._id });
 
@@ -28,7 +27,7 @@ export default async function handler(
     if (isLocked(res, book, protectionToken)) return;
 
     // Check if required fields are not empty
-    if (!title || !content || !textContent) {
+    if (!title) {
       return response(res, {
         type: "INVALID",
         msg: "Please fill in all required fields",
@@ -38,11 +37,8 @@ export default async function handler(
     // Create the note
     const note = {
       title,
-      content,
-      textContent,
       notebookId: book._id,
       userId: user._id,
-      locked: locked || false,
     };
 
     const newNote = await Note.create(note);

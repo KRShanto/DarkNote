@@ -8,11 +8,11 @@ const NoteSchema = new Schema<NoteType>({
   },
   content: {
     type: String,
-    required: true,
+    default: "",
   },
   textContent: {
     type: String,
-    required: true,
+    default: "",
   },
   notebookId: {
     type: String,

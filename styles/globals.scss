@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ysabeau&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap");
 
 @import "var";
 
@@ -95,6 +95,7 @@ body.LIGHT {
 @import "side-navbar";
 @import "popup";
 @import "form";
+@import "create-note";
 
 @import "utils/button";
 @import "utils/card";
