@@ -4,7 +4,7 @@ import Note from "@/models/note";
 import dbConnect from "@/lib/dbConnect";
 import response from "@/lib/response";
 import getUser from "@/lib/db/getUser";
-import { NotebookType } from "@/types/data/notebook";
+import { bookWithoutToken } from "@/lib/db/bookWithoutToken";
 
 interface ProtectionToken {
   protectionTokens: { id: string; token: string }[];
@@ -45,13 +45,15 @@ export default async function handler(
       // Check if the book is locked
       if (book.locked && !book.protectionToken) {
         // don't send the notes
-        return { ...book._doc, notes: [] };
+        // exclude the `protectionToken` from the response
+        return { ...bookWithoutToken(book), notes: [] };
       }
 
       // Match the protection token
       if (book.locked && book.protectionToken !== token?.token) {
         // don't send the notes
-        return { ...book._doc, notes: [] };
+        // exclude the `protectionToken` from the response
+        return { ...bookWithoutToken(book), notes: [] };
       }
 
       // Get the notes

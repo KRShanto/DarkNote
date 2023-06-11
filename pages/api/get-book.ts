@@ -4,6 +4,7 @@ import dbConnect from "@/lib/dbConnect";
 import response from "@/lib/response";
 import getUser from "@/lib/db/getUser";
 import getBook from "@/lib/db/getBook";
+import { bookWithoutToken } from "@/lib/db/bookWithoutToken";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,7 +26,8 @@ export default async function handler(
     // return the book
     return response(res, {
       type: "SUCCESS",
-      data: book,
+      // don't return the `protectionToken` to the client
+      data: bookWithoutToken(book),
     });
   } catch (error: any) {
     // handle cast errors
