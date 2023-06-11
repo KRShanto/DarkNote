@@ -4,11 +4,15 @@ import Form from "./form/Form";
 import { SendType } from "./form/Form";
 
 export default function PopupForm({
+  title,
+  error,
   className,
   submitHandler,
   children,
   crossIcon = true,
 }: {
+  title?: string;
+  error?: string;
   className?: string;
   submitHandler: (send: SendType) => void;
   children: React.ReactNode;
@@ -20,7 +24,12 @@ export default function PopupForm({
 
   return (
     <Popup crossIcon={crossIcon}>
-      <Form submitHandler={handleSubmit} className={className}>
+      <Form
+        submitHandler={handleSubmit}
+        className={className}
+        error={error}
+        title={title}
+      >
         {children}
       </Form>
     </Popup>

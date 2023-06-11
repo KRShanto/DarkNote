@@ -47,11 +47,9 @@ export default function ProtectionKeyForm() {
       className="protection-key-form"
       submitHandler={handleUnlock}
       crossIcon={true}
+      title="Unlock this notebook"
+      error={error}
     >
-      <h1 className="heading">This notebook is locked</h1>
-
-      {error && <p className="error">{error}</p>}
-
       <Input
         type="password"
         placeholder="Enter protection key"
