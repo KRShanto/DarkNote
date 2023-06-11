@@ -9,6 +9,7 @@ interface BooksWithNotesState {
   loading: boolean;
   set: (books: BookWithNotesType[]) => void;
   add: (book: BookWithNotesType) => void;
+  addNote(bookId: string, note: NoteType): void;
   addNotes: (bookId: string, notes: NoteType[]) => void;
   delete: (book: BookWithNotesType) => void;
   get: () => Promise<void>;
@@ -29,6 +30,16 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
     set((state) => ({
       books: [...state.books, book],
     })),
+  // Add a note to a book
+  addNote: (bookId, note) =>
+    set((state) => ({
+      books: state.books.map((b) => {
+        if (b._id === bookId) {
+          return { ...b, notes: [...b.notes, note] };
+        }
+        return b;
+      }),
+    })),
   // Add notes to a book
   addNotes: (bookId, notes) =>
     set((state) => ({
@@ -39,6 +50,7 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
         return b;
       }),
     })),
+
   // Delete a book from the books array list
   delete: (book) =>
     set((state) => ({
@@ -57,7 +69,14 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
       console.error("Error occured while fetching books with notes!", res.msg);
     }
 
-    set({ books: data, loading: false });
+    // First set the books
+    set({ books: data });
+
+    // Set the loading state to false after some time, because if it changes immediately, then components will throw not found error while the `books` is fully loaded.
+    // So changing this state so that components will have loading `true` but books will be ready at this time and then after that changing the state won't be any problem
+    setTimeout(() => {
+      set({ loading: false });
+    }, 50);
   },
   // Unlock a book (set the `unlocked` property to true)
   unlock: (bookId) =>
