@@ -23,13 +23,8 @@ export default function PopupForm({
   };
 
   return (
-    <Popup crossIcon={crossIcon}>
-      <Form
-        submitHandler={handleSubmit}
-        className={className}
-        error={error}
-        title={title}
-      >
+    <Popup crossIcon={crossIcon} title={title}>
+      <Form submitHandler={handleSubmit} className={className} error={error}>
         {children}
       </Form>
     </Popup>

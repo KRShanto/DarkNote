@@ -3,9 +3,11 @@ import { usePopupStore } from "../../stores/popup";
 import { FaTimes } from "react-icons/fa";
 
 export default function Popup({
+  title,
   crossIcon = true,
   children,
 }: {
+  title?: string;
   crossIcon: boolean;
   children: React.ReactNode;
 }) {
@@ -32,6 +34,8 @@ export default function Popup({
         id="popup"
         className={shouldClose ? "close" : justOpened ? "open" : ""}
       >
+        {title && <h1 className="title">{title}</h1>}
+
         {crossIcon && (
           <button className="close" onClick={closePopup}>
             <FaTimes />

@@ -13,3 +13,5 @@ IMPORTANT create a component and global state for logging the fetch requests and
 Change the color of TinyMCE (match it with the theme)
 
 FEATURE Multiple passwords
+
+Custom scrollbar

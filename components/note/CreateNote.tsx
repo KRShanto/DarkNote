@@ -79,9 +79,9 @@ export default function CreateNote() {
   // Choose which notebook to create the note in
   if (!notebook) {
     return (
-      <Popup crossIcon>
+      <Popup crossIcon title="Choose a notebook">
         <div className="book-choose">
-          <h1 className="title">Choose a notebook</h1>
+          {/* <h1 className="title">Choose a notebook</h1> */}
           <p className="tip">Choose a notebook to create the note in.</p>
           <p className="tip">Locked notebooks are not shown.</p>
           <div className="books">

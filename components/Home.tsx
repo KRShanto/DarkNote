@@ -24,14 +24,14 @@ export default function Home() {
         </h1>
 
         <div className="options">
-          <button className="option btn light">
-            <FaBook className="icon" />
-            <p className="text">Create new Notebook</p>
-          </button>
-
           <button className="option btn light" onClick={createNote}>
             <FaRegStickyNote className="icon" />
             <p className="text">Create new Note</p>
+          </button>
+
+          <button className="option btn light">
+            <FaBook className="icon" />
+            <p className="text">Create new Notebook</p>
           </button>
 
           <button className="option btn light">

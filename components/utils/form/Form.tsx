@@ -5,7 +5,6 @@ import { useLoadingStore } from "@/stores/loading";
 export type SendType = (path: string, body: any) => Promise<ReturnedJsonType>;
 
 export default function Form({
-  title,
   error,
   className,
   submitHandler,
@@ -43,8 +42,6 @@ export default function Form({
 
   return (
     <form action="#" onSubmit={handleSubmit} className={`form ${className}`}>
-      {title && <h1 className="heading">{title}</h1>}
-
       {error && <p className="error">{error}</p>}
 
       {children}
