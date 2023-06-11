@@ -27,12 +27,13 @@
       align-items: center;
       justify-content: center;
       gap: 1rem;
-      width: 30rem;
+      width: 35rem;
       padding: 1rem;
       margin: 0.2rem 0;
       color: rgb(255, 255, 255);
       transition: all 0.2s ease-in-out;
       background-color: transparent;
+      font-size: 1.5rem;
 
       &:hover {
         transform: scale(1.05);
