@@ -151,7 +151,6 @@ export default function CreateNote() {
           <RichEditor
             content={content}
             setContent={setContent}
-            textContent={textContent}
             setTextContent={setTextContent}
           />
 

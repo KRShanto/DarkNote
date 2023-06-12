@@ -42,7 +42,12 @@ export default function CreateBook() {
 
   return (
     <PopupForm title="Create Book" error={error} submitHandler={handleCreate}>
-      <Input label="Title" value={title} setValue={setTitle} />
+      <Input
+        label="Title"
+        value={title}
+        setValue={setTitle}
+        placeholder="Enter book title"
+      />
 
       <div className="form-wrapper">
         <Checkbox checked={locked} setChecked={setLocked} label="Locked" />

@@ -20,8 +20,7 @@ export default async function handler(
 
     if (!user) return;
 
-    const { id, title, content, textContent, locked, protectionToken } =
-      req.body;
+    const { id, title, content, textContent, protectionToken } = req.body;
 
     const note = await getNote(res, { _id: id, userId: user._id });
 
@@ -34,7 +33,7 @@ export default async function handler(
     // update the note
     const newNote = await Note.findOneAndUpdate(
       { _id: id, userId: user._id },
-      { title, content, textContent, locked: locked || false },
+      { title, content, textContent },
       { new: true }
     );
 

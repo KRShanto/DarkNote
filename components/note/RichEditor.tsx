@@ -4,12 +4,10 @@ import { Editor } from "@tinymce/tinymce-react";
 function RichEditor({
   content,
   setContent,
-  textContent,
   setTextContent,
 }: {
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
-  textContent: string;
   setTextContent: React.Dispatch<React.SetStateAction<string>>;
 }) {
   function handleEditorChange(content: any, editor: any) {
@@ -26,7 +24,7 @@ function RichEditor({
       toolbar="undo redo | styles | bold italic | alignleft aligncenter alignright | link image | bullist numlist outdent indent"
       plugins="code link image lists"
       init={{
-        height: 500,
+        height: 600,
         menubar: false,
         skin: "oxide-dark",
         content_css: "dark",
