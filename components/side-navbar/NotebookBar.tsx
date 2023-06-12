@@ -15,6 +15,10 @@ export default function NotebookBar() {
     openPopup("CreateNote", {});
   }
 
+  function createBook() {
+    openPopup("CreateNotebook", {});
+  }
+
   return (
     <div className="notebook-bar">
       <div className="main-header">
@@ -25,7 +29,11 @@ export default function NotebookBar() {
             title="New Note"
             onClick={createNote}
           />
-          <HiFolderPlus className="icon" title="New Notebook" />
+          <HiFolderPlus
+            className="icon"
+            title="New Notebook"
+            onClick={createBook}
+          />
           <VscCollapseAll className="icon" title="Collapse notebooks" />
         </div>
       </div>

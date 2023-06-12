@@ -16,6 +16,10 @@ export default function Home() {
     openPopup("CreateNote", {});
   }
 
+  function createBook() {
+    openPopup("CreateNotebook", {});
+  }
+
   return (
     <>
       <div id="home">
@@ -29,7 +33,7 @@ export default function Home() {
             <p className="text">Create new Note</p>
           </button>
 
-          <button className="option btn light">
+          <button className="option btn light" onClick={createBook}>
             <FaBook className="icon" />
             <p className="text">Create new Notebook</p>
           </button>

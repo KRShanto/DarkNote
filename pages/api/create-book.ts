@@ -15,9 +15,9 @@ export default async function handler(
 
   if (!user) return;
 
-  const { title, description, locked } = req.body;
+  const { title, locked } = req.body;
 
-  if (!title || !description) {
+  if (!title) {
     return response(
       res,
       {
@@ -30,7 +30,6 @@ export default async function handler(
 
   const notebook: NotebookType = {
     title,
-    description,
     locked: locked || false,
     unlocked: false,
     userId: user._id,

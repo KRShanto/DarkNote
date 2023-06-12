@@ -6,12 +6,15 @@ const notebookSchema = new Schema<NotebookType>({
     type: String,
     required: true,
   },
-  description: String,
   userId: {
     type: String,
     required: true,
   },
   locked: {
+    type: Boolean,
+    default: false,
+  },
+  unlocked: {
     type: Boolean,
     default: false,
   },
