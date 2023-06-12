@@ -53,6 +53,8 @@ export default function Book({ book }: { book: BookWithNotesType }) {
         )}
       </button>
 
+      <hr />
+
       {isOpen && (
         <div className="notes">
           {book.notes.map((note: NoteType, index: number) => (

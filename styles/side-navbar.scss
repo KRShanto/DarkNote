@@ -11,6 +11,12 @@
   flex-direction: row;
   overflow-x: hidden;
 
+  hr {
+    width: 100%;
+    color: rgba(255, 255, 255, 0.404);
+    margin: 0 auto;
+  }
+
   .links {
     width: 5vw;
     min-width: 5vw;
@@ -77,51 +83,61 @@
       }
     }
 
-    .header {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      padding: 2rem;
-      border: none;
-      outline: none;
-      background-color: transparent;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.367);
-      width: 100%;
-      transition: background-color 0.2s ease-in-out;
-      cursor: pointer;
+    .book {
+      padding: 0 1rem;
 
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.084);
+      hr {
+        width: 95%;
+        margin: 0 auto;
       }
 
-      .title {
-        font-size: 1.7rem;
-        font-family: "Ysabeau", cursive;
-        font-weight: bold;
-        color: white;
-      }
-
-      .toggle {
-        font-size: 1.8rem;
+      .header {
+        border-radius: 1rem;
         display: flex;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: space-between;
         align-items: center;
-        color: white;
+        padding: 2rem;
         border: none;
         outline: none;
         background-color: transparent;
-      }
+        // border-bottom: 2px solid rgba(255, 255, 255, 0.367);
+        width: 100%;
+        transition: background-color 0.2s ease-in-out;
+        cursor: pointer;
 
-      .lock {
-        font-size: 1.8rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: rgba(255, 255, 255, 0.876);
-        border: none;
-        outline: none;
-        background-color: transparent;
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.084);
+        }
+
+        .title {
+          font-size: 1.7rem;
+          font-family: "Ysabeau", cursive;
+          font-weight: bold;
+          color: white;
+        }
+
+        .toggle {
+          font-size: 1.8rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: white;
+          border: none;
+          outline: none;
+          background-color: transparent;
+        }
+
+        .lock {
+          font-size: 1.8rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: rgba(255, 255, 255, 0.876);
+          border: none;
+          outline: none;
+          background-color: transparent;
+        }
       }
     }
 
