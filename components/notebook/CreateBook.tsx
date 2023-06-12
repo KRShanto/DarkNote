@@ -1,45 +1,38 @@
-import fetcher from "@/lib/fetcher";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
-import { useLoadingStore } from "@/stores/loading";
-import NotLoggedInMessage from "../NotLoggedInMessage";
-
-// import lock icon
-import { FaLock } from "react-icons/fa";
-// import unlock icon
-import { FaUnlock } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { SendType } from "../utils/form/Form";
+import { usePopupStore } from "@/stores/popup";
+import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
+import PopupForm from "../utils/PopupForm";
+import Input from "../utils/form/Input";
+import Checkbox from "../utils/form/Checkbox";
+import Submit from "../utils/form/Submit";
 
 export default function CreateBook() {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [locked, setLocked] = useState(false);
   const [error, setError] = useState("");
 
-  const router = useRouter();
+  const { add } = useBooksWithNotesStore();
+  const { closePopup } = usePopupStore();
 
-  const { data: session, status } = useSession();
-  const { turnOn, turnOff } = useLoadingStore();
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    if (!title || !description) {
+  async function handleCreate(send: SendType) {
+    if (!title) {
       return setError("Please fill in all fields");
     }
 
     try {
-      const body = { title, description, locked };
+      const body = { title, locked };
 
-      turnOn();
-      const json = await fetcher("/api/create-book", body);
-      turnOff();
+      const json = await send("/api/create-book", body);
 
       if (json.type !== "SUCCESS") {
         throw new Error(json.msg);
       } else {
-        // redirect to the book page
-        router.push(`/book/${json.data._id}`);
+        // Add the book to the store
+        add(json.data);
+
+        // Close the popup
+        closePopup();
       }
     } catch (error: any) {
       console.error(error);
@@ -47,46 +40,15 @@ export default function CreateBook() {
     }
   }
 
-  if (!session) {
-    return <NotLoggedInMessage />;
-  }
-
   return (
-    <form id="create-book" onSubmit={handleSubmit}>
-      <h1 className="heading">Create Book</h1>
-
-      {error && <p className="error">{error}</p>}
+    <PopupForm title="Create Book" error={error} submitHandler={handleCreate}>
+      <Input label="Title" value={title} setValue={setTitle} />
 
       <div className="form-wrapper">
-        <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <Checkbox checked={locked} setChecked={setLocked} label="Locked" />
       </div>
 
-      <div className="form-wrapper">
-        <label htmlFor="description">Description</label>
-        <textarea
-          name="description"
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
-
-      <div className="lock">
-        {locked ? (
-          <FaLock className="icon active" onClick={() => setLocked(!locked)} />
-        ) : (
-          <FaUnlock className="icon" onClick={() => setLocked(!locked)} />
-        )}
-      </div>
-
-      <button type="submit">Create Book</button>
-    </form>
+      <Submit>Create</Submit>
+    </PopupForm>
   );
 }
