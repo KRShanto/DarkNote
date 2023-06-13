@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { NoteType } from "@/types/data/note";
-import { FaClock } from "react-icons/fa";
-import moment from "moment";
 import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
-import { BeatLoader, FadeLoader } from "react-spinners";
-import { usePopupStore } from "@/stores/popup";
-import Lottie from "lottie-react";
-import KidNotFoundAnimation from "@/public/animations/kid-not-found.json";
+import { FadeLoader } from "react-spinners";
 import RichEditor from "../RichEditor";
 import { getProtectionTokenById } from "@/lib/session";
 import fetcher from "@/lib/fetcher";

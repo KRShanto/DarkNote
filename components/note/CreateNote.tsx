@@ -32,8 +32,6 @@ export default function CreateNote() {
   }, [data, books]);
 
   async function handleCreate(send: SendType) {
-    // console.log("Notebook: ", notebook);
-
     if (!title) {
       return setError("Please fill in all fields");
     }
@@ -45,8 +43,6 @@ export default function CreateNote() {
       title,
       protectionToken,
     });
-
-    // console.log("json: ", json);
 
     if (json.type === "SUCCESS") {
       // Add the note to the store

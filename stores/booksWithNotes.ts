@@ -21,6 +21,7 @@ interface BooksWithNotesState {
     }
   ): void;
   delete: (book: BookWithNotesType) => void;
+  deleteNote(bookId: string, noteId: string): void;
   get: () => Promise<void>;
   unlock: (bookId: string) => void;
 }
@@ -93,6 +94,20 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
   delete: (book) =>
     set((state) => ({
       books: state.books.filter((b) => b._id !== book._id),
+    })),
+
+  // Delete a note from a book
+  deleteNote: (bookId, noteId) =>
+    set((state) => ({
+      books: state.books.map((b) => {
+        if (b._id === bookId) {
+          return {
+            ...b,
+            notes: b.notes.filter((n) => n._id !== noteId),
+          };
+        }
+        return b;
+      }),
     })),
 
   // Fetch the books array from the server and set the books array
