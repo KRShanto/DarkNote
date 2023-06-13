@@ -26,13 +26,6 @@ const NoteSchema = new Schema<NoteType>({
     type: Date,
     default: Date.now,
   },
-  locked: {
-    type: Boolean,
-    default: false,
-  },
-  protectionToken: {
-    type: String,
-  },
 });
 
 const Note = mongoose.models.Note || mongoose.model("Note", NoteSchema);

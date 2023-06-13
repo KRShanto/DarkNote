@@ -22,12 +22,10 @@ export default function DisplayNote() {
   const [protectionToken, setProtectionToken] = useState<string>("");
   const [fetching, setFetching] = useState<boolean>(false);
 
-  const [i, setI] = useState<number>(0);
-
   const router = useRouter();
   const { id, edit } = router.query;
 
-  const { books, loading } = useBooksWithNotesStore();
+  const { books, loading, updateNote } = useBooksWithNotesStore();
   const { openPopup } = usePopupStore();
 
   // reset edit mode when the page changes
@@ -80,8 +78,6 @@ export default function DisplayNote() {
   }, [note, content, textContent, fetching, contentBeforeSave]);
 
   async function saveNote() {
-    console.log("I am trying to save the note");
-
     // Before saving, check if the content is the same as the content before saving
     // If it is, then don't save it
     if (content === contentBeforeSave) return;
@@ -99,6 +95,11 @@ export default function DisplayNote() {
 
     if (json.type === "SUCCESS") {
       setContentBeforeSave(content);
+      // Update the store
+      updateNote(note?.notebookId as string, note?._id as string, {
+        content,
+        textContent,
+      });
     } else {
       console.error(json.msg);
     }

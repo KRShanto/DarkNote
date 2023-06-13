@@ -7,6 +7,4 @@ export interface NoteType {
   createdAt: Date;
   userId: string;
   notebookId: string;
-  locked: boolean;
-  protectionToken?: string;
 }

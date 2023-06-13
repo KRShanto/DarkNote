@@ -11,6 +11,15 @@ interface BooksWithNotesState {
   add: (book: BookWithNotesType) => void;
   addNote(bookId: string, note: NoteType): void;
   addNotes: (bookId: string, notes: NoteType[]) => void;
+  updateNote(
+    bookId: string,
+    noteId: string,
+    note: {
+      title?: string;
+      content?: string;
+      textContent?: string;
+    }
+  ): void;
   delete: (book: BookWithNotesType) => void;
   get: () => Promise<void>;
   unlock: (bookId: string) => void;
@@ -19,17 +28,21 @@ interface BooksWithNotesState {
 export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
   // The books array
   books: [],
+
   // Is the books array are fetching?
   // By default, it is true because we are fetching the books whenever the app is loaded (_app.tsx)
   loading: true,
+
   // Set the books array
   // Its recommended to use other methods to update the books array instead of using this method directly
   set: (books) => set({ books }),
+
   // Add a book to the books array list
   add: (book) =>
     set((state) => ({
       books: [...state.books, book],
     })),
+
   // Add a note to a book
   addNote: (bookId, note) =>
     set((state) => ({
@@ -40,6 +53,7 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
         return b;
       }),
     })),
+
   // Add notes to a book
   addNotes: (bookId, notes) =>
     set((state) => ({
@@ -51,11 +65,36 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
       }),
     })),
 
+  // Update a note of a book
+  // Update only the store. No need to fetch the server
+  updateNote: async (bookId, noteId, note) => {
+    set((state) => ({
+      books: state.books.map((b) => {
+        if (b._id === bookId) {
+          return {
+            ...b,
+            notes: b.notes.map((n) => {
+              if (n._id === noteId) {
+                return {
+                  ...n,
+                  ...note,
+                };
+              }
+              return n;
+            }),
+          };
+        }
+        return b;
+      }),
+    }));
+  },
+
   // Delete a book from the books array list
   delete: (book) =>
     set((state) => ({
       books: state.books.filter((b) => b._id !== book._id),
     })),
+
   // Fetch the books array from the server and set the books array
   get: async () => {
     const protectionTokens = getProtectionTokens();
@@ -78,6 +117,7 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
       set({ loading: false });
     }, 50);
   },
+
   // Unlock a book (set the `unlocked` property to true)
   unlock: (bookId) =>
     set((state) => ({
