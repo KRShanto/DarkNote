@@ -2,14 +2,16 @@ import { create } from "zustand";
 
 interface EditModeState {
   editMode: boolean;
-  turnOn: () => void;
+  noteId: string | null;
+  turnOn: (noteId: string) => void;
   turnOff: () => void;
-  toggle: () => void;
+  toggle: (noteId: string) => void;
 }
 
 export const useEditModeStore = create<EditModeState>((set) => ({
   editMode: false,
-  turnOn: () => set({ editMode: true }),
-  turnOff: () => set({ editMode: false }),
-  toggle: () => set((state) => ({ editMode: !state.editMode })),
+  noteId: null,
+  turnOn: (noteId) => set({ editMode: true, noteId }),
+  turnOff: () => set({ editMode: false, noteId: null }),
+  toggle: (noteId) => set((state) => ({ editMode: !state.editMode, noteId })),
 }));

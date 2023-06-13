@@ -28,14 +28,14 @@ export default function DisplayNote() {
   // reset edit mode when the page changes
   // and set edit mode if the query is `edit`
   useEffect(() => {
-    if (edit) {
-      turnOn();
+    if (edit && note) {
+      turnOn(note._id);
     }
 
     return () => {
       turnOff();
     };
-  }, [id]);
+  }, [id, note]);
 
   // find the note from the books
   useEffect(() => {

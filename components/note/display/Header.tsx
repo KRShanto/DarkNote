@@ -45,7 +45,7 @@ export default function Header({
 
         <button
           className={`btn ${editMode ? "light" : "blue"}`}
-          onClick={toggle}
+          onClick={() => toggle(note._id)}
         >
           {editMode ? "Stop Editing" : "Start Editing"}
         </button>

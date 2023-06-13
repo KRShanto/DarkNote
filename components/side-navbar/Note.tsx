@@ -4,6 +4,8 @@ import Lottie from "lottie-react";
 import Link from "next/link";
 import { NoteType } from "@/types/data/note";
 import EyeAnimation from "@/public/animations/eye-animation.json";
+import EditAnimation from "@/public/animations/drawing-pencil.json";
+import { useEditModeStore } from "@/stores/editMode";
 
 export default function Note({
   note,
@@ -16,6 +18,7 @@ export default function Note({
   const { id } = router.query;
 
   const [noteOpened, setOpenedNote] = useState(false);
+  const { editMode } = useEditModeStore();
 
   useEffect(() => {
     if (id === note._id) {
@@ -47,7 +50,7 @@ export default function Note({
       {noteOpened && (
         <Lottie
           className="eye"
-          animationData={EyeAnimation}
+          animationData={editMode ? EditAnimation : EyeAnimation}
           loop
           autoplay
           style={{ minWidth: 40, height: 40, marginTop: 10 }}
