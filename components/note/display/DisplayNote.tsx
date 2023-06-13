@@ -8,14 +8,16 @@ import { BeatLoader, FadeLoader } from "react-spinners";
 import { usePopupStore } from "@/stores/popup";
 import Lottie from "lottie-react";
 import KidNotFoundAnimation from "@/public/animations/kid-not-found.json";
-import RichEditor from "./RichEditor";
+import RichEditor from "../RichEditor";
 import { getProtectionTokenById } from "@/lib/session";
 import fetcher from "@/lib/fetcher";
 import { SAVE_AFTER } from "@/constants/general";
+import { useEditModeStore } from "@/stores/editMode";
+import Header from "./Header";
+import NoNote from "./NoNote";
 
 export default function DisplayNote() {
   const [note, setNote] = useState<NoteType | null>();
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
   const [textContent, setTextContent] = useState<string>("");
   const [contentBeforeSave, setContentBeforeSave] = useState<string>("");
@@ -26,22 +28,22 @@ export default function DisplayNote() {
   const { id, edit } = router.query;
 
   const { books, loading, updateNote } = useBooksWithNotesStore();
-  const { openPopup } = usePopupStore();
+  const { editMode, turnOn, turnOff } = useEditModeStore();
 
   // reset edit mode when the page changes
   // and set edit mode if the query is `edit`
   useEffect(() => {
     if (edit) {
-      setEditMode(true);
+      turnOn();
     }
 
     return () => {
-      setEditMode(false);
+      turnOff();
     };
   }, [id]);
 
+  // find the note from the books
   useEffect(() => {
-    // find the note from the books
     books.forEach((book) => {
       book.notes.forEach((note) => {
         if (note._id === id) {
@@ -51,6 +53,7 @@ export default function DisplayNote() {
     });
   }, [id, books]);
 
+  // set the content of the note
   useEffect(() => {
     if (note) {
       setContent(note.content);
@@ -59,6 +62,7 @@ export default function DisplayNote() {
     }
   }, [note]);
 
+  // set the protection token
   useEffect(() => {
     if (note) {
       const protectionToken = getProtectionTokenById(note.notebookId);
@@ -66,8 +70,8 @@ export default function DisplayNote() {
     }
   }, [note]);
 
+  // every 2 seconds, save the note
   useEffect(() => {
-    // every 2 seconds, save the note
     const interval = setInterval(() => {
       saveNote();
     }, SAVE_AFTER);
@@ -77,6 +81,7 @@ export default function DisplayNote() {
     };
   }, [note, content, textContent, fetching, contentBeforeSave]);
 
+  // Save the note
   async function saveNote() {
     // Before saving, check if the content is the same as the content before saving
     // If it is, then don't save it
@@ -105,14 +110,6 @@ export default function DisplayNote() {
     }
   }
 
-  function toggleEditMode() {
-    setEditMode(!editMode);
-  }
-
-  function deleteNote() {
-    openPopup("DeleteNote", { id: note?._id });
-  }
-
   if (loading) {
     return (
       <div className="local-spinner">
@@ -121,65 +118,12 @@ export default function DisplayNote() {
     );
   }
 
-  if (!note) {
-    return (
-      <div className="note-not-found">
-        <h1 className="text">Note not found.</h1>
-
-        <Lottie
-          animationData={KidNotFoundAnimation}
-          className="animation"
-          loop={true}
-          autoplay={true}
-        />
-
-        <p className="tip">
-          The note you are looking for does not exist or you do not have access
-          to it.
-        </p>
-
-        <p className="tip">
-          Unlock notebooks on the left to see the notes inside it.
-        </p>
-      </div>
-    );
-  }
+  if (!note) return <NoNote />;
 
   return (
     <div>
       <div className="display-note">
-        <div className="header">
-          <div className="title-info">
-            <h1 className="title">{note?.title}</h1>
-            <div className="info">
-              <span className="date">
-                <FaClock />
-                {moment(note?.createdAt).format("MMMM Do YYYY")}
-              </span>
-            </div>
-          </div>
-
-          <hr />
-
-          <div className="options">
-            {editMode && (
-              <button className="btn success" onClick={saveNote}>
-                {fetching ? <BeatLoader color="white" size={8} /> : "Save Note"}
-              </button>
-            )}
-
-            <button
-              className={`btn ${editMode ? "light" : "blue"}`}
-              onClick={toggleEditMode}
-            >
-              {editMode ? "Stop Editing" : "Start Editing"}
-            </button>
-
-            <button className="btn danger" onClick={deleteNote}>
-              Delete Note
-            </button>
-          </div>
-        </div>
+        <Header note={note} fetching={fetching} saveNote={saveNote} />
 
         {editMode ? (
           <>
