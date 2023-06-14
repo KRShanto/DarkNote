@@ -12,12 +12,14 @@ export default function Popup({
   children: React.ReactNode;
 }) {
   const [justOpened, setJustOpened] = useState(false);
-  const { shouldClose, closePopup, closeActually } = usePopupStore(
-    (state) => state
-  );
+  const { shouldClose, closePopup, closeActually } = usePopupStore();
 
   useEffect(() => {
-    setJustOpened(true);
+    const id = setTimeout(() => {
+      setJustOpened(true);
+    }, 100);
+
+    return () => clearTimeout(id);
   }, []);
 
   useEffect(() => {
