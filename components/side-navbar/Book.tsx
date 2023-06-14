@@ -54,15 +54,15 @@ export default function Book({ book }: { book: BookWithNotesType }) {
 
   // Delete the book
   function deleteBook() {
-    openPopup("Deletebook", { id: book._id });
+    openPopup("Deletebook", { book });
   }
 
   function renameBook() {
-    openPopup("RenameBook", { id: book._id });
+    openPopup("RenameBook", { book });
   }
 
   function changeLock() {
-    openPopup("ChangeLock", { id: book._id });
+    openPopup("ChangeLock", { book });
   }
 
   return (
@@ -99,12 +99,6 @@ export default function Book({ book }: { book: BookWithNotesType }) {
             title="Rename Notebook"
             onClick={renameBook}
           />
-
-          {/* <AiOutlineUnlock
-            className="icon lock"
-            title={book.locked ? "Unlock Notebook" : "Lock Notebook"}
-            onClick={changeLock}
-          /> */}
 
           {book.locked ? (
             <AiOutlineUnlock

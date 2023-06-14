@@ -16,23 +16,15 @@ export default function RenameBook() {
   const [title, setTitle] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const [book, setBook] = useState<BookWithNotesType | null>();
-
-  const { books, loading, updateBook } = useBooksWithNotesStore();
+  const { loading, updateBook } = useBooksWithNotesStore();
   const { data, closePopup } = usePopupStore();
+  const { book } = data as { book: BookWithNotesType };
 
-  // find the book
-  // and also set the protection token
   useEffect(() => {
-    if (!data.id) throw new Error("No book `id` provided in popup data");
+    if (!book) throw new Error("No book `book` provided in popup data");
 
-    books.forEach((book) => {
-      if (book._id === data.id) {
-        setBook(book);
-        setTitle(book.title);
-      }
-    });
-  }, [data, books]);
+    setTitle(book.title);
+  }, [book]);
 
   async function handleRename(send: SendType) {
     if (!title) {
@@ -40,7 +32,7 @@ export default function RenameBook() {
       return;
     }
 
-    const protectionToken = getProtectionTokenById(data.id);
+    const protectionToken = getProtectionTokenById(book._id as string);
 
     const json = await send("/api/update-book", {
       id: book?._id,

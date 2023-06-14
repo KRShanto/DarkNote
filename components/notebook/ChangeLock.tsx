@@ -6,31 +6,22 @@ import { getProtectionTokenById } from "@/lib/session";
 import Popup from "../utils/Popup";
 import PostButton from "../utils/PostButton";
 import { ReturnedJsonType } from "@/types/json";
-import { BookWithNotesType } from "@/types/data/booksWithNotes";
 
 // TODO take passwords before locking notebooks
 export default function ChangeLock() {
-  const [book, setBook] = useState<BookWithNotesType | null>();
   const [protectionToken, setProtectionToken] = useState<string>("");
 
   const { books, loading, updateBook } = useBooksWithNotesStore();
   const { data, closePopup } = usePopupStore();
+  const { book } = data;
 
-  // find the book
-  // and also set the protection token
   useEffect(() => {
-    if (!data.id) throw new Error("No book `id` provided in popup data");
+    if (!book) throw new Error("No book `book` provided in popup data");
 
-    books.forEach((book) => {
-      if (book._id === data.id) {
-        setBook(book);
-      }
-    });
-
-    const protectionToken = getProtectionTokenById(data.id);
+    const protectionToken = getProtectionTokenById(book._id);
 
     setProtectionToken(protectionToken as string);
-  }, [data, books]);
+  }, [book]);
 
   function afterChangingLock(json: ReturnedJsonType) {
     if (json.type === "SUCCESS") {

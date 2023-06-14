@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 import { usePopupStore } from "@/stores/popup";
 import { useRouter } from "next/router";
-import { NoteType } from "@/types/data/note";
 import { FadeLoader } from "react-spinners";
-import { NotebookType } from "@/types/data/notebook";
 import Popup from "../utils/Popup";
 import PopupForm from "../utils/PopupForm";
 import Input from "../utils/form/Input";
@@ -15,38 +13,33 @@ import { getProtectionTokenById } from "@/lib/session";
 export default function CreateNote() {
   const [title, setTitle] = useState("");
   const [error, setError] = useState("");
-  const [notebook, setNotebook] = useState<NotebookType>();
+  const [notebookId, setNotebookId] = useState<string>("");
 
   const { books, loading, addNote } = useBooksWithNotesStore();
   const { data, closePopup } = usePopupStore();
-  // const { id } = data as { id: string };
+  const { id } = data as { id: string };
   const router = useRouter();
 
   useEffect(() => {
-    // find the notebook from the books
-    books.forEach((book) => {
-      if (book._id === data.id && book.unlocked === true) {
-        setNotebook(book);
-      }
-    });
-  }, [data, books]);
+    setNotebookId(id);
+  }, [id]);
 
   async function handleCreate(send: SendType) {
     if (!title) {
       return setError("Please fill in all fields");
     }
 
-    const protectionToken = getProtectionTokenById(notebook?._id as string);
+    const protectionToken = getProtectionTokenById(notebookId as string);
 
     const json = await send("/api/create-note", {
-      id: notebook?._id,
+      id: notebookId,
       title,
       protectionToken,
     });
 
     if (json.type === "SUCCESS") {
       // Add the note to the store
-      addNote(notebook?._id as string, json.data);
+      addNote(notebookId as string, json.data);
 
       // redirect to notebook page
       router.push(`/note/${json.data._id}?edit=true`);
@@ -67,7 +60,7 @@ export default function CreateNote() {
   }
 
   // Choose which notebook to create the note in
-  if (!notebook) {
+  if (!notebookId) {
     return (
       <Popup crossIcon title="Choose a notebook">
         <div className="book-choose">
@@ -83,7 +76,7 @@ export default function CreateNote() {
                 <div
                   key={book._id}
                   className="book"
-                  onClick={() => setNotebook(book)}
+                  onClick={() => setNotebookId(book._id as string)}
                 >
                   <p className="book-title">{book.title}</p>
                 </div>

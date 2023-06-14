@@ -3,44 +3,39 @@ import { usePopupStore } from "@/stores/popup";
 import { NoteType } from "@/types/data/note";
 import React, { useEffect, useState } from "react";
 import { FadeLoader } from "react-spinners";
-import { SendType } from "../utils/form/Form";
 import { getProtectionTokenById } from "@/lib/session";
 import Popup from "../utils/Popup";
 import PostButton from "../utils/PostButton";
 import { ReturnedJsonType } from "@/types/json";
+import { useRouter } from "next/router";
 
 export default function DeleteNote() {
-  const [note, setNote] = useState<NoteType | null>();
   const [protectionToken, setProtectionToken] = useState<string>("");
 
-  const { books, loading, deleteNote } = useBooksWithNotesStore();
+  const { loading, deleteNote } = useBooksWithNotesStore();
   const { data, closePopup } = usePopupStore();
+  const { note } = data as { note: NoteType };
 
-  // find the note from the books
-  // and also set the protection token
+  const router = useRouter();
+
   useEffect(() => {
-    if (!data.id) throw new Error("No note `id` provided in popup data");
+    if (!note) throw new Error("No note `note` provided in popup data");
 
-    books.forEach((book) => {
-      book.notes.forEach((note) => {
-        if (note._id === data.id) {
-          setNote(note);
-        }
-      });
-    });
-
-    const protectionToken = getProtectionTokenById(note?.notebookId as string);
+    const protectionToken = getProtectionTokenById(note.notebookId);
 
     setProtectionToken(protectionToken as string);
-  }, [data, books]);
+  }, [note]);
 
   function afterDelete(json: ReturnedJsonType) {
     if (json.type === "SUCCESS") {
       // Delete the note from the store
-      deleteNote(note?.notebookId as string, note?._id as string);
+      deleteNote(note.notebookId as string, note._id as string);
 
       // Close the popup
       closePopup();
+
+      // Go back to the home page
+      router.push("/");
     } else {
       console.log("Something went worng: ", json);
     }
@@ -57,13 +52,13 @@ export default function DeleteNote() {
   return (
     <Popup crossIcon title="Delete Note">
       <p className="tip">
-        Are you sure you want to delete this note <b>{note?.title}</b>
+        Are you sure you want to delete this note <b>{note.title}</b>
       </p>
 
       <PostButton
         path="/api/delete-note"
         body={{
-          id: note?._id,
+          id: note._id,
           protectionToken,
         }}
         afterPost={afterDelete}

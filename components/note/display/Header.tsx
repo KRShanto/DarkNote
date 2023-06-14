@@ -19,7 +19,7 @@ export default function Header({
   const { openPopup } = usePopupStore();
 
   function deleteNote() {
-    openPopup("DeleteNote", { id: note?._id });
+    openPopup("DeleteNote", { note });
   }
 
   return (
