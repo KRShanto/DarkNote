@@ -34,25 +34,6 @@ export default function DeleteNote() {
     setProtectionToken(protectionToken as string);
   }, [data, books]);
 
-  //   async function handleDelete(send: SendType) {
-  //     const protectionToken = getProtectionTokenById(note?.notebookId as string);
-
-  //     const json = await send("/api/delete-note", {
-  //       id: note?._id,
-  //       protectionToken,
-  //     });
-
-  //     if (json.type === "SUCCESS") {
-  //       // Delete the note from the store
-  //       deleteNote(note?.notebookId as string, note?._id as string);
-
-  //       // Close the popup
-  //       closePopup();
-  //     } else {
-  //       console.log("Something went worng: ", json);
-  //     }
-  //   }
-
   function afterDelete(json: ReturnedJsonType) {
     if (json.type === "SUCCESS") {
       // Delete the note from the store

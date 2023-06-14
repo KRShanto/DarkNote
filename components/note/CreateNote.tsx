@@ -25,7 +25,7 @@ export default function CreateNote() {
   useEffect(() => {
     // find the notebook from the books
     books.forEach((book) => {
-      if (book._id === data.id && !book.locked && book.unlocked === true) {
+      if (book._id === data.id && book.unlocked === true) {
         setNotebook(book);
       }
     });
@@ -53,12 +53,6 @@ export default function CreateNote() {
 
       // Close the popup
       closePopup();
-    } else if (json.type === "LOCKED") {
-      // This should never happen
-      // But in case it does, just blank the `notebook` state so that the user can choose a notebook again
-      setNotebook(undefined);
-    } else if (json.type === "INVALID") {
-      setError("You need to fill in all fields");
     } else {
       setError("Something went wrong");
     }
@@ -77,12 +71,11 @@ export default function CreateNote() {
     return (
       <Popup crossIcon title="Choose a notebook">
         <div className="book-choose">
-          {/* <h1 className="title">Choose a notebook</h1> */}
           <p className="tip">Choose a notebook to create the note in.</p>
           <p className="tip">Locked notebooks are not shown.</p>
           <div className="books">
             {books.map((book) => {
-              if (book.locked || book.unlocked !== true) {
+              if (book.unlocked !== true) {
                 return null;
               }
 
