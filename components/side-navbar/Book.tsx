@@ -4,10 +4,19 @@ import { NoteType } from "@/types/data/note";
 import { BookWithNotesType } from "@/types/data/booksWithNotes";
 import { usePopupStore } from "@/stores/popup";
 import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
+import { addProtectionToken } from "@/lib/session";
 
 import { IoIosArrowForward } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
-import { addProtectionToken } from "@/lib/session";
+import { AiFillFileAdd } from "react-icons/ai";
+// delete icon
+import { AiOutlineDelete } from "react-icons/ai";
+// pencil icon
+import { AiOutlineEdit } from "react-icons/ai";
+// lock icon
+import { AiOutlineLock } from "react-icons/ai";
+// unlock icon
+import { AiOutlineUnlock } from "react-icons/ai";
 
 export default function Book({ book }: { book: BookWithNotesType }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,17 +24,17 @@ export default function Book({ book }: { book: BookWithNotesType }) {
   const { openPopup } = usePopupStore();
   const { addNotes, unlock } = useBooksWithNotesStore();
 
+  // After unlock
+  function afterUnlock(data: any) {
+    addProtectionToken(book._id as string, data.protectionToken);
+    addNotes(book._id as string, data.notes);
+    unlock(book._id as string);
+    setIsOpen(!isOpen);
+  }
+
   // Toggle the book open and closed
   // If the book is locked, open Unlock popup
   function toggle() {
-    // After unlock
-    function afterUnlock(data: any) {
-      addProtectionToken(book._id as string, data.protectionToken);
-      addNotes(book._id as string, data.notes);
-      unlock(book._id as string);
-      setIsOpen(!isOpen);
-    }
-
     if (book.locked && book.unlocked !== true) {
       // Open unlock popup
       openPopup("Unlock", {
@@ -36,6 +45,11 @@ export default function Book({ book }: { book: BookWithNotesType }) {
     } else {
       setIsOpen(!isOpen);
     }
+  }
+
+  // Create a new note
+  function createNote() {
+    openPopup("CreateNote", { id: book._id });
   }
 
   return (
@@ -54,6 +68,23 @@ export default function Book({ book }: { book: BookWithNotesType }) {
       </button>
 
       <hr />
+
+      {isOpen && (
+        <div className="book-options">
+          <AiFillFileAdd
+            className="icon new"
+            title="New Note"
+            onClick={createNote}
+          />
+          <AiOutlineDelete className="icon delete" title="Delete Notebook" />
+          <AiOutlineEdit className="icon edit" title="Rename Notebook" />
+          {book.locked ? (
+            <AiOutlineUnlock className="icon unlock" title="Unlock Notebook" />
+          ) : (
+            <AiOutlineLock className="icon lock" title="Lock Notebook" />
+          )}
+        </div>
+      )}
 
       {isOpen && (
         <div className="notes">

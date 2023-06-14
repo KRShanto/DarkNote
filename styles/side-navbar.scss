@@ -139,6 +139,40 @@
           background-color: transparent;
         }
       }
+
+      .book-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 2rem;
+        border: none;
+        outline: none;
+        margin-right: 2rem;
+        margin-top: 1rem;
+
+        .icon {
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+
+        .new {
+          color: rgb(60, 150, 240);
+        }
+
+        .delete {
+          color: rgb(240, 60, 60);
+        }
+
+        .edit {
+          color: rgb(0, 98, 255);
+        }
+
+        .lock,
+        .unlock {
+          color: rgb(240, 240, 60);
+        }
+      }
     }
 
     .notes {
