@@ -28,6 +28,7 @@
     font-family: sans-serif;
     color: rgb(181, 213, 254);
     max-width: 30rem;
+    margin: 0.5rem 0;
   }
 
   .close {
@@ -49,6 +50,10 @@
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
+  }
+
+  .btn {
+    margin-top: 2rem;
   }
 }
 

@@ -61,6 +61,10 @@ export default function Book({ book }: { book: BookWithNotesType }) {
     openPopup("RenameBook", { id: book._id });
   }
 
+  function changeLock() {
+    openPopup("ChangeLock", { id: book._id });
+  }
+
   return (
     <div className="book">
       <button className="header" onClick={toggle}>
@@ -78,7 +82,7 @@ export default function Book({ book }: { book: BookWithNotesType }) {
 
       <hr />
 
-      {isOpen && (
+      {isOpen && book.unlocked && (
         <div className="book-options">
           <AiFillFileAdd
             className="icon new"
@@ -95,15 +99,30 @@ export default function Book({ book }: { book: BookWithNotesType }) {
             title="Rename Notebook"
             onClick={renameBook}
           />
+
+          {/* <AiOutlineUnlock
+            className="icon lock"
+            title={book.locked ? "Unlock Notebook" : "Lock Notebook"}
+            onClick={changeLock}
+          /> */}
+
           {book.locked ? (
-            <AiOutlineUnlock className="icon unlock" title="Unlock Notebook" />
+            <AiOutlineUnlock
+              className="icon lock"
+              title="Unlock Notebook"
+              onClick={changeLock}
+            />
           ) : (
-            <AiOutlineLock className="icon lock" title="Lock Notebook" />
+            <AiOutlineLock
+              className="icon lock"
+              title="Lock Notebook"
+              onClick={changeLock}
+            />
           )}
         </div>
       )}
 
-      {isOpen && (
+      {isOpen && book.unlocked && (
         <div className="notes">
           {book.notes.map((note: NoteType, index: number) => (
             <Note note={note} index={index} key={index} />

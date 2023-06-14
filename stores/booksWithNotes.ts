@@ -100,9 +100,19 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
   // Update the book
   // Update only the store. No need to fetch the server
   updateBook: (bookId, book) => {
+    console.log("Here the book: ", book);
+
     set((state) => ({
       books: state.books.map((b) => {
         if (b._id === bookId) {
+          if (book.locked !== undefined) {
+            return {
+              ...b,
+              ...book,
+              locked: book.locked,
+              unlocked: !book.locked,
+            };
+          }
           return {
             ...b,
             ...book,

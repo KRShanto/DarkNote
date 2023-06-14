@@ -25,7 +25,12 @@ export default async function handler(
 
     // update the book
     book.title = title || book.title;
-    book.locked = locked || book.locked;
+
+    if (locked !== undefined) {
+      // remove the protection token if the book is unlocked
+      if (!locked) book.protectionToken = undefined;
+      book.locked = locked;
+    }
 
     await book.save();
 

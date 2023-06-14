@@ -5,4 +5,5 @@ export type PopupType =
   | "Createbook"
   | "Deletebook"
   | "RenameBook"
+  | "ChangeLock"
   | null;
