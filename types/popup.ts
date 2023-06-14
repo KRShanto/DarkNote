@@ -4,4 +4,5 @@ export type PopupType =
   | "CreateNote"
   | "Createbook"
   | "Deletebook"
+  | "RenameBook"
   | null;

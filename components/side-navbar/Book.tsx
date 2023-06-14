@@ -57,6 +57,10 @@ export default function Book({ book }: { book: BookWithNotesType }) {
     openPopup("Deletebook", { id: book._id });
   }
 
+  function renameBook() {
+    openPopup("RenameBook", { id: book._id });
+  }
+
   return (
     <div className="book">
       <button className="header" onClick={toggle}>
@@ -86,7 +90,11 @@ export default function Book({ book }: { book: BookWithNotesType }) {
             title="Delete Notebook"
             onClick={deleteBook}
           />
-          <AiOutlineEdit className="icon edit" title="Rename Notebook" />
+          <AiOutlineEdit
+            className="icon edit"
+            title="Rename Notebook"
+            onClick={renameBook}
+          />
           {book.locked ? (
             <AiOutlineUnlock className="icon unlock" title="Unlock Notebook" />
           ) : (

@@ -7,12 +7,18 @@ import Popup from "../utils/Popup";
 import PostButton from "../utils/PostButton";
 import { ReturnedJsonType } from "@/types/json";
 import { BookWithNotesType } from "@/types/data/booksWithNotes";
+import PopupForm from "../utils/PopupForm";
+import { SendType } from "../utils/form/Form";
+import Input from "../utils/form/Input";
+import Submit from "../utils/form/Submit";
 
-export default function DeleteBook() {
+export default function RenameBook() {
+  const [title, setTitle] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
   const [book, setBook] = useState<BookWithNotesType | null>();
-  const [protectionToken, setProtectionToken] = useState<string>("");
 
-  const { books, loading, deleteBook } = useBooksWithNotesStore();
+  const { books, loading, updateBook } = useBooksWithNotesStore();
   const { data, closePopup } = usePopupStore();
 
   // find the book
@@ -23,18 +29,30 @@ export default function DeleteBook() {
     books.forEach((book) => {
       if (book._id === data.id) {
         setBook(book);
+        setTitle(book.title);
       }
     });
+  }, [data, books]);
+
+  async function handleRename(send: SendType) {
+    if (!title) {
+      setError("Please enter a title");
+      return;
+    }
 
     const protectionToken = getProtectionTokenById(data.id);
 
-    setProtectionToken(protectionToken as string);
-  }, [data, books]);
+    const json = await send("/api/update-book", {
+      id: book?._id,
+      title,
+      protectionToken,
+    });
 
-  function afterDelete(json: ReturnedJsonType) {
     if (json.type === "SUCCESS") {
-      // Delete the note from the store
-      deleteBook(book?._id as string);
+      // Update the book in the store
+      updateBook(book?._id as string, {
+        title,
+      });
 
       // Close the popup
       closePopup();
@@ -52,22 +70,19 @@ export default function DeleteBook() {
   }
 
   return (
-    <Popup crossIcon title="Delete Notebook">
-      <p className="tip">
-        Are you sure you want to delete this notebook <b>{book?.title}</b>
-      </p>
+    <PopupForm
+      submitHandler={handleRename}
+      error={error}
+      title="Rename Notebook"
+    >
+      <Input
+        label="New title"
+        value={title}
+        setValue={setTitle}
+        placeholder="Enter the new title"
+      />
 
-      <PostButton
-        path="/api/delete-book"
-        body={{
-          id: book?._id,
-          protectionToken,
-        }}
-        afterPost={afterDelete}
-        className="btn danger"
-      >
-        Delete
-      </PostButton>
-    </Popup>
+      <Submit>Rename</Submit>
+    </PopupForm>
   );
 }

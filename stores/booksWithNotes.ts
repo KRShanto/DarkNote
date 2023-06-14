@@ -20,6 +20,13 @@ interface BooksWithNotesState {
       textContent?: string;
     }
   ): void;
+  updateBook(
+    bookId: string,
+    book: {
+      title?: string;
+      locked?: boolean;
+    }
+  ): void;
   deleteBook: (bookId: string) => void;
   deleteNote(bookId: string, noteId: string): void;
   get: () => Promise<void>;
@@ -68,7 +75,7 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
 
   // Update a note of a book
   // Update only the store. No need to fetch the server
-  updateNote: async (bookId, noteId, note) => {
+  updateNote: (bookId, noteId, note) => {
     set((state) => ({
       books: state.books.map((b) => {
         if (b._id === bookId) {
@@ -90,6 +97,21 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
     }));
   },
 
+  // Update the book
+  // Update only the store. No need to fetch the server
+  updateBook: (bookId, book) => {
+    set((state) => ({
+      books: state.books.map((b) => {
+        if (b._id === bookId) {
+          return {
+            ...b,
+            ...book,
+          };
+        }
+        return b;
+      }),
+    }));
+  },
   // Delete a book from the books array list
   deleteBook: (bookId) =>
     set((state) => ({

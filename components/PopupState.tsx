@@ -5,6 +5,7 @@ import CreateNote from "./note/CreateNote";
 import CreateBook from "./notebook/CreateBook";
 import DeleteNote from "./note/DeleteNote";
 import DeleteBook from "./notebook/DeleteBook";
+import RenameBook from "./notebook/RenameBook";
 
 export default function PopupState() {
   const { popup } = usePopupStore((state) => state);
@@ -16,6 +17,7 @@ export default function PopupState() {
       {popup === "Createbook" && <CreateBook />}
       {popup === "DeleteNote" && <DeleteNote />}
       {popup === "Deletebook" && <DeleteBook />}
+      {popup === "RenameBook" && <RenameBook />}
     </>
   );
 }
