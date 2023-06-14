@@ -28,10 +28,9 @@ export default async function handler(
     );
   }
 
-  const notebook: NotebookType = {
+  const notebook = {
     title,
     locked: locked || false,
-    unlocked: false,
     userId: user._id,
   };
 

@@ -2,5 +2,6 @@ export type PopupType =
   | "Unlock"
   | "DeleteNote"
   | "CreateNote"
-  | "CreateNotebook"
+  | "Createbook"
+  | "Deletebook"
   | null;

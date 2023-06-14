@@ -17,7 +17,7 @@ export default function Home() {
   }
 
   function createBook() {
-    openPopup("CreateNotebook", {});
+    openPopup("Createbook", {});
   }
 
   return (

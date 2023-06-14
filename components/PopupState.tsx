@@ -4,6 +4,7 @@ import ProtectionKeyForm from "./ProtectionKeyForm";
 import CreateNote from "./note/CreateNote";
 import CreateBook from "./notebook/CreateBook";
 import DeleteNote from "./note/DeleteNote";
+import DeleteBook from "./notebook/DeleteBook";
 
 export default function PopupState() {
   const { popup } = usePopupStore((state) => state);
@@ -12,8 +13,9 @@ export default function PopupState() {
     <>
       {popup === "Unlock" && <ProtectionKeyForm />}
       {popup === "CreateNote" && <CreateNote />}
-      {popup === "CreateNotebook" && <CreateBook />}
+      {popup === "Createbook" && <CreateBook />}
       {popup === "DeleteNote" && <DeleteNote />}
+      {popup === "Deletebook" && <DeleteBook />}
     </>
   );
 }

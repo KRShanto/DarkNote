@@ -33,6 +33,8 @@ export default async function handler(
     // Delete all the notes
     await Note.deleteMany({ notebookId: id });
 
+    console.log("Notebook deleted successfully");
+
     return response(res, {
       type: "SUCCESS",
       msg: "Notebook deleted successfully",

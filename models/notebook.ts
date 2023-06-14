@@ -14,10 +14,6 @@ const notebookSchema = new Schema<NotebookType>({
     type: Boolean,
     default: false,
   },
-  unlocked: {
-    type: Boolean,
-    default: false,
-  },
   createdAt: {
     type: Date,
     default: Date.now,

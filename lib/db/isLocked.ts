@@ -1,10 +1,10 @@
 import { NextApiResponse } from "next";
-import { NotebookType } from "@/types/data/notebook";
+import { INotebook, NotebookType } from "@/types/data/notebook";
 import response from "@/lib/response";
 
 export default function isLocked(
   res: NextApiResponse,
-  book: NotebookType,
+  book: INotebook,
   protectionToken: string
 ) {
   if (book.locked && !book.protectionToken) {

@@ -20,7 +20,7 @@ interface BooksWithNotesState {
       textContent?: string;
     }
   ): void;
-  delete: (book: BookWithNotesType) => void;
+  deleteBook: (bookId: string) => void;
   deleteNote(bookId: string, noteId: string): void;
   get: () => Promise<void>;
   unlock: (bookId: string) => void;
@@ -91,9 +91,9 @@ export const useBooksWithNotesStore = create<BooksWithNotesState>((set) => ({
   },
 
   // Delete a book from the books array list
-  delete: (book) =>
+  deleteBook: (bookId) =>
     set((state) => ({
-      books: state.books.filter((b) => b._id !== book._id),
+      books: state.books.filter((b) => b._id !== bookId),
     })),
 
   // Delete a note from a book

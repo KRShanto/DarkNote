@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import NotLoggedInMessage from "../NotLoggedInMessage";
 import { useLoadingStore } from "@/stores/loading";
 import { NotebookType } from "@/types/data/notebook";
-import DeleteBook from "./DeleteBook";
+import DeleteBook from "./DeleteBook.old";
 import { usePopupStore } from "@/stores/popup";
 
 export default function DisplayBook() {

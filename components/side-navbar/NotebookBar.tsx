@@ -16,7 +16,7 @@ export default function NotebookBar() {
   }
 
   function createBook() {
-    openPopup("CreateNotebook", {});
+    openPopup("Createbook", {});
   }
 
   return (

@@ -1,56 +1,75 @@
-import { useRouter } from "next/router";
-import fetcher from "@/lib/fetcher";
-import { useLoadingStore } from "@/stores/loading";
+import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
+import { usePopupStore } from "@/stores/popup";
+import { NoteType } from "@/types/data/note";
+import React, { useEffect, useState } from "react";
+import { FadeLoader } from "react-spinners";
+import { SendType } from "../utils/form/Form";
+import { getProtectionTokenById } from "@/lib/session";
+import Popup from "../utils/Popup";
+import PostButton from "../utils/PostButton";
+import { ReturnedJsonType } from "@/types/json";
+import { BookWithNotesType } from "@/types/data/booksWithNotes";
 
-export default function DeleteBook({
-  id,
-  protectionToken,
-  setDeletePopup,
-}: {
-  id: string;
-  protectionToken: string;
-  setDeletePopup: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  const router = useRouter();
-  const { turnOn, turnOff } = useLoadingStore();
+export default function DeleteBook() {
+  const [book, setBook] = useState<BookWithNotesType | null>();
+  const [protectionToken, setProtectionToken] = useState<string>("");
 
-  console.log("protectionToken", protectionToken);
+  const { books, loading, deleteBook } = useBooksWithNotesStore();
+  const { data, closePopup } = usePopupStore();
 
-  async function handleDelete() {
-    turnOn();
-    const json = await fetcher("/api/delete-book", {
-      id,
-      protectionToken,
+  // find the book
+  // and also set the protection token
+  useEffect(() => {
+    if (!data.id) throw new Error("No book `id` provided in popup data");
+
+    books.forEach((book) => {
+      if (book._id === data.id) {
+        setBook(book);
+      }
     });
-    turnOff();
 
+    const protectionToken = getProtectionTokenById(data.id);
+
+    setProtectionToken(protectionToken as string);
+  }, [data, books]);
+
+  function afterDelete(json: ReturnedJsonType) {
     if (json.type === "SUCCESS") {
-      // redirect to home page
-      router.push(`/`);
+      // Delete the note from the store
+      deleteBook(book?._id as string);
+
+      // Close the popup
+      closePopup();
     } else {
-      console.error("ERROR");
-      console.error(json);
+      console.log("Something went worng: ", json);
     }
   }
 
-  return (
-    <div className="delete-note confirm">
-      <h1 style={{ color: "rgb(255, 0, 0)" }} className="heading">
-        Are you sure you want to delete this notebook?
-      </h1>
+  if (loading) {
+    return (
+      <div className="local-spinner">
+        <FadeLoader color="cyan" />
+      </div>
+    );
+  }
 
-      <p className="text">
-        All your notes under this book will be deleted as well.
+  return (
+    <Popup crossIcon title="Delete Notebook">
+      <p className="tip">
+        Are you sure you want to delete this notebook <b>{book?.title}</b>
       </p>
 
-      <div className="options">
-        <button className="btn" onClick={() => setDeletePopup(false)}>
-          Cancel
-        </button>
-        <button className="btn danger" onClick={handleDelete}>
-          Delete
-        </button>
-      </div>
-    </div>
+      <PostButton
+        path="/api/delete-book"
+        body={{
+          id: book?._id,
+          protectionToken,
+        }}
+        afterPost={afterDelete}
+        className="btn danger"
+      >
+        Delete
+      </PostButton>
+    </Popup>
   );
 }
