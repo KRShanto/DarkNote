@@ -6,10 +6,12 @@ import Book from "./Book";
 import { AiFillFileAdd } from "react-icons/ai";
 import { HiFolderPlus } from "react-icons/hi2";
 import { VscCollapseAll } from "react-icons/vsc";
+import { useCollapseStore } from "@/stores/collapse";
 
 export default function NotebookBar() {
   const { books } = useBooksWithNotesStore();
   const { openPopup } = usePopupStore();
+  const { collapseNow } = useCollapseStore();
 
   function createNote() {
     openPopup("CreateNote", {});
@@ -34,7 +36,11 @@ export default function NotebookBar() {
             title="New Notebook"
             onClick={createBook}
           />
-          <VscCollapseAll className="icon" title="Collapse notebooks" />
+          <VscCollapseAll
+            className="icon"
+            title="Collapse notebooks"
+            onClick={collapseNow}
+          />
         </div>
       </div>
       <hr />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Note from "./Note";
 import { NoteType } from "@/types/data/note";
 import { BookWithNotesType } from "@/types/data/booksWithNotes";
@@ -17,12 +17,19 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { AiOutlineLock } from "react-icons/ai";
 // unlock icon
 import { AiOutlineUnlock } from "react-icons/ai";
+import { useCollapseStore } from "@/stores/collapse";
 
 export default function Book({ book }: { book: BookWithNotesType }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { openPopup } = usePopupStore();
   const { addNotes, unlock } = useBooksWithNotesStore();
+  const { collapse } = useCollapseStore();
+
+  // When the `collapse` state changes, close the book
+  useEffect(() => {
+    setIsOpen(false);
+  }, [collapse]);
 
   // After unlock
   function afterUnlock(data: any) {
