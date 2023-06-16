@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { usePopupStore } from "@/stores/popup";
 
 // icons
 import { FaRegStickyNote } from "react-icons/fa";
@@ -7,7 +8,6 @@ import { FaBook } from "react-icons/fa";
 import { FaKeyboard } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
-import { usePopupStore } from "@/stores/popup";
 
 export default function Home() {
   const { openPopup } = usePopupStore();
@@ -38,11 +38,6 @@ export default function Home() {
             <p className="text">Create new Notebook</p>
           </button>
 
-          <button className="option btn light">
-            <FaUserFriends className="icon" />
-            <p className="text">Checkout the notes of your friends</p>
-          </button>
-
           <Link href="#" className="option btn light">
             <FaKeyboard className="icon" />
             <p className="text">Keyboard shortcuts</p>
@@ -52,6 +47,11 @@ export default function Home() {
             <FaLock className="icon" />
             <p className="text">Change passwords</p>
           </Link>
+
+          <button className="option btn light">
+            <FaUserFriends className="icon" />
+            <p className="text">Checkout the notes of your friends</p>
+          </button>
         </div>
       </div>
     </>

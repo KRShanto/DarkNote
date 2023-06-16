@@ -5,6 +5,7 @@ import dbConnect from "@/lib/dbConnect";
 import response from "@/lib/response";
 import getUser from "@/lib/db/getUser";
 import { bookWithoutToken } from "@/lib/db/bookWithoutToken";
+import { decrypt } from "@/lib/db/decrypt";
 
 interface ProtectionToken {
   protectionTokens: { id: string; token: string }[];
@@ -59,6 +60,16 @@ export default async function handler(
       // Get the notes
       const notes = await Note.find({ notebookId: book._id }).sort({
         createdAt: "desc",
+      });
+
+      // Decrypt the notes
+      // also remove the `iv` from the response
+      notes.forEach((note) => {
+        const { decryptedContent, decryptedTextContent } = decrypt(note);
+
+        note.content = decryptedContent;
+        note.textContent = decryptedTextContent;
+        note.iv = undefined;
       });
 
       return { ...book._doc, unlocked: true, notes };

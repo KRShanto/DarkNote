@@ -1,6 +1,7 @@
 import Note from "@/models/note";
 import response from "@/lib/response";
 import { NextApiResponse } from "next";
+import { decrypt } from "./decrypt";
 
 // Get the book
 export default async function getNote(res: NextApiResponse, query: any) {

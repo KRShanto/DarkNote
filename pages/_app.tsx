@@ -7,18 +7,14 @@ import { SessionProvider } from "next-auth/react";
 import { useThemeStore } from "@/stores/theme";
 import { useMediaQuery } from "react-responsive";
 import { useMobileStore } from "@/stores/mobile";
-import { useViewStore } from "@/stores/view";
 import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 import LoadingBar from "react-top-loading-bar";
-import { FadeLoader, BounceLoader } from "react-spinners";
+import { FadeLoader } from "react-spinners";
 import { useLoadingStore } from "@/stores/loading";
 import { useRouter } from "next/router";
 import { ThemeType } from "@/types/theme";
-import { ViewType } from "@/types/view";
 import { usePopupStore } from "@/stores/popup";
-import LoaderForUser from "@/components/LoaderForUser";
 import SideNavbar from "../components/side-navbar/SideNavbar";
-import fetcher from "@/lib/fetcher";
 import PopupState from "@/components/PopupState";
 
 export default function App({
@@ -29,7 +25,6 @@ export default function App({
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
   const [progress, setProgress] = useState(0);
 
-  const { setView } = useViewStore();
   const { theme, changeTheme } = useThemeStore();
   const { loading } = useLoadingStore();
   const { setIsMobile } = useMobileStore();
@@ -39,14 +34,9 @@ export default function App({
   // Get the theme and view from local storage
   useEffect(() => {
     const theme = localStorage.getItem("theme") as ThemeType | null;
-    const view = localStorage.getItem("view") as ViewType | null;
 
     if (theme) {
       changeTheme(theme);
-    }
-
-    if (view) {
-      setView(view);
     }
   }, []);
 
@@ -95,7 +85,7 @@ export default function App({
 
       {loading && (
         <div className="preloader">
-          <BounceLoader className="spinner" color="cyan" loading={loading} />
+          <FadeLoader className="spinner" color="cyan" loading={loading} />
         </div>
       )}
 
@@ -111,10 +101,10 @@ export default function App({
           </div>
 
           <Footer />
-
-          <LoaderForUser />
         </main>
       </SessionProvider>
     </>
   );
 }
+
+// 3442 lines (almost)

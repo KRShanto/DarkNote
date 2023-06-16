@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
 import response from "@/lib/response";
-import Note from "@/models/note";
 import getUser from "@/lib/db/getUser";
 import isLocked from "@/lib/db/isLocked";
 import getBook from "@/lib/db/getBook";

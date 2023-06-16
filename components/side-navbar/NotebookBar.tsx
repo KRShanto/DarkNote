@@ -2,6 +2,7 @@ import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 import { usePopupStore } from "@/stores/popup";
 import React from "react";
 import Book from "./Book";
+import { FadeLoader } from "react-spinners";
 
 import { AiFillFileAdd } from "react-icons/ai";
 import { HiFolderPlus } from "react-icons/hi2";
@@ -9,7 +10,7 @@ import { VscCollapseAll } from "react-icons/vsc";
 import { useCollapseStore } from "@/stores/collapse";
 
 export default function NotebookBar() {
-  const { books } = useBooksWithNotesStore();
+  const { books, loading } = useBooksWithNotesStore();
   const { openPopup } = usePopupStore();
   const { collapseNow } = useCollapseStore();
 
@@ -45,9 +46,17 @@ export default function NotebookBar() {
       </div>
       <hr />
 
-      {books.map((book) => (
-        <Book key={book._id} book={book} />
-      ))}
+      {loading ? (
+        <div className="local-spinner">
+          <FadeLoader color="cyan" />
+        </div>
+      ) : (
+        <>
+          {books.map((book) => (
+            <Book key={book._id} book={book} />
+          ))}
+        </>
+      )}
     </div>
   );
 }

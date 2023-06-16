@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import NoteBook from "@/models/notebook";
 import dbConnect from "@/lib/dbConnect";
-import { NotebookType } from "@/types/data/notebook";
 import response from "@/lib/response";
 import getUser from "@/lib/db/getUser";
 

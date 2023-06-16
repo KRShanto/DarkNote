@@ -1,5 +1,5 @@
 import { NextApiResponse } from "next";
-import { INotebook, NotebookType } from "@/types/data/notebook";
+import { INotebook } from "@/types/data/notebook";
 import response from "@/lib/response";
 
 export default function isLocked(

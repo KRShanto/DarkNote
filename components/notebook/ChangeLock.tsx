@@ -30,8 +30,6 @@ export default function ChangeLock() {
         locked: !book?.locked,
       });
 
-      console.log("AFter books: ", books);
-
       // Close the popup
       closePopup();
     } else {

@@ -3,50 +3,19 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  // background-color: transparent;
   height: 8vh;
   width: 100vw;
   position: fixed;
   top: 0;
-  // right: 0;
   left: 0;
   z-index: 100;
-  // color: $white;
-  // border-bottom: 0.5px solid rgba(255, 255, 255, 0.262);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
   .logo {
     color: gold;
-    font-family: "Tilt Neon", sans-serif;
+    font-family: cursive;
     font-size: 2rem;
     font-weight: bold;
     text-decoration: none;
-  }
-
-  .links {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 3rem;
-    align-items: center;
-
-    .link {
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.3s ease-in-out;
-      font-size: 2rem;
-      background-color: transparent;
-      border: none;
-      outline: none;
-      cursor: pointer;
-
-      &:hover {
-        color: $mainColor;
-      }
-    }
-
-    .profile-image {
-      border-radius: 50%;
-    }
   }
 }

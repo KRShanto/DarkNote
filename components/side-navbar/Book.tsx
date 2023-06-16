@@ -5,19 +5,15 @@ import { BookWithNotesType } from "@/types/data/booksWithNotes";
 import { usePopupStore } from "@/stores/popup";
 import { useBooksWithNotesStore } from "@/stores/booksWithNotes";
 import { addProtectionToken } from "@/lib/session";
+import { useCollapseStore } from "@/stores/collapse";
 
 import { IoIosArrowForward } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import { AiFillFileAdd } from "react-icons/ai";
-// delete icon
 import { AiOutlineDelete } from "react-icons/ai";
-// pencil icon
 import { AiOutlineEdit } from "react-icons/ai";
-// lock icon
 import { AiOutlineLock } from "react-icons/ai";
-// unlock icon
 import { AiOutlineUnlock } from "react-icons/ai";
-import { useCollapseStore } from "@/stores/collapse";
 
 export default function Book({ book }: { book: BookWithNotesType }) {
   const [isOpen, setIsOpen] = useState(false);

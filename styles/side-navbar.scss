@@ -79,6 +79,11 @@
           font-size: 1.8rem;
           cursor: pointer;
           color: rgb(162, 229, 255);
+          transition: all 0.2s ease-in-out;
+
+          &:hover {
+            color: rgb(60, 150, 240);
+          }
         }
       }
     }

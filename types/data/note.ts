@@ -19,4 +19,5 @@ export interface INote extends Document {
   createdAt: Date;
   userId: string;
   notebookId: string;
+  iv: string;
 }
