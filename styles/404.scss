@@ -1,0 +1,25 @@
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .animation {
+    width: 35rem;
+  }
+
+  .text {
+    font-size: 4rem;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(90deg, #ff0000, #ff00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tip {
+    font-size: 1.5rem;
+    font-family: "Poppins", sans-serif;
+    color: rgba(255, 255, 255, 0.795);
+  }
+}
