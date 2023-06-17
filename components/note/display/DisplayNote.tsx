@@ -25,20 +25,24 @@ export default function DisplayNote() {
   const { books, loading, updateNote } = useBooksWithNotesStore();
   const { editMode, turnOn, turnOff } = useEditModeStore();
 
-  // reset edit mode when the page changes
-  // and set edit mode if the query is `edit`
+  // turn on edit mode if the query includes `edit`
   useEffect(() => {
     if (edit && note) {
       turnOn(note._id);
     }
+  }, [edit]);
 
+  // reset edit mode when the page changes
+  useEffect(() => {
     return () => {
       turnOff();
     };
-  }, [id, note]);
+  }, [router]);
 
   // find the note from the books
   useEffect(() => {
+    if (!books) return;
+
     books.forEach((book) => {
       book.notes.forEach((note) => {
         if (note._id === id) {
@@ -75,6 +79,10 @@ export default function DisplayNote() {
       clearInterval(interval);
     };
   }, [note, content, textContent, fetching, contentBeforeSave]);
+
+  useEffect(() => {
+    console.log("editMode changed", editMode);
+  }, [editMode]);
 
   // Save the note
   async function saveNote() {
