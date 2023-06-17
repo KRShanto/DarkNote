@@ -15,3 +15,10 @@ Change the color of TinyMCE (match it with the theme)
 FEATURE Multiple passwords
 
 Custom scrollbar
+
+Convert this project to Next.js 13 - page.js will be the home page and /dashboard will be rest of the pages from current project (next 12)
+
+Use Tauri to make a desktop app
+
+Introduction page
+
