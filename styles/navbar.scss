@@ -12,7 +12,11 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
   .logo {
-    color: gold;
+    background: linear-gradient(230deg, #00ffe1, #000dff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "Poppins", sans-serif;
     font-family: cursive;
     font-size: 2rem;
     font-weight: bold;
