@@ -16,6 +16,10 @@ import { ThemeType } from "@/types/theme";
 import { usePopupStore } from "@/stores/popup";
 import SideNavbar from "../components/side-navbar/SideNavbar";
 import PopupState from "@/components/PopupState";
+import { useSession, signIn } from "next-auth/react";
+import { FaLock } from "react-icons/fa";
+import { FaUserFriends } from "react-icons/fa";
+import { FaBook } from "react-icons/fa";
 
 export default function App({
   Component,
@@ -90,21 +94,90 @@ export default function App({
       )}
 
       <SessionProvider session={session}>
-        <PopupState />
-
-        <main style={{ opacity: loading || popup ? 0.2 : 1 }}>
-          <Navbar />
-          <SideNavbar />
-
-          <div className="main-body">
-            <Component {...pageProps} />
-          </div>
-
-          <Footer />
-        </main>
+        <Main
+          Component={Component}
+          pageProps={pageProps}
+          loading={loading}
+          popup={popup}
+        />
       </SessionProvider>
     </>
   );
 }
 
-// 3442 lines (almost)
+function Main({
+  Component,
+  pageProps,
+  loading,
+  popup,
+}: {
+  Component: any;
+  pageProps: any;
+  loading: boolean;
+  popup: string | null;
+}) {
+  const { data: userSession } = useSession();
+
+  if (!userSession) {
+    // return intro.
+    return (
+      <div className="intro">
+        <h1>
+          Welcome to <span className="logo">Dark Note</span>
+        </h1>
+
+        <p>
+          Dark Note is a note taking app that allows you to create notes and
+          notebooks.
+        </p>
+
+        <div className="features">
+          <h2>Features</h2>
+
+          <div className="feature">
+            <p>
+              <FaLock className="icon" />
+              Lock your notes with a password so that only you can view them.
+            </p>
+          </div>
+
+          <div className="feature">
+            <p>
+              {" "}
+              <FaUserFriends className="icon" />
+              Share your notes with your friends and work on them together.
+            </p>
+          </div>
+
+          <div className="feature">
+            <p>
+              <FaBook className="icon" />
+              Create notebooks and organize your notes by adding them to
+              notebooks.
+            </p>
+          </div>
+        </div>
+
+        <button onClick={() => signIn()} className="btn blue">
+          Get Started
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <PopupState />
+      <main style={{ opacity: loading || popup ? 0.2 : 1 }}>
+        <Navbar />
+        <SideNavbar />
+
+        <div className="main-body">
+          <Component {...pageProps} />
+        </div>
+
+        <Footer />
+      </main>
+    </>
+  );
+}
