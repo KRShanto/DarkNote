@@ -116,7 +116,11 @@ function Main({
   loading: boolean;
   popup: string | null;
 }) {
-  const { data: userSession } = useSession();
+  const { data: userSession, status } = useSession();
+
+  if (status === "loading") {
+    return <LoadingBar color="rgb(0, 255, 208)" height={3} progress={100} />;
+  }
 
   if (!userSession) {
     // return intro.
